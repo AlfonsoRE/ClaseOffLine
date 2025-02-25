@@ -3,7 +3,7 @@ $dbConnect = array(
     'server' => 'localhost',
     'user' => 'root',
     'pass' => '',
-    'dbname' => 'biometria'
+    'dbname' => 'esf'
 );
 
 $db = new mysqli(
