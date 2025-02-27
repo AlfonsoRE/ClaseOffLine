@@ -17,5 +17,5 @@ if ($db->connect_errno>0) {
     exit;
 }
 
-$acentos = $db->query("SET NAMES 'utf8'");
+$acentos = $db->query("SET NAMES 'utf8'");
 ?>
