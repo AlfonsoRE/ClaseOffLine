@@ -1,0 +1,11 @@
+<?php
+error_reporting(E_ALL);
+require_once 'conexion.php';
+
+$obj = json_decode(file_get_contents("php://input"));
+$stmt = $db->prepare("INSERT INTO cuestionarios(id_tema, titulo, descripcion, id_clase) VALUES(?, ?, ?, ?)");
+$stmt->bind_param('issi', $obj->id_tema, $obj->titulo, $obj->descripcion, $obj->id_clase);
+$stmt->execute();
+$stmt->close();
+echo "Registro exitoso";
+?>
