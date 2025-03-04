@@ -2,20 +2,18 @@
 error_reporting(E_ALL);
 require_once 'conexion.php';
 $obj = json_decode(file_get_contents("php://input")); 
-$stmt = $db->prepare("SELECT id, nombre, materia, descripcion, codigo, id_usuario FROM clases 
+$stmt = $db->prepare("SELECT id, titulo, descripcion, id_tema FROM material 
 WHERE id = ?");
 $stmt->bind_param('i',  $obj->id);
-$stmt->bind_result($id, $nombre, $materia, $descripcion, $codigo, $id_usuario);
+$stmt->bind_result($id, $titulo, $descripcion, $id_tema);
 $stmt->execute();
 $arr = array();
 while($stmt->fetch()){
 $arr[] = array(
 'id' => $id, 
-'nombre' => $nombre,
-'materia' => $materia,
+'titulo' => $titulo,
 'descripcion' => $descripcion,
-'codigo' => $codigo,
-'id_usuario' => $id_usuario,
+'id_tema' => $id_tema,
     );
 }
 $stmt->close();
