@@ -5,8 +5,8 @@ require_once 'conexion.php';
 $obj = json_decode(file_get_contents("php://input"));
 
 // Verifica que se reciba el id_clase
-if (!isset($obj->id_clase)) {
-    echo json_encode(["error" => "Falta el id_clase"]);
+if (!isset($obj->id_clase) || !is_numeric($obj->id_clase)) {
+    echo json_encode(["error" => "Falta o es inválido el id_clase"]);
     exit();
 }
 
@@ -14,7 +14,7 @@ if (!isset($obj->id_clase)) {
 $stmt = $db->prepare("SELECT id, id_tema, titulo, descripcion, valor, fecha, fecha_entrega, id_clase FROM tareas WHERE id_clase = ?");
 
 if (!$stmt) {
-    echo json_encode(["error" => "Error en la preparación de la consulta"]);
+    echo json_encode(["error" => "Error en la preparación de la consulta: " . $db->error]);
     exit();
 }
 
@@ -22,25 +22,19 @@ if (!$stmt) {
 $stmt->bind_param('i', $obj->id_clase);
 
 // Ejecuta la consulta
-$stmt->execute();
+if (!$stmt->execute()) {
+    echo json_encode(["error" => "Error en la ejecución de la consulta: " . $stmt->error]);
+    exit();
+}
 
-// Vincula los resultados
-$stmt->bind_result($id, $id_tema, $titulo, $descripcion, $valor, $fecha, $fecha_entrega, $id_clase);
+// Obtiene los resultados
+$result = $stmt->get_result();
 
 $arr = array();
 
 // Obtiene todas las tareas de la clase
-while ($stmt->fetch()) {
-    $arr[] = array(
-        'id' => $id,
-        'id_tema' => $id_tema,
-        'titulo' => $titulo,
-        'descripcion' => $descripcion,
-        'valor' => $valor,
-        'fecha' => $fecha,
-        'fecha_entrega' => $fecha_entrega,
-        'id_clase' => $id_clase
-    );
+while ($row = $result->fetch_assoc()) {
+    $arr[] = $row;
 }
 
 // Cierra la consulta
