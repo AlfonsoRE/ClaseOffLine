@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['json']) && isset($_FILES['archivo'])) {
         $json = json_decode($_POST['json']);
 
-        if ($json && isset($json->id_tareas) && isset($json->id_usuario) && isset($json->calificacion) && isset($_FILES['archivo'])) {
+        if ($json && isset($json->id_tareas) && isset($json->id_usuario) && isset($_FILES['archivo'])) {
             if ($_FILES['archivo']['size'] > MAX_FILE_SIZE) {
                 echo json_encode(["status" => "error", "message" => "El archivo excede el límite de 3MB"]);
                 exit;
