@@ -1,9 +1,7 @@
 <?php
 error_reporting(E_ALL);
 require_once 'conexion.php';
-$obj = json_decode(file_get_contents("php://input"));
-$stmt = $db->prepare("SELECT id,id_tareas,nombre,fecha FROM archivos_tarea WHERE id= ?");
-$stmt->bind_param('i', $obj->id);
+$stmt = $db->prepare("SELECT id,id_tareas,nombre,fecha FROM archivos_tarea");
 $stmt->bind_result($id,$id_tareas,$nombre,$fecha);
 $stmt->execute();
 $arr = array();
