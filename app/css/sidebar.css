@@ -1,0 +1,149 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+#page {
+    margin: 0px auto;
+    width: 100%;
+}
+
+#content {
+    height: 100%;
+    overflow: auto;
+    padding: 50px;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+footer.page-footer {
+    background-color: #0d47a1;
+    color: white;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    height: 65px;
+}
+
+nav.navbar {
+    background-color: #0d47a1;
+}
+
+
+/* Lateral */
+#lateral {
+    position: fixed;
+    background-color: #e9eaed;
+    width: 10%;
+    height: 100%;
+    left: 0;
+    top: 50px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Imagen dentro del lateral */
+#lateral img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px; /* Espacio entre la imagen y el menú */
+}
+
+/* Menú principal */
+#lateral #menu {
+    position: fixed;
+    left: -220px; /* Inicialmente oculto */
+    top: 50px;
+    padding: 10px;
+    width: 220px;
+    background-color: #e9eaed; /* Fondo de color igual al de las opciones del menú */
+    color: #333;
+    z-index: 1000;
+    height: 100%;
+    transition: left 0.5s ease;
+    overflow: hidden;
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+/* Cada recuadro que contiene el menú y el submenú */
+.menu-container {
+    border: 1px solid #ccc; /* Borde para separar cada sección */
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px; /* Separación entre los recuadros */
+    background-color: #f7f7f7; /* Fondo para el contenedor del menú y submenú */
+}
+
+/* Submenú inicialmente oculto */
+.submenu {
+    display: none; /* Ocultar submenú al inicio */
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+/* Ítems dentro de los submenús */
+.submenu-item {
+    padding: 8px;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+}
+
+/* El último ítem del submenú */
+.submenu-item:last-child {
+    border-bottom: none;
+}
+
+/* Mostrar submenú cuando el ratón pasa sobre el ítem de menú */
+.menu-item:hover + .submenu {
+    display: block; /* Muestra el submenú */
+}
+
+/* Mostrar el menú al pasar el ratón por la sección lateral */
+#lateral:hover #menu {
+    left: 0px; /* Mueve el menú hacia la derecha */
+}
+
+/* Mostrar el submenú cuando el ratón pasa sobre el menú */
+#lateral:hover .submenu {
+    display: block; /* Muestra el submenú */
+}
+
+/* Lista del menú */
+#menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Ítem del menú principal */
+.menu-item {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #e9eaed; /* Fondo igual al color de las opciones */
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #d1d1d1; /* Borde entre ítems */
+    transition: background-color 0.3s ease;
+}
+
+/* Enlaces dentro de los ítems del menú */
+.menu-item a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+/* Hover en los ítems del menú */
+.menu-item:hover {
+    background-color: #c2c2c2; /* Fondo claro al hacer hover */
+}
+
+/* Hover en los ítems dentro de los submenús */
+.submenu-item:hover {
+    background-color: #ddd; /* Fondo claro al hacer hover en submenú */
+}
