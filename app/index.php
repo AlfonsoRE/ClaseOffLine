@@ -24,14 +24,14 @@
       <span class="icon-bar"></span>                        
      </button>  
      <IMG class="navbar-brand" SRC="./img/itsavblaent40.png"> </IMG>
-     <a class="navbar-brand" href=""> ClaseOffLine</a>
+     <a class="navbar-brand" href="./index.php"> ClaseOffLine</a>
     </div>
 
     <div class="collapse navbar-collapse" id="myNavbar">
-      <form class="navbar-form navbar-right" action="./modelo/login.php" method="post" role="form">
+      <form class="navbar-form navbar-right" action="../api/login.php" method="post" role="form">
       <div class="input-group">
        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-      <input type="text" class="form-control" name ="clave" placeholder="Usuario" required>
+      <input type="text" class="form-control" name ="email" placeholder="Email" required>
       </div>
       <div class="input-group">
        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
