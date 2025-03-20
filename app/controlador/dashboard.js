@@ -3,6 +3,9 @@ var App = angular.module('app',[]);
 App.controller('dashboardCtrl', function($scope,$http){
 
 $scope.usuario={};
+$scope.guardaClase  = function(){
+	alert("si funciona");
+}
 
 $scope.guardar = function(){
 	$http.post('../api/guardarUsuario.php',$scope.usuario)
