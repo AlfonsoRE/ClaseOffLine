@@ -32,7 +32,7 @@
      
     <ul class="nav navbar-nav">
        <li><a  href="./addClase.php">Agregar una clase</a></li>
-       <li><a href="">Unirse a una clase</a></li>
+       <li><a href="./joinClase.php">Unirse a una clase</a></li>
     </ul>
       <ul class="nav navbar-nav navbar-right">
        <li><a href=""><?php session_start(); echo  $_SESSION['usuario']; ?></a></li>

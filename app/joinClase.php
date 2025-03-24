@@ -43,8 +43,9 @@
    </div>
   </nav>
 </header>
-<script src="./controlador/dashboard.js"></script>
-<body ng-controller="dashboardCtrl">
+
+<script src="./controlador/addClase.js"></script>
+<body ng-controller="addClaseCtrl">
 
 <div id="lateral">
     <img src="./img/Escudo.png" />
@@ -79,39 +80,58 @@
  
  <div class ="row">
   <div class="col-md-12">
-    <h2>¡Bienvenido!</h2>
+    <h2>Unirse a una clase</h2>
     </div>
   </div>
 <br>
   <div class ="row">
 
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
-    </div>
+  <form class="form-horizontal" name="form">
 
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
+  <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+ 
+   <div class="form-group">
+       <label  class="col-sm-4 control-label"> Nombre: </label>
+       <div class="col-sm-8">
+       <input type="text" class="form-control" name ="nombre" 
+       ng-model="clase.nombre" placeholder="Nombre" required>
     </div>
+     </div>  
+     <div class="form-group">
+       <label  class="col-sm-4 control-label"> Materia: </label>
+       <div class="col-sm-8">
+       <input type="text" class="form-control" name ="materia" 
+       ng-model="clase.materia" placeholder="Nombre de la Materia" required>
+       </div>
+     </div>  
+     
+     <div class="form-group">
+       <label  class="col-sm-4 control-label"> Descripcion: </label>
+       <div class="col-sm-8">
+       <input type="text" class="form-control" name ="descripcion" 
+       ng-model="clase.descripcion" placeholder="Descripcion" required>
+       </div>
+     </div> 
+     
+       
+     <div class="form-group">
+       <label  class="col-sm-4 control-label"> Codigo: </label>
+       <div class="col-sm-8">
+       <input type="text" class="form-control" name ="codigo" 
+       ng-model="clase.codigo" placeholder="Codigo" required>
+       </div>
+     </div>
+     
+     
+ <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-8">
+     <button type="submit" value ="enviar" ng-click ="form.$valid && guardaClase()"
+      class="btn btn-success btn-md"> Crear clase</button>       
+     </div>
+    </div>
+  </form>
 
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
-    </div>
-
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
-    </div>
+   
 
   </div>
 
