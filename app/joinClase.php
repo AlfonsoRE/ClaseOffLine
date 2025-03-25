@@ -44,8 +44,8 @@
   </nav>
 </header>
 
-<script src="./controlador/addClase.js"></script>
-<body ng-controller="addClaseCtrl">
+<script src="./controlador/joinClase.js"></script>
+<body ng-controller="joinClaseCtrl">
 
 <div id="lateral">
     <img src="./img/Escudo.png" />
@@ -86,50 +86,23 @@
 <br>
   <div class ="row">
 
-  <form class="form-horizontal" name="form">
-
-  <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+  <form class="form-horizontal" name="form" ng-submit="form.$valid && unirseClase()">
+    <input type="hidden" ng-init="clase.id_usuario='<?php echo $_SESSION['id']; ?>'">
  
-   <div class="form-group">
-       <label  class="col-sm-4 control-label"> Nombre: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="nombre" 
-       ng-model="clase.nombre" placeholder="Nombre" required>
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Código de Clase:</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="codigo" ng-model="clase.codigo" placeholder="Código" required>
+        </div>
     </div>
-     </div>  
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Materia: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="materia" 
-       ng-model="clase.materia" placeholder="Nombre de la Materia" required>
-       </div>
-     </div>  
-     
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Descripcion: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="descripcion" 
-       ng-model="clase.descripcion" placeholder="Descripcion" required>
-       </div>
-     </div> 
-     
-       
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Codigo: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="codigo" 
-       ng-model="clase.codigo" placeholder="Codigo" required>
-       </div>
-     </div>
-     
-     
- <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
-     <button type="submit" value ="enviar" ng-click ="form.$valid && guardaClase()"
-      class="btn btn-success btn-md"> Crear clase</button>       
-     </div>
+  
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+            <button type="submit" class="btn btn-success btn-md">Unirse a la clase</button>
+        </div>
     </div>
-  </form>
+</form>
+
 
    
 
