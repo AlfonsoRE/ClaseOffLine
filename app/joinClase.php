@@ -50,26 +50,22 @@
 <div id="lateral">
     <img src="./img/Escudo.png" />
     <div id="menu">
+       <!-- Recuadro de "Clases inscritas" -->
+       <div class="menu-container">
+            <ul>
+                <li class="menu-item">Clases inscritas</li>
+                <div class="submenu" ng-repeat = 'c in clasesInscritas'>
+                    <li class="submenu-item"><a href="./claseAnuncio.php?id_clase={{c.id}}">{{c.materia}}</a></li>                  
+                </div>
+            </ul>
+        </div>
+        <hr>
         <!-- Recuadro de "Clases impartidas" -->
         <div class="menu-container">
             <ul>
                 <li class="menu-item">Clases impartidas</li>
-                <div class="submenu">
-                    <li class="submenu-item"><a href="#">Programacion avanzada de tecnologias moviles</a></li>
-                    <li class="submenu-item"><a href="#">Clase 2</a></li>
-                </div>
-            </ul>
-        </div>
-
-        <hr>
-
-        <!-- Recuadro de "Clases inscritas" -->
-        <div class="menu-container">
-            <ul>
-                <li class="menu-item">Clases inscritas</li>
-                <div class="submenu">
-                    <li class="submenu-item"><a href="#">Clase 3</a></li>
-                    <li class="submenu-item"><a href="#">Clase 4</a></li>
+                <div class="submenu" ng-repeat = 'c in clasesImpartidas'>
+                    <li class="submenu-item"><a href="./editAnuncio.php?id_clase={{c.id}}">{{c.materia}}</a></li>
                 </div>
             </ul>
         </div>
@@ -88,7 +84,8 @@
 
   <form class="form-horizontal" name="form" ng-submit="form.$valid && unirseClase()">
     <input type="hidden" ng-init="clase.id_usuario='<?php echo $_SESSION['id']; ?>'">
- 
+    <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+
     <div class="form-group">
         <label class="col-sm-4 control-label">Código de Clase:</label>
         <div class="col-sm-8">

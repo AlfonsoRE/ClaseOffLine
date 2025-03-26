@@ -49,71 +49,72 @@
 <div id="lateral">
     <img src="./img/Escudo.png" />
     <div id="menu">
-        <!-- Recuadro de "Clases impartidas" -->
-        <div class="menu-container">
-            <ul>
-                <li class="menu-item">Clases impartidas</li>
-                <div class="submenu">
-                    <li class="submenu-item"><a href="#">Programacion avanzada de tecnologias moviles</a></li>
-                    <li class="submenu-item"><a href="#">Clase 2</a></li>
-                </div>
-            </ul>
-        </div>
-
-        <hr>
-
+        
         <!-- Recuadro de "Clases inscritas" -->
         <div class="menu-container">
             <ul>
                 <li class="menu-item">Clases inscritas</li>
-                <div class="submenu">
-                    <li class="submenu-item"><a href="#">Clase 3</a></li>
-                    <li class="submenu-item"><a href="#">Clase 4</a></li>
+                <div class="submenu" ng-repeat = 'c in clasesInscritas'>
+                    <li class="submenu-item"><a href="./claseAnuncio.php?id_clase={{c.id}}">{{c.materia}}</a></li>                  
                 </div>
             </ul>
         </div>
+        <hr>
+        <!-- Recuadro de "Clases impartidas" -->
+        <div class="menu-container">
+            <ul>
+                <li class="menu-item">Clases impartidas</li>
+                <div class="submenu" ng-repeat = 'c in clasesImpartidas'>
+                    <li class="submenu-item"><a href="./editAnuncio.php?id_clase={{c.id}}">{{c.materia}}</a></li>
+                </div>
+            </ul>
+        </div>
+
     </div>
 </div>
 
  <div id="content" class="container">
+
+ <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+
+ 
+ <div class ="row">
  
  <div class ="row">
   <div class="col-md-12">
-    <h2>¡Bienvenido!</h2>
+    <h2>Clases inscritas</h2>
     </div>
   </div>
 <br>
   <div class ="row">
-
+    <div  ng-repeat = 'c in clasesInscritas'>
     <div class="panel-group col-md-4">
     <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
+        <div class="panel-heading"><b>{{c.materia}}</b>. <a href="./claseAnuncio.php?id_clase={{c.id}}"> Ir <span class="glyphicon glyphicon-education"></span></a></div>
+        <div class="panel-body">{{c.descripcion}}</div>
+        <div class="panel-footer"><b>Maestro: </b>{{c.maestro}}
+         </div>
       </div>
     </div>
-
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
     </div>
-
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
-    </div>
-
-    <div class="panel-group col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">Panel with panel-primary class</div>
-        <div class="panel-body">Panel Content</div>
-      </div>
-    </div>
-
   </div>
+
+  <div class="col-md-12">
+    <h2>Clases impartidas</h2>
+    </div>
+  </div>
+<br>
+  <div class ="row" >
+    <div ng-repeat = 'c in clasesImpartidas'>
+    <div class="panel-group col-md-4">
+    <div class="panel panel-warning">
+        <div class="panel-heading"><b>{{c.materia}}</b> . <a href="./editAnuncio.php?id_clase={{c.id}}"> Ir <span class="glyphicon glyphicon-edit"></span></a></div>
+        <div class="panel-body">{{c.descripcion}}</div>       
+      </div>
+    </div>
+    </div>
+  </div>
+
 
  </div>
 </body>

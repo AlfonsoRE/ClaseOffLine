@@ -1,15 +1,31 @@
-
 var App = angular.module('app',[]);
 
-App.controller('addClaseCtrl', function($scope,$http){
+App.controller('editCtrl', function($scope,$http){
 
+$scope.clase ={};
 $scope.usuario={};
-$scope.clase={};
 $scope.clasesImpartidas={};
 $scope.clasesInscritas={};
 
+function getParameterByName(name) {
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+	results = regex.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
 $scope.consultarClases = function(){
+	$scope.clase.id  = getParameterByName('id_clase');
 	$scope.usuario.id_usuario= document.getElementById("idUsuario").value;
+	
+	$http.post('../api/consultarClase.php',$scope.clase)
+	.success(function(data,status,headers,config){
+		$scope.clase = data[0];		
+        // setTimeout(function () {$scope.creaU = false;}, 1000);
+	}).error(function(data,status,headers,config){
+		alert("Error BD" + data);
+	});
 	$http.post('../api/consultarClaseIdUsuario.php',$scope.usuario)
 	.success(function(data,status,headers,config){
 		$scope.clasesImpartidas = data;		
@@ -27,17 +43,6 @@ $scope.consultarClases = function(){
 	});
 }
 
-$scope.guardaClase  = function(){
-	$scope.clase.id_usuario= document.getElementById("idUsuario").value;
-	$http.post('../api/guardarClases.php',$scope.clase)
-	.success(function(data,status,headers,config){
-		$scope.clase={};
-		alert("Registrado");
-        // setTimeout(function () {$scope.creaU = false;}, 1000);
-	}).error(function(data,status,headers,config){
-		alert("Error BD" + data);
-	});
-}
 
 $scope.consultarClases();
 

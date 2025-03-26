@@ -13,7 +13,10 @@
  <script src="./controlador/jquery.min.js"></script>
  <script src="./controlador/bootstrap.min.js"></script>
  <script src="./controlador/angular.min.js"></script>
+ <script src="./controlador/edit.js"></script>
 </head>
+
+<div ng-controller="editCtrl">
 
 <header>
  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -31,8 +34,11 @@
     <div class="collapse navbar-collapse" id="myNavbar">
      
     <ul class="nav navbar-nav">
-       <li><a  href="./addClase.php">Agregar una clase</a></li>
-       <li><a href="./joinClase.php">Unirse a una clase</a></li>
+       <li> <a href="./editClase.php?id_clase={{clase.id}}">{{ clase.materia.length > 40 ? (clase.materia | limitTo:40) + '...' : clase.materia }}</a></li>
+       <li><a href="./editAnuncio.php?id_clase={{clase.id}}">Anuncios</a></li>
+       <li><a href="./editContenido.php?id_clase={{clase.id}}">Contenido</a></li>
+       <li><a href="./editAlumnos.php?id_clase={{clase.id}}">Alumnos</a></li>
+       <li><a href="./editCalificaciones.php?id_clase={{clase.id}}">Calificaciones</a></li>
     </ul>
       <ul class="nav navbar-nav navbar-right">
        <li><a href=""><?php session_start(); echo  $_SESSION['usuario']; ?></a></li>
@@ -44,15 +50,13 @@
   </nav>
 </header>
 
-<script src="./controlador/addClase.js"></script>
-<body ng-controller="addClaseCtrl">
-
+<body >
 <div id="lateral">
     <img src="./img/Escudo.png" />
     <div id="menu">
-
-     <!-- Recuadro de "Clases inscritas" -->
-     <div class="menu-container">
+        
+        <!-- Recuadro de "Clases inscritas" -->
+        <div class="menu-container">
             <ul>
                 <li class="menu-item">Clases inscritas</li>
                 <div class="submenu" ng-repeat = 'c in clasesInscritas'>
@@ -70,71 +74,7 @@
                 </div>
             </ul>
         </div>
-      
 
     </div>
 </div>
-
- <div id="content" class="container">
-
- <div class ="row">
-  <div class="col-md-12">
-    <h2>Alta Clase</h2>
-    </div>
-  </div>
-<br>
-  <div class ="row">
-
-  <form class="form-horizontal" name="form">
-
-  <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
- 
-   <div class="form-group">
-       <label  class="col-sm-4 control-label"> Nombre: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="nombre" 
-       ng-model="clase.nombre" placeholder="Nombre" required>
-    </div>
-     </div>  
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Materia: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="materia" 
-       ng-model="clase.materia" placeholder="Nombre de la Materia" required>
-       </div>
-     </div>  
-     
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Descripcion: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="descripcion" 
-       ng-model="clase.descripcion" placeholder="Descripcion" required>
-       </div>
-     </div> 
-     
-       
-     <div class="form-group">
-       <label  class="col-sm-4 control-label"> Codigo: </label>
-       <div class="col-sm-8">
-       <input type="text" class="form-control" name ="codigo" 
-       ng-model="clase.codigo" placeholder="Codigo" required>
-       </div>
-     </div>
-     
-     
- <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
-     <button type="submit" value ="enviar" ng-click ="form.$valid && guardaClase()"
-      class="btn btn-success btn-md"> Crear clase</button>       
-     </div>
-    </div>
-  </form>
-
-   
-
-  </div>
-
- </div>
-</body>
-
-<?php require_once 'pie.php'; ?>
+<input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
