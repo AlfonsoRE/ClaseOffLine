@@ -43,6 +43,17 @@ $scope.consultarClases = function(){
 	});
 }
 
+$scope.modificarClase  = function(){
+	$scope.clase.id_usuario= document.getElementById("idUsuario").value;
+	$http.post('../api/modificarClases.php',$scope.clase)
+	.success(function(data,status,headers,config){
+		alert("Registrado");
+        // setTimeout(function () {$scope.creaU = false;}, 1000);
+	}).error(function(data,status,headers,config){
+		alert("Error BD" + data);
+	});
+}
+
 
 $scope.consultarClases();
 
