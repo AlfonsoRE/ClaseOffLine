@@ -2,6 +2,7 @@ var App = angular.module('app', ['ngSanitize']);
 
 App.controller('claseCtrl', function($scope,$http, $sce){
 	
+	// Anuncios
 	$scope.anuncio ={};
 	$scope.anuncios ={};
 	$scope.nuevoAnuncio = '';
@@ -219,6 +220,33 @@ App.controller('claseCtrl', function($scope,$http, $sce){
 		$scope.consultarAnuncios();
 
 	}, 500);
+
+//Cierra anuncios
+
+//Alumnos
+$scope.alumnos={};
+
+$scope.buscarMaestroPorIdClase = function(id) {
+	var resultado = $scope.clasesInscritas.filter(function(item) {
+	  return item.id === id;
+	});
+	return resultado.length > 0 ? resultado[0].maestro : null;
+  };
+
+  $scope.consultarAlumnos = function (){
+		$scope.buscar.id_clase =  getParameterByName('id_clase');
+		$http.post('../api/consultarClaseEstudianteIdClase.php',$scope.buscar)
+		.success(function(data,status,headers,config){
+			$scope.alumnos = data;
+		}).error(function(data,status,headers,config){
+			alert("Error BD" + data);
+		});
+}
+
+$scope.consultarAlumnos();
+
+//Cierra Alumnos
+
 
 // codigo generico para la navegacion 
 

@@ -13,7 +13,9 @@
  <script src="./controlador/jquery.min.js"></script>
  <script src="./controlador/bootstrap.min.js"></script>
  <script src="./controlador/angular.min.js"></script>
+<script src="./controlador/angular-sanitize.min.js"></script>
  <script src="./controlador/clase.js"></script>
+
 </head>
 
 <div ng-controller="claseCtrl">
