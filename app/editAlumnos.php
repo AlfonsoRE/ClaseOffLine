@@ -1,4 +1,6 @@
 <?php require_once 'encabezadoEdit.php'; ?>
+<script src="./controlador/angular-sanitize.min.js"></script>
+
 <div id="content" class="container">
 
   <h2>Maestro</h2>

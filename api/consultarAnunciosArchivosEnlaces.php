@@ -18,7 +18,7 @@ if ($id_clase <= 0) {
 $sql = "SELECT a.id, a.mensaje, a.fecha, u.nombre,a.id_usuario  
         FROM anuncios a
         LEFT JOIN usuarios u ON a.id_usuario = u.id
-        WHERE a.id_clase = ? order by a.id";
+        WHERE a.id_clase = ? order by a.id desc";
 $stmt = $db->prepare($sql);
 $stmt->bind_param("i", $id_clase);
 $stmt->execute();
