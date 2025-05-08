@@ -52,7 +52,11 @@
       <div class="modal-body">
         <form ng-submit="guardarTarea()">
           <label for="titulo">ID Tema</label>
-          <input type="number" class="form-control" ng-model="nuevaTarea.id_tema" placeholder="ID Tema" />
+          <select ng-model="nuevaTarea.id_tema" 
+        ng-options="tema.id as tema.titulo for tema in temas" 
+        class="form-control">
+        <option value="">Seleccione un tema</option>
+        </select>
           <br>
           <label for="titulo">Título</label>
           <input type="text" class="form-control" ng-model="nuevaTarea.titulo" placeholder="Título" />
@@ -75,7 +79,7 @@
   </div>
 </div>
 
-<!-- Modal Agregar Cuestionarios-->
+<!-- Modal Agregar Cuestionario-->
 <div id="modalAgregarCuestionario" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -85,7 +89,11 @@
       <div class="modal-body">
         <form ng-submit="guardarCuestionario()">
           <label for="titulo">ID Tema</label>
-          <input type="number" class="form-control" ng-model="nuevoCuestionario.id_tema" placeholder="ID Tema" />
+          <select ng-model="nuevoCuestionario.id_tema" 
+        ng-options="tema.id as tema.titulo for tema in temas" 
+        class="form-control">
+        <option value="">Seleccione un tema</option>
+        </select>
           <br>
           <label for="titulo">Título</label>
           <input type="text" class="form-control" ng-model="nuevoCuestionario.titulo" placeholder="Título" required />
@@ -102,7 +110,6 @@
   </div>
 </div>
 
-
 <!-- Modal Agregar Material-->
 <div id="modalAgregarMaterial" class="modal fade">
   <div class="modal-dialog">
@@ -112,14 +119,18 @@
       </div>
       <div class="modal-body">
         <form>
+        <label for="titulo">ID Tema</label>
+        <select ng-model="nuevoMaterial.id_tema" 
+        ng-options="tema.id as tema.titulo for tema in temas" 
+        class="form-control">
+        <option value="">Seleccione un tema</option>
+        </select>
+          <br>
           <label for="titulo">Título</label>
           <input type="text" class="form-control" ng-model="nuevoMaterial.titulo" placeholder="Título" />
           <br>
           <label for="titulo">Descripción</label>
-          <textarea class="form-control" ng-model="nuevoMaterial.descripcion" placeholder="Descripción"></textarea>
-          <br>
-          <label for="titulo">ID Tema</label>
-          <input type="number" class="form-control" ng-model="nuevoMaterial.id_tema" placeholder="ID Tema" />
+          <textarea class="form-control" ng-model="nuevoMaterial.descripcion" placeholder="Descripción"></textarea>   
         </form>
       </div>
       <div class="modal-footer">
@@ -129,6 +140,7 @@
     </div>
   </div>
 </div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
