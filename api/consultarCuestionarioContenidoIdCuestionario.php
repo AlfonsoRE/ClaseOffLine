@@ -2,15 +2,17 @@
 error_reporting(E_ALL);
 require_once 'conexion.php';
 
-$obj = json_decode(file_get_contents("php://input"));
+// Obtener id desde GET
+$id_cuestionario = isset($_GET['id_cuestionario']) ? intval($_GET['id_cuestionario']) : 0;
 
-$stmt = $db->prepare("SELECT id, id_cuestionario, pregunta, opcion1, opcion2, opcion3,  opcion4, respuesta, fecha_creacion FROM cuestionarios_contenido WHERE id_cuestionario = ?");
-$stmt->bind_param('i', $obj->id_cuestionario);
-$stmt->bind_result($id, $id_cuestionario, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $respuesta, $fecha_creacion);
+$stmt = $db->prepare("SELECT id, id_cuestionario, pregunta, opcion1, opcion2, opcion3, opcion4, respuesta, fecha_creacion FROM cuestionarios_contenido WHERE id_cuestionario = ?");
+$stmt->bind_param('i', $id_cuestionario);
 $stmt->execute();
+$stmt->bind_result($id, $id_cuestionario, $pregunta, $opcion1, $opcion2, $opcion3, $opcion4, $respuesta, $fecha_creacion);
+
 $arr = array();
 if ($stmt->fetch()) {
-    $arr[] = array(
+    $arr = array(
         'id' => $id,
         'id_cuestionario' => $id_cuestionario,
         'pregunta' => $pregunta,
@@ -23,5 +25,5 @@ if ($stmt->fetch()) {
     );
 }
 $stmt->close();
+
 echo json_encode($arr);
-?>

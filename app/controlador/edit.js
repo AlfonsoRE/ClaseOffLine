@@ -12,6 +12,20 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 	$scope.enlace ={};
 	$scope.enlaces ={};
 	$scope.buscar ={};
+	$scope.id_clase = getParameterByName("id_clase");
+	$scope.contenidos = [];
+	$scope.temas = [];
+	$scope.nuevoTema = {};
+	$scope.temaEditar = {};
+	$scope.tareas = [];
+	$scope.nuevaTarea = {};
+	$scope.tarea = {};
+	$scope.cuestionarios = [];
+	$scope.nuevoCuestionario = {};
+	$scope.cuestionario = {}; // ✅ Agregada
+	$scope.materiales = [];
+	$scope.nuevoMaterial = {};
+	$scope.material = {};
 
 	setTimeout(function() {
         var quill = new Quill('#editor', {
@@ -323,8 +337,382 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     }
   };
 
+  // ------------------------------------
+  // Temas
+  // ------------------------------------
+  $scope.consultarTemas = function () {
+    $http.post("../api/consultarTemas.php", { id_clase: $scope.id_clase }).then(
+      function (response) {
+        $scope.temas = response.data;
+      },
+      function (error) {
+        alert("Error al consultar temas: " + error);
+      }
+    );
+  };
+
+  $scope.guardarTema = function () {
+    if (!$scope.nuevoTema.titulo) {
+      alert("El título del tema es obligatorio.");
+      return;
+    }
+
+    $scope.nuevoTema.id_clase = getParameterByName("id_clase");
+    $http.post("../api/guardarTema.php", $scope.nuevoTema).then(
+      function () {
+        alert("Tema guardado");
+        $scope.consultarTemas();
+        $scope.nuevoTema = {};
+        $("#ModalTemaClose").click();
+      },
+      function (error) {
+        alert("Error al guardar tema: " + error);
+      }
+    );
+  };
+
+  $scope.eliminarTema = function (tema) {
+    if (confirm("¿Estás seguro de eliminar el tema?")) {
+      $http.post("../api/eliminarTema.php", { id: tema.id }).then(
+        function () {
+          alert("Tema eliminado");
+          console.log("Tema eliminado:", tema);
+          $scope.consultarTemas();
+        },
+        function (error) {
+          alert("Error al eliminar tema: " + error);
+        }
+      );
+    }
+  };
+
+  $scope.abrirModalEditarTema = function (tema) {
+    $scope.temaEditar = angular.copy(tema);
+    $("#modalEditarTema").modal();
+  };
+
+  $scope.guardarEdicionTema = function () {
+    if (confirm("¿Estás seguro de guardar los cambios del tema?")) {
+      $http.post("../api/modificarTema.php", $scope.temaEditar).then(
+        function () {
+          alert("Tema modificado");
+          console.log("Tema modificado:", $scope.temaEditar);
+          $scope.consultarTemas();
+          $("#modalEditarTema").modal("hide");
+        },
+        function (error) {
+          alert("Error al modificar tema: " + error.statusText);
+        }
+      );
+    }
+  };
+
+  
+  // -----------------------------------
+  // TAREAS
+  // -----------------------------------
+  $scope.consultarTareas = function () {
+    $http
+      .post("../api/consultarTareas.php", { id_clase: $scope.id_clase })
+      .success(function (data) {
+        $scope.tareas = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar tareas: " + err);
+      });
+  };
+
+  $scope.guardarTarea = function () {
+    if (!$scope.nuevaTarea.titulo) {
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+
+    $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
+    $http.post("../api/guardarTarea.php", $scope.nuevaTarea).then(
+      function () {
+        alert("Tarea guardada");
+        console.log("Tarea insertada:", $scope.nuevaTarea);
+        $scope.consultarTareas();
+        $scope.nuevaTarea = {};
+        $("#ModalTareaClose").click();
+      },
+      function (error) {
+        alert("Error al guardar tarea: " + error);
+      }
+    );
+  };
+
+  $scope.eliminarTarea = function (tarea) {
+    if (confirm("¿Eliminar esta tarea?")) {
+      $http
+        .post("../api/eliminarTarea.php", { id: tarea.id })
+        .success(function () {
+          alert("Tarea eliminada");
+          $scope.consultarTareas();
+        })
+        .error(function (err) {
+          alert("Error al eliminar tarea: " + err);
+        });
+    }
+  };
+
+  $scope.abrirModalEditarTarea = function (tarea) {
+    $scope.tareaEditar = angular.copy(tarea);
+    $("#modalEditarTarea").modal();
+  };
+
+  $scope.guardarEdicionTarea = function () {
+    if (confirm("¿Estás seguro de guardar los cambios de la tarea?")) {
+      $http.post("../api/modificarTarea.php", $scope.tareaEditar).then(
+        function () {
+          alert("Tarea modificada");
+          console.log("Tarea modificada:", $scope.tareaEditar);
+          $scope.consultarTareas();
+          $("#modalEditarTarea").modal("hide");
+        },
+        function (error) {
+          alert("Error al modificar tarea: " + error.statusText);
+        }
+      );
+    }
+  };
+
+  $scope.irAEditarTarea = function (id) {
+    window.location.href = "editTarea.php?id_tarea=" + id;
+  };
+  $scope.salir = function () {
+    window.history.back();
+  };
+  // -----------------------------------
+  // CUESTIONARIOS
+  // -----------------------------------
+  $scope.consultarCuestionarios = function () {
+    $http
+      .post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
+      .success(function (data) {
+        $scope.cuestionarios = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar cuestionarios: " + err);
+      });
+  };
+  $scope.guardarCuestionario = function () {
+    if (!$scope.nuevoCuestionario.titulo) {
+      alert("El título del cuestionario es obligatorio.");
+      return;
+    }
+    $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
+    $http.post("../api/guardarCuestionario.php", $scope.nuevoCuestionario).then(
+      function (response) {
+        console.log("Respuesta del servidor:", response.data);
+        const nuevoId = response.data.id;
+        if (!nuevoId) {
+          alert("No se pudo obtener el ID del cuestionario creado.");
+          return;
+        }
+        console.log("Cuestionario insertado:", $scope.nuevoCuestionario);
+        const cuestionarioContenidoVacio = {
+          id_cuestionario: nuevoId,
+          pregunta: " ",
+          opcion1: " ",
+          opcion2: " ",
+          opcion3: " ",
+          opcion4: " ",
+          respuesta: 1,
+        };
+
+        $http
+          .post(
+            "../api/guardarCuestionariosContenido.php",
+            cuestionarioContenidoVacio
+          )
+          .then(
+            function () {
+              console.log("Registro vacío en cuestionarios_contenido creado");
+              window.location.href = `editCuestionario.php?id_cuestionario=${nuevoId}`;
+            },
+            function (error) {
+              alert(
+                "Error al guardar contenido vacío del cuestionario: " +
+                  error.data
+              );
+            }
+          );
+        $scope.consultarCuestionarios();
+        $scope.nuevoCuestionario = {};
+        $("#ModalCuestionarioClose").click();
+      },
+      function (error) {
+        alert("Error al guardar cuestionario: " + error.data);
+      }
+    );
+  };
+  $scope.guardarPregunta = function () {
+    if (
+      !$scope.cuestionario.pregunta ||
+      !$scope.cuestionario.opcion1 ||
+      !$scope.cuestionario.opcion2 ||
+      !$scope.cuestionario.opcion3 ||
+      !$scope.cuestionario.opcion4 ||
+      !$scope.cuestionario.respuesta
+    ) {
+      alert("Por favor, completa todos los campos antes de guardar.");
+      return;
+    }
+    $http
+      .post("../api/modificarCuestionariosContenido.php", $scope.cuestionario)
+      .then(
+        function () {
+          alert("Pregunta guardada correctamente");
+          console.log("Pregunta actualizada:", $scope.cuestionario);
+        },
+        function (error) {
+          alert("Error al guardar pregunta: " + error.data);
+        }
+      );
+  };
+  $scope.obtenerPreguntaInicial = function () {
+    const idCuestionario = getParameterByName("id_cuestionario");
+    $http
+      .get(
+        `../api/consultarCuestionarioContenidoIdCuestionario.php?id_cuestionario=${idCuestionario}`
+      )
+      .then(
+        function (response) {
+          $scope.cuestionario = response.data; // debe tener el ID de la fila creada vacía
+        },
+        function (error) {
+          alert("Error al cargar contenido del cuestionario: " + error.data);
+        }
+      );
+  };
+  $scope.obtenerPreguntaInicial();
+  $scope.eliminarCuestionario = function (cuestionario) {
+    if (confirm("¿Eliminar este cuestionario?")) {
+      $http
+        .post("../api/eliminarCuestionario.php", { id: cuestionario.id })
+        .success(function () {
+          alert("Cuestionario eliminado");
+          $scope.consultarCuestionarios();
+        })
+        .error(function (err) {
+          alert("Error al eliminar cuestionario: " + err);
+        });
+    }
+  };
+  $scope.abrirModalEditarCuestionario = function (cuestionario) {
+    $scope.cuestionarioEditar = angular.copy(cuestionario);
+    $("#modalEditarCuestionario").modal();
+  };
+  $scope.guardarEdicionCuestionario = function () {
+    if (confirm("¿Estás seguro de guardar los cambios del cuestionario?")) {
+      $http
+        .post("../api/modificarCuestionario.php", $scope.cuestionarioEditar)
+        .then(
+          function () {
+            alert("Cuestionario modificado");
+            console.log("Cuestionario modificado:", $scope.cuestionarioEditar);
+            $scope.consultarCuestionarios();
+            $("#modalEditarCuestionario").modal("hide");
+          },
+          function (error) {
+            alert("Error al modificar cuestionario: " + error.statusText);
+          }
+        );
+    }
+  };
+  $scope.irAEditarCuestionario = function (id) {
+    window.location.href = "editCuestionario.php?id_cuestionario=" + id;
+  };
+  $scope.salir = function () {
+    window.history.back();
+  };
+  // -----------------------------------
+  // MATERIALES
+  // -----------------------------------
+  $scope.consultarMateriales = function () {
+    $http
+      .post("../api/consultarMaterial.php", { id_clase: $scope.id_clase })
+      .success(function (data) {
+        $scope.materiales = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar materiales: " + err);
+      });
+  };
+
+  // Función para guardar un material
+  $scope.guardarMaterial = function () {
+    if (!$scope.nuevoMaterial.titulo || !$scope.nuevoMaterial.descripcion) {
+      alert("El título y la descripción del material son obligatorios.");
+      return;
+    }
+
+    $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+    $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial).then(
+      function () {
+        alert("Material guardado");
+        console.log("Material insertado:", $scope.nuevoMaterial);
+        $scope.consultarTemas(); // Vuelve a cargar los temas con sus contenidos
+        $scope.nuevoMaterial = {}; // Limpiar el formulario
+        $("#ModalMaterialClose").click(); // Cerrar el modal
+      },
+      function (error) {
+        alert("Error al guardar material: " + error.statusText);
+      }
+    );
+  };
+
+  $scope.eliminarMaterial = function (material) {
+    if (confirm("¿Eliminar este material?")) {
+      $http
+        .post("../api/eliminarMaterial.php", { id: material.id })
+        .success(function () {
+          alert("Material eliminado");
+          $scope.consultarMateriales();
+        })
+        .error(function (err) {
+          alert("Error al eliminar material: " + err);
+        });
+    }
+  };
+
+  $scope.abrirModalEditarMaterial = function (material) {
+    $scope.materialEditar = angular.copy(material);
+    $("#modalEditarMaterial").modal();
+  };
+
+  $scope.guardarEdicionMaterial = function () {
+    if (confirm("¿Estás seguro de guardar los cambios del material?")) {
+      $http.post("../api/modificarMaterial.php", $scope.materialEditar).then(
+        function () {
+          alert("Material modificado");
+          console.log("Material modificado:", $scope.materialEditar);
+          $scope.consultarMateriales();
+          $("#modalEditarMaterial").modal("hide");
+        },
+        function (error) {
+          alert("Error al modificar material: " + error.statusText);
+        }
+      );
+    }
+  };
+
+  $scope.irAEditarMaterial = function (id) {
+    window.location.href = "editMaterial.php?id_material=" + id;
+  };
+  $scope.salir = function () {
+    window.history.back();
+  };
+
+  $scope.consultarTemas();
+  $scope.consultarTareas();
   $scope.consultarClases();
   $scope.consultarDatosMaestro();
+  $scope.consultarCuestionarios();
+  $scope.consultarMateriales();
+  $scope.obtenerPreguntaInicial(); // ✅ solo una vez
 });
  
 App.directive('uploaderModel', ["$parse", function ($parse) {
