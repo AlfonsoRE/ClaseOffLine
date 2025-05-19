@@ -5,6 +5,7 @@ $obj = json_decode(file_get_contents("php://input"));
 $stmt = $db->prepare("INSERT INTO tareas (id_tema, titulo, descripcion, valor, fecha, fecha_entrega, id_clase)  VALUES (?, ?, ?, ?, NOW(), ?, ?)");
 $stmt->bind_param('issdsi', $obj->id_tema, $obj->titulo, $obj->descripcion, $obj->valor, $obj->fecha_entrega, $obj->id_clase);
 $stmt->execute();
+$id_generado = $db->insert_id;
 $stmt->close();
-echo "Registro de tarea exitoso";
+echo $id_generado;
 ?>
