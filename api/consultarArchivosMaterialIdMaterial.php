@@ -16,7 +16,8 @@ while ($stmt->fetch()) {
         'nombre' => $nombre,
         'archivo' => base64_encode($archivo),
         'ruta' => $ruta,
-        'fecha' => $fecha
+        'fecha' => $fecha,
+        'url'=> '../api/descargarArchivoMaterial.php?id='.$id
     );
 }
 

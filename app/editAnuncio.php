@@ -97,25 +97,14 @@
 
 <div id="content" class="container">
     <!-- Header unificado con materia y código -->
-    <div class="materia-header">
-        <div class="materia-info">
-            <h2>{{clase.materia}}</h2>
-            <p>{{clase.nombre}}</p>
-        </div>
-
-        <div class="panel panel-success codigo-panel">
-            <div class="panel-heading">
-                <b>Código</b>
-                <a class="glyphicon glyphicon-education"></a>
-            </div>
-            <div class="panel-body">
-                <b>Código: </b>{{clase.codigo}}
-            </div>
-            <div class="panel-footer">
-                <b>Descripción: </b>{{clase.descripcion}}
-            </div>
-        </div>
+   <br>
+  <div class="row">
+    <div class="jumbotron">
+      <h2>{{clase.materia}}</h2>
+      <p>{{clase.descripcion}}</p>
+      <h3>Codigo: {{clase.codigo}}</h3>
     </div>
+  </div>
 
     <div class="row">
         <div class="panel panel-primary">

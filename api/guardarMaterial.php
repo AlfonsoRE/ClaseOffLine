@@ -7,5 +7,6 @@ $stmt=$db->prepare("INSERT INTO material(titulo,descripcion,id_tema)
 $stmt->bind_param('ssi',$obj->titulo,$obj->descripcion,$obj->id_tema);
 $stmt->execute();
 $stmt->close();
-echo "Registro exitoso"; 
+$id_generado = $db->insert_id;
+echo $id_generado;
 ?>

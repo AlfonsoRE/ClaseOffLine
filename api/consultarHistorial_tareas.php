@@ -9,7 +9,7 @@ $stmt = $db->prepare("
     FROM historial_tareas ht
     JOIN usuarios u ON ht.id_usuario = u.id
     JOIN tareas t ON ht.id_tareas = t.id
-    WHERE t.id_clase = ?
+    WHERE t.id_clase = ? order by ht.id_tareas, u.nombre
 ");
 
 $obj = json_decode(file_get_contents("php://input"));

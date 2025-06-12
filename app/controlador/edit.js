@@ -3,6 +3,8 @@ var App = angular.module("app",['ngSanitize']);
 App.controller("editCtrl",  function($scope,$http, $sce) {
   	
 	// Anuncios
+  $scope.clase = {};
+  $scope.tareasAlumnos = [];
 	$scope.anuncio ={};
 	$scope.anuncios ={};
 	$scope.nuevoAnuncio = '';
@@ -27,6 +29,15 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 	$scope.nuevoMaterial = {};
 	$scope.material = {};
   var quill;
+  var quillM;
+
+  setTimeout(function() {
+         quillM = new Quill('#editorM', {
+            theme: 'snow',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
+            }
+        }); }, 500);
 
 	setTimeout(function() {
          quill = new Quill('#editor', {
@@ -235,6 +246,8 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 		$scope.consultarAnuncios();
 
 	}, 500);
+
+
 
 //Cierra anuncios
   $scope.clase = {};
@@ -505,14 +518,15 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   };
 
   $scope.subirArchivoT = function(){
+        if (!$scope.nuevaTarea.id_tema) {
+          alert("El tema de la tarea es obligatorio.");
+          return;
+        }
         if (!$scope.nuevaTarea.titulo) {
           alert("El título de la tarea es obligatorio.");
           return;
         }
-         if (!$scope.nuevaTarea.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
-        }
+        
         $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
 			  var contenido = quill.root.innerHTML;
         $scope.nuevaTarea.descripcion= contenido;
@@ -566,14 +580,14 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 		}
 
     $scope.agregarEnlaceT = function(){
-       if (!$scope.nuevaTarea.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }
-         if (!$scope.nuevaTarea.id_tema) {
+      if (!$scope.nuevaTarea.id_tema) {
           alert("El tema de la tarea es obligatorio.");
           return;
         }
+       if (!$scope.nuevaTarea.titulo) {
+          alert("El título de la tarea es obligatorio.");
+          return;
+        }         
         $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
 			  var contenido = quill.root.innerHTML;
         $scope.nuevaTarea.descripcion= contenido;
@@ -641,6 +655,242 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 				});
 			}
 		}
+
+  // -----------------------------------
+  // MATERIALES
+  // -----------------------------------
+  $scope.consultarMateriales = function () {
+    $http
+      .post("../api/consultarMaterial.php", { id_clase: $scope.id_clase })
+      .success(function (data) {
+        $scope.materiales = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar materiales: " + err);
+      });
+  };
+
+  // Función para guardar un material
+  $scope.guardarMaterial = function () {
+    if (!$scope.nuevoMaterial.titulo || !$scope.nuevoMaterial.descripcion) {
+      alert("El título y la descripción del material son obligatorios.");
+      return;
+    }
+
+      $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+      var contenido = quillM.root.innerHTML;
+       $scope.nuevoMaterial.descripcion = contenido;
+        if($scope.nuevoMaterial.id == null){	
+          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+          .success(function(data,status,headers,config) {  
+             $scope.nuevoMaterial = {};
+             quillM.setText('');		
+					   $scope.consultarArchivosM();	
+					   $scope.consultarEnlacesM();
+              $scope.consultarTemas();
+             $("#ModalMaterialClose").click();             
+            }).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});          
+      }else{
+        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function(data,status,headers,config) {          
+             $scope.nuevoMaterial = {};
+             quillM.setText('');		
+              $scope.consultarTemas();
+					   $scope.consultarArchivosM();	
+					   $scope.consultarEnlacesM();
+             $("#ModalMaterialClose").click(); 
+           }).error(function(data,status,headers,config){
+              alert("Error al guardar tarea: " + error);
+            });
+          } 
+  };
+
+  $scope.eliminarMaterial = function (material) {
+    if (confirm("¿Eliminar este material?")) {
+      $http
+        .post("../api/eliminarMaterial.php", { id: material.id })
+        .success(function () {         
+          //$scope.consultarMaterial();
+        })
+        .error(function (err) {
+          alert("Error al eliminar material: " + err);
+        });
+    }
+  };
+
+  $scope.subirArchivoM = function(){
+        if (!$scope.nuevoMaterial.id_tema) {
+          alert("El tema de la tarea es obligatorio.");
+          return;
+        }
+        if (!$scope.nuevoMaterial.titulo) {
+          alert("El título de la tarea es obligatorio.");
+          return;
+        }
+        
+        $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+			  var contenido = quillM.root.innerHTML;
+        $scope.nuevoMaterial.descripcion= contenido;
+        if($scope.nuevoMaterial.id == null){	
+          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+          .success(function(data,status,headers,config) {          
+              $scope.nuevoMaterial.id = data;
+              $('#ModalArchivoM').modal('show');
+            }).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});          
+      }else{
+        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function(data,status,headers,config) {          
+              $('#ModalArchivoM').modal('show');
+           }).error(function(data,status,headers,config){
+              alert("Error al guardar tarea: " + error);
+            });
+      }
+  }
+
+  $scope.guardarArchivoM = function(){
+			$scope.archivo.id_material =  $scope.nuevoMaterial.id;
+			var formData = new FormData();
+			formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
+			formData.append("archivo", $scope.documento); // Enviar archivo
+
+			$http.post('../api/guardarArchivosMaterial.php', formData, {
+				headers: { "Content-Type": undefined },
+				transformRequest: angular.identity
+			}).then(function (response) {
+				$scope.archivo={};
+				$scope.documento = null;
+				$scope.consultarArchivosM();
+				$('#ModalArchivoMClose').click();
+			}, function (error) {
+				$scope.mensaje = "Error al subir archivo";
+				alert("Error BD" + data);
+			});
+		}
+
+    $scope.consultarArchivosM = function(){
+			$scope.buscar.id_material = $scope.nuevoMaterial.id;
+			//$scope.buscar.id_anuncio = 22;
+			$http.post('../api/consultarArchivosMaterialIdMaterial.php',$scope.buscar)
+			.success(function(data,status,headers,config){
+				$scope.archivos = data;					
+			}).error(function(data,status,headers,config){
+				alert("Error BD" + data);
+			});
+		}
+
+    $scope.agregarEnlaceM = function(){
+      if (!$scope.nuevoMaterial.titulo) {
+          alert("El título de la tarea es obligatorio.");
+          return;
+        }
+      if (!$scope.nuevoMaterial.id_tema) {
+          alert("El tema de la tarea es obligatorio.");
+          return;
+        }
+
+         $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+			  var contenido = quillM.root.innerHTML;
+        $scope.nuevoMaterial.descripcion= contenido;
+        if($scope.nuevoMaterial.id == null){	
+          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+          .success(function(data,status,headers,config) {          
+              $scope.nuevoMaterial.id = data;
+               $('#ModalEnlaceM').modal('show');
+            }).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});          
+      }else{
+        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function(data,status,headers,config) {          
+               $('#ModalEnlaceM').modal('show');
+           }).error(function(data,status,headers,config){
+              alert("Error al guardar tarea: " + error);
+            });
+      }                
+       
+		}
+
+      $scope.guardarEnlaceM = function(){			
+			$scope.enlace.id_material = $scope.nuevoMaterial.id;
+				$http.post('../api/guardarEnlaceMaterial.php',$scope.enlace)
+				.success(function(data,status,headers,config){	
+					$scope.enlace={};
+					$scope.consultarEnlacesM();				
+					$('#ModalEnlaceMClose').click();
+				}).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});
+		}
+
+    $scope.consultarEnlacesM = function(){
+			$scope.buscar.id_material = $scope.nuevoMaterial.id;
+		   // $scope.buscar.id_anuncios = 19;
+			$http.post('../api/consultarEnlaceMaterialPorMaterial.php',$scope.buscar)
+			.success(function(data,status,headers,config){
+				$scope.enlaces = data;					
+			}).error(function(data,status,headers,config){
+				alert("Error BD" + data);
+			});
+		}
+
+    $scope.eliminarArchivoM = function (id){
+			if (confirm("¿Estás seguro de eliminar este archivo?")) {
+				$scope.buscar.id = id;
+				$http.post('../api/eliminarArchivosMaterial.php',$scope.buscar)
+				.success(function(data,status,headers,config){
+					$scope.consultarArchivosM();
+				}).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});
+			}
+		}
+
+    	$scope.eliminarEnlaceM = function (id){
+			if (confirm("¿Estás seguro de eliminar este enlace?")) {
+				$scope.buscar.id = id;
+				$http.post('../api/eliminarEnlaceMaterial.php',$scope.buscar)
+				.success(function(data,status,headers,config){
+					$scope.consultarEnlacesT();
+				}).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});
+			}
+		}
+
+
+
+
+  $scope.abrirModalEditarMaterial = function (material) {
+    $scope.materialEditar = angular.copy(material);
+    $("#modalEditarMaterial").modal();
+  };
+
+  $scope.guardarEdicionMaterial = function () {
+    if (confirm("¿Estás seguro de guardar los cambios del material?")) {
+      $http.post("../api/modificarMaterial.php", $scope.materialEditar).then(
+        function () {
+          alert("Material modificado");
+          console.log("Material modificado:", $scope.materialEditar);
+          $scope.consultarMateriales();
+          $("#modalEditarMaterial").modal("hide");
+        },
+        function (error) {
+          alert("Error al modificar material: " + error.statusText);
+        }
+      );
+    }
+  };
+
+  $scope.irAEditarMaterial = function (id) {
+    window.location.href = "editMaterial.php?id_material=" + id;
+  };
+  $scope.salir = function () {
+    window.history.back();
+  };
 
 
 
@@ -790,84 +1040,38 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   $scope.salir = function () {
     window.history.back();
   };
+
   // -----------------------------------
-  // MATERIALES
+  // CALIFICACIONES
   // -----------------------------------
-  $scope.consultarMateriales = function () {
-    $http
-      .post("../api/consultarMaterial.php", { id_clase: $scope.id_clase })
-      .success(function (data) {
-        $scope.materiales = data;
-      })
-      .error(function (err) {
-        alert("Error al consultar materiales: " + err);
-      });
-  };
 
-  // Función para guardar un material
-  $scope.guardarMaterial = function () {
-    if (!$scope.nuevoMaterial.titulo || !$scope.nuevoMaterial.descripcion) {
-      alert("El título y la descripción del material son obligatorios.");
-      return;
-    }
+   // Consultar alumnos con sus tareas asignadas
+    $scope.consultarTareasAlumnos = function () {
+        $scope.clase.id = getParameterByName('id_clase');
 
-    $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-    $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial).then(
-      function () {
-        alert("Material guardado");
-        console.log("Material insertado:", $scope.nuevoMaterial);
-        $scope.consultarTemas(); // Vuelve a cargar los temas con sus contenidos
-        $scope.nuevoMaterial = {}; // Limpiar el formulario
-        $("#ModalMaterialClose").click(); // Cerrar el modal
-      },
-      function (error) {
-        alert("Error al guardar material: " + error.statusText);
-      }
-    );
-  };
+        // Hacer la petición HTTP
+        $http.post('../api/consultarHistorial_tareas.php', $scope.clase)
+            .success(function (data) {
+                $scope.tareasAlumnos = data;
+            })
+            .error(function (data) {
+                alert("Error BD: " + data);
+            });
+    };
+    
+    // Modificar calificación
+    $scope.actualizarCalificacion = function (tarea) {
+        $http.post('../api/modificarHistorialTareas.php', tarea)
+            .success(function (data) {
+                alert("Calificación actualizada");
+            })
+            .error(function (data) {
+                alert("Error BD: " + data);
+            });
+    };
 
-  $scope.eliminarMaterial = function (material) {
-    if (confirm("¿Eliminar este material?")) {
-      $http
-        .post("../api/eliminarMaterial.php", { id: material.id })
-        .success(function () {
-          alert("Material eliminado");
-          $scope.consultarMateriales();
-        })
-        .error(function (err) {
-          alert("Error al eliminar material: " + err);
-        });
-    }
-  };
 
-  $scope.abrirModalEditarMaterial = function (material) {
-    $scope.materialEditar = angular.copy(material);
-    $("#modalEditarMaterial").modal();
-  };
-
-  $scope.guardarEdicionMaterial = function () {
-    if (confirm("¿Estás seguro de guardar los cambios del material?")) {
-      $http.post("../api/modificarMaterial.php", $scope.materialEditar).then(
-        function () {
-          alert("Material modificado");
-          console.log("Material modificado:", $scope.materialEditar);
-          $scope.consultarMateriales();
-          $("#modalEditarMaterial").modal("hide");
-        },
-        function (error) {
-          alert("Error al modificar material: " + error.statusText);
-        }
-      );
-    }
-  };
-
-  $scope.irAEditarMaterial = function (id) {
-    window.location.href = "editMaterial.php?id_material=" + id;
-  };
-  $scope.salir = function () {
-    window.history.back();
-  };
-
+  $scope.consultarTareasAlumnos();
   $scope.consultarTemas();
   $scope.consultarTareas();
   $scope.consultarClases();
