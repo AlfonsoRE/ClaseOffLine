@@ -1,4 +1,6 @@
 <?php require_once 'encabezadoEdit.php'; ?>
+<link rel="stylesheet" href="./css/quill.snow.css">
+<script src="./controlador/quill.min.js"></script>
 <script src="./controlador/angular-sanitize.min.js"></script>
 
 <div id="content" class="container">

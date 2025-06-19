@@ -552,7 +552,7 @@
           <input type="text" class="form-control" ng-model="nuevoCuestionario.titulo" placeholder="Título" required />
           <br>
           <label for="titulo">Descripción</label>
-          <textarea class="form-control" ng-model="nuevoCuestionario.descripcion" placeholder="Descripción"></textarea>
+           <div id="editorC"></div> 
         </form>
       </div>
       <div class="modal-footer">

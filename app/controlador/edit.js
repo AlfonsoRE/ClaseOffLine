@@ -28,8 +28,34 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 	$scope.materiales = [];
 	$scope.nuevoMaterial = {};
 	$scope.material = {};
+  $scope.pregunta={};
+  $scope.preguntaMod={};
+  $scope.preguntas={};
   var quill;
   var quillM;
+  var quillC;
+  var quillCu;
+  var quillPe;
+
+   quillCu = new Quill('#editorCu', {
+            theme: 'snow',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
+            }});
+
+   quillPe = new Quill('#editorPe', {
+            theme: 'snow',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
+            }});
+
+   setTimeout(function() {
+         quillC = new Quill('#editorC', {
+            theme: 'snow',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
+            }
+        }); }, 500);
 
   setTimeout(function() {
          quillM = new Quill('#editorM', {
@@ -899,6 +925,19 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // -----------------------------------
   // CUESTIONARIOS
   // -----------------------------------
+    $scope.consultarCuestionario = function () {
+      
+    $http
+      .post("../api/consultarCuestionario.php", { id: getParameterByName("id_cuestionario") })
+      .success(function (data) {
+         $scope.nuevoCuestionario = data;
+        quillCu.clipboard.dangerouslyPasteHTML( $scope.nuevoCuestionario.descripcion);
+       
+      })
+      .error(function (err) {
+        alert("Error al consultar cuestionarios: " + err);
+      });
+  };
   $scope.consultarCuestionarios = function () {
     $http
       .post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
@@ -909,12 +948,18 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         alert("Error al consultar cuestionarios: " + err);
       });
   };
+
   $scope.guardarCuestionario = function () {
-    if (!$scope.nuevoCuestionario.titulo) {
+    if (!$scope.nuevoCuestionario.id_tema) {
       alert("El título del cuestionario es obligatorio.");
       return;
-    }
+    }if (!$scope.nuevoCuestionario.titulo) {
+      alert("El tema del cuestionario es obligatorio.");
+      return;
+    } 
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
+     var contenido = quillC.root.innerHTML;
+    $scope.nuevoCuestionario.descripcion= contenido;
     $http.post("../api/guardarCuestionario.php", $scope.nuevoCuestionario).then(
       function (response) {
         console.log("Respuesta del servidor:", response.data);
@@ -923,83 +968,152 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           alert("No se pudo obtener el ID del cuestionario creado.");
           return;
         }
-        console.log("Cuestionario insertado:", $scope.nuevoCuestionario);
-        const cuestionarioContenidoVacio = {
-          id_cuestionario: nuevoId,
-          pregunta: " ",
-          opcion1: " ",
-          opcion2: " ",
-          opcion3: " ",
-          opcion4: " ",
-          respuesta: 1,
-        };
-
-        $http
-          .post(
-            "../api/guardarCuestionariosContenido.php",
-            cuestionarioContenidoVacio
-          )
-          .then(
-            function () {
-              console.log("Registro vacío en cuestionarios_contenido creado");
-              window.location.href = `editCuestionario.php?id_cuestionario=${nuevoId}`;
-            },
-            function (error) {
-              alert(
-                "Error al guardar contenido vacío del cuestionario: " +
-                  error.data
-              );
-            }
-          );
-        $scope.consultarCuestionarios();
-        $scope.nuevoCuestionario = {};
-        $("#ModalCuestionarioClose").click();
-      },
-      function (error) {
+        window.location.href = `editCuestionario.php?id_clase=${$scope.nuevoCuestionario.id_clase}&id_cuestionario=${nuevoId}`;
+      },function (error) {
         alert("Error al guardar cuestionario: " + error.data);
       }
     );
   };
+
+  $scope.modificarCuestionario = function () {
+    if (!$scope.nuevoCuestionario.id_tema) {
+      alert("El título del cuestionario es obligatorio.");
+      return;
+    }if (!$scope.nuevoCuestionario.titulo) {
+      alert("El tema del cuestionario es obligatorio.");
+      return;
+    } 
+    $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
+     var contenido = quillCu.root.innerHTML;
+    $scope.nuevoCuestionario.descripcion= contenido;
+    $http.post("../api/modificarCuestionario.php", $scope.nuevoCuestionario).then(
+      function (response) {
+       alert("Cuestionario modificado");
+      },function (error) {
+        alert("Error al guardar cuestionario: " + error.data);
+      }
+    );
+  };
+
   $scope.guardarPregunta = function () {
+     var contenido = quillC.root.innerHTML;
+     var valid = quillC.getText().trim();
+     $scope.pregunta.pregunta= contenido;
+     $scope.pregunta.id_cuestionario= $scope.nuevoCuestionario.id;     
     if (
-      !$scope.cuestionario.pregunta ||
-      !$scope.cuestionario.opcion1 ||
-      !$scope.cuestionario.opcion2 ||
-      !$scope.cuestionario.opcion3 ||
-      !$scope.cuestionario.opcion4 ||
-      !$scope.cuestionario.respuesta
+     valid === '' ||
+      !$scope.pregunta.opcion1 ||
+      !$scope.pregunta.opcion2 ||
+      !$scope.pregunta.opcion3 ||
+      !$scope.pregunta.opcion4 ||
+      !$scope.pregunta.respuesta
     ) {
       alert("Por favor, completa todos los campos antes de guardar.");
       return;
     }
-    $http
-      .post("../api/modificarCuestionariosContenido.php", $scope.cuestionario)
-      .then(
-        function () {
-          alert("Pregunta guardada correctamente");
-          console.log("Pregunta actualizada:", $scope.cuestionario);
-        },
-        function (error) {
-          alert("Error al guardar pregunta: " + error.data);
-        }
-      );
+
+    if (
+      $scope.pregunta.opcion1 !== $scope.pregunta.respuesta &&
+      $scope.pregunta.opcion2 !== $scope.pregunta.respuesta &&
+      $scope.pregunta.opcion3 !== $scope.pregunta.respuesta &&
+      $scope.pregunta.opcion4 !== $scope.pregunta.respuesta
+    ) {
+      alert("Por favor, una opcion debe ser textualmente igual a la respuesta.");
+      return;
+    }
+
+    $http.post("../api/guardarCuestionariosContenido.php", $scope.pregunta)
+      .success(function (data) {
+        $scope.pregunta = {};
+        quillC.setText('');	
+        $scope.consultarPreguntas();
+        $("#ModalPreguntaClose").click(); 
+      })
+      .error(function (err) {
+        alert("Error al consultar cuestionarios: " + err);
+      });
+ 
   };
-  $scope.obtenerPreguntaInicial = function () {
-    const idCuestionario = getParameterByName("id_cuestionario");
-    $http
-      .get(
-        `../api/consultarCuestionarioContenidoIdCuestionario.php?id_cuestionario=${idCuestionario}`
-      )
-      .then(
-        function (response) {
-          $scope.cuestionario = response.data; // debe tener el ID de la fila creada vacía
-        },
-        function (error) {
-          alert("Error al cargar contenido del cuestionario: " + error.data);
-        }
-      );
+
+   $scope.consultarPreguntas = function () {
+
+    $http.post("../api/consultarCuestionarioContenidoIdCuestionario.php", { id_cuestionario:   getParameterByName("id_cuestionario") })
+      .success(function (data) {
+        $scope.preguntas = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar cuestionarios: " + err);
+      });
   };
-  $scope.obtenerPreguntaInicial();
+
+   $scope.formatQuill = function (pregunta) {
+    let textoPlano = pregunta.replace(/<[^>]+>/g, '').trim(); // Elimina etiquetas
+    let resumen = textoPlano.length > 60 
+              ? textoPlano.slice(0, 60) + "..." 
+              : textoPlano;
+    return resumen;
+  };
+
+  $scope.modalModificarPregunta = function (pregunta) {
+   $scope.preguntaMod = pregunta;
+   quillPe.clipboard.dangerouslyPasteHTML($scope.preguntaMod.pregunta);
+   $("#modalModPregunta").modal();
+  };
+
+   $scope.modificarPregunta = function () {
+     var contenido = quillPe.root.innerHTML;
+     var valid = quillPe.getText().trim();
+     $scope.preguntaMod.pregunta= contenido;
+    if (
+     valid === '' ||
+      !$scope.preguntaMod.opcion1 ||
+      !$scope.preguntaMod.opcion2 ||
+      !$scope.preguntaMod.opcion3 ||
+      !$scope.preguntaMod.opcion4 ||
+      !$scope.preguntaMod.respuesta
+    ) {
+      alert("Por favor, completa todos los campos antes de modificar.");
+      return;
+    }
+
+    if (
+      $scope.preguntaMod.opcion1 !== $scope.preguntaMod.respuesta &&
+      $scope.preguntaMod.opcion2 !== $scope.preguntaMod.respuesta &&
+      $scope.preguntaMod.opcion3 !== $scope.preguntaMod.respuesta &&
+      $scope.preguntaMod.opcion4 !== $scope.preguntaMod.respuesta
+    ) {
+      alert("Por favor, una opcion debe ser textualmente igual a la respuesta.");
+      return;
+    }
+
+    $http.post("../api/modificarCuestionariosContenido.php", $scope.preguntaMod)
+      .success(function (data) {
+        $scope.preguntaMod = {};
+        quillPe.setText('');	
+        $scope.consultarPreguntas();
+        $("#ModalModPreguntaClose").click(); 
+      })
+      .error(function (err) {
+        alert("Error al consultar cuestionarios: " + err);
+      });
+ 
+  };
+
+  $scope.eliminarPregunta = function (id){
+			if (confirm("¿Estás seguro de eliminar la pregunta?")) {
+				$scope.buscar.id = id;
+				$http.post('../api/eliminarCuestionariosContenido.php',$scope.buscar)
+				.success(function(data,status,headers,config){
+				 $scope.consultarPreguntas();
+				}).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+				});
+			}
+		}
+
+
+
+ 
   $scope.eliminarCuestionario = function (cuestionario) {
     if (confirm("¿Eliminar este cuestionario?")) {
       $http
@@ -1076,9 +1190,10 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   $scope.consultarTareas();
   $scope.consultarClases();
   $scope.consultarDatosMaestro();
-  $scope.consultarCuestionarios();
+  $scope.consultarCuestionario();
   $scope.consultarMateriales();
-  $scope.obtenerPreguntaInicial(); // ✅ solo una vez
+  $scope.consultarPreguntas();
+  //$scope.obtenerPreguntaInicial(); // ✅ solo una vez
 });
  
 App.directive('uploaderModel', ["$parse", function ($parse) {

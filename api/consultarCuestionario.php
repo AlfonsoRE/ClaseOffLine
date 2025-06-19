@@ -10,7 +10,7 @@ $stmt->bind_result($id, $id_tema, $titulo, $descripcion, $id_clase, $fecha_creac
 $stmt->execute();
 $arr = array();
 if ($stmt->fetch()) {
-    $arr[] = array(
+    $arr = array(
         'id' => $id,
         'id_tema' => $id_tema,
         'titulo' => $titulo,
