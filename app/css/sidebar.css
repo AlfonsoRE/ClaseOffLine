@@ -147,3 +147,33 @@ nav.navbar {
 .submenu-item:hover {
     background-color: #ddd; /* Fondo claro al hacer hover en submenú */
 }
+
+.tema-block {
+  margin-bottom: 30px;
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.contenido-preview {
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-left: 5px solid #eee;
+  background: #fff;
+  transition: background 0.2s ease;
+}
+
+.contenido-preview:hover {
+  background: #f0f0f0;
+}
+
+.icono-grande {
+  font-size: 18px;
+}
+
+.contenido-detalle {
+  padding: 10px 0;
+  color: #555;
+}

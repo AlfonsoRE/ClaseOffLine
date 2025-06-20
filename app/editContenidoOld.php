@@ -20,74 +20,134 @@
        <span class="glyphicon glyphicon-certificate"></span> Cuestionario
     </button>
   </div>
-   <br><br>
-  <div class="row">
-      <div ng-repeat="tema in temas" class="tema-block">    
+</div>
 
-      <h4 style="display: flex; justify-content: space-between; align-items: center;">
-        <strong><span class="glyphicon glyphicon-list"></span> {{tema.titulo }}</strong>
-          <span>
-            <button class="btn btn-xs btn-default" ng-click="abrirModalEditarTema(tema)">
-              <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            <button class="btn btn-xs btn-danger" ng-click="eliminarTema(tema)">
-              <i class="glyphicon glyphicon-trash"></i>
-            </button>
-          </span>
-      </h4>
 
-      <!-- TAREAS -->
-      <div ng-repeat="tarea in tema.tareas" class="contenido-preview" ng-click="tarea.abierto = !tarea.abierto">
-        <div class="media">
-          <div class="media-left">
-            <i class="glyphicon glyphicon-edit icono-grande text-warning"></i>
+<!-- Temas -->
+<div id="content" class="container mt-5 pt-4">
+
+  <!-- Iterar sobre los temas -->
+  <div class="card mb-4" ng-repeat="tema in temas">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">{{ tema.titulo }} <button ng-click="eliminarTema(tema)" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+          <button type="button" class="btn btn-success" ng-click="abrirModalEditarTema(tema)" >
+            <span class="glyphicon glyphicon-pencil"></span> Modificar
+          </button>
+        </h4>
+        </td>
+        <td>
+      <td>
+        </td>
+    </div>
+    <div class="card-body">
+
+      <!-- Botón para desplegar/ocultar Materiales -->
+      <div class="accordion" id="accordion{{tema.id}}">
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<!-- Materiales -->
+<div class="card">
+          <div class="card-header" id="headingMaterial{{tema.id}}">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseMaterial{{tema.id}}" aria-expanded="true" aria-controls="collapseMaterial{{tema.id}}">
+                <span class="glyphicon glyphicon-book"></span> Materiales
+              </button>
+            </h5>
           </div>
-          <div class="media-body">
-           {{ tarea.titulo }}
-            <div ng-show="tarea.abierto" class="contenido-detalle">
-              <p><div ng-bind-html="tarea.descripcion"></div></p>              
-              <p><strong>Valor:</strong> {{ tarea.valor }}</p>
-              <p><strong>Fecha de entrega:</strong> {{ tarea.fecha_entrega | date:'mediumDate' }}</p>
+          <div id="collapseMaterial{{tema.id}}" class="collapse" aria-labelledby="headingMaterial{{tema.id}}" data-parent="#accordion{{tema.id}}">
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="material in materiales | filter:{id_tema: tema.id}">
+                  <strong>{{ material.titulo }}</strong>: {{ material.descripcion }}
+                  <div class="float-right">
+                    <button ng-click="abrirModalEditarMaterial(material)" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalEditarMaterial">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button ng-click="eliminarMaterial(material)" class="btn btn-danger btn-sm">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button ng-click="irAEditarMaterial(material.id)" class="btn btn-primary btn-sm">
+                      <span class="glyphicon glyphicon-plus"></span> Ver
+                    </button>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- MATERIALES -->
-      <div ng-repeat="mat in tema.material" class="contenido-preview" ng-click="mat.abierto = !mat.abierto">
-        <div class="media">
-          <div class="media-left">
-            <i class="glyphicon glyphicon-book icono-grande text-success"></i>
+<!-- Tareas -->
+<div class="card">
+          <div class="card-header" id="headingTareas{{tema.id}}">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTareas{{tema.id}}" aria-expanded="false" aria-controls="collapseTareas{{tema.id}}">
+                <span class="glyphicon glyphicon-tasks"></span> Tareas
+              </button>
+            </h5>
           </div>
-          <div class="media-body">
-            {{ mat.titulo }}
-            <div ng-show="mat.abierto" class="contenido-detalle">
-              <p><div ng-bind-html="mat.descripcion"></div></p>
+          <div id="collapseTareas{{tema.id}}" class="collapse" aria-labelledby="headingTareas{{tema.id}}" data-parent="#accordion{{tema.id}}">
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="tarea in tareas | filter:{id_tema: tema.id}">
+                  <strong>{{ tarea.titulo }}</strong>: {{ tarea.descripcion }} <strong>{{ tarea.valor }}</strong>: {{ tarea.fecha_entrega }}
+                  <div class="float-right">
+                    <button ng-click="abrirModalEditarTarea(tarea)" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalEditarTarea">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button ng-click="eliminarTarea(tarea)" class="btn btn-danger btn-sm">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button ng-click="irAEditarTarea(tarea.id)" class="btn btn-primary btn-sm">
+                      <span class="glyphicon glyphicon-plus"></span> Ver
+                    </button>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- CUESTIONARIOS -->
-      <div ng-repeat="cues in tema.cuestionarios" class="contenido-preview" ng-click="cues.abierto = !cues.abierto">
-        <div class="media">
-          <div class="media-left">
-            <i class="glyphicon glyphicon-certificate icono-grande text-primary"></i>
+
+
+<!-- Cuestionarios -->
+<div class="card">
+          <div class="card-header" id="headingCuestionarios{{tema.id}}">
+            <h5 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCuestionarios{{tema.id}}" aria-expanded="false" aria-controls="collapseCuestionarios{{tema.id}}">
+                <span class="glyphicon glyphicon-list-alt"></span> Cuestionarios
+              </button>
+            </h5>
           </div>
-          <div class="media-body">
-           {{ cues.titulo }}
-            <div ng-show="cues.abierto" class="contenido-detalle">
-              <p><div ng-bind-html="cues.descripcion"></div></p>
-              <p><strong>Fecha creación:</strong> {{ cues.fecha_creacion | date:'mediumDate' }}</p>
+          <div id="collapseCuestionarios{{tema.id}}" class="collapse" aria-labelledby="headingCuestionarios{{tema.id}}" data-parent="#accordion{{tema.id}}">
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="cuestionario in cuestionarios | filter:{id_tema: tema.id}">
+                  <strong>{{ cuestionario.titulo }}</strong>: {{ cuestionario.descripcion }}
+                  <div class="float-right">
+                    <button ng-click="abrirModalEditarCuestionario(cuestionario)" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalEditarCuestionario">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button ng-click="eliminarCuestionario(cuestionario)" class="btn btn-danger btn-sm">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button ng-click="irAEditarCuestionario(cuestionario.id)" class="btn btn-primary btn-sm">
+                      <span class="glyphicon glyphicon-plus"></span> Ver
+                    </button>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </div>
 
-      <hr>
-    </div>  
- 
- </div>
+  </div> <!-- Fin de la Accordion -->
 
 
   <!-- Modal para editar tema -->
@@ -116,6 +176,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <!-- Modal para editar material -->
 <div class="modal fade" id="modalEditarMaterial" tabindex="-1" role="dialog">
@@ -641,8 +702,9 @@
     </div>
 </div>
 <!-- Termina Modal -->
-</div>
-</body>
 
 </div>
+
+
+
 <?php require_once 'pie.php'; ?>

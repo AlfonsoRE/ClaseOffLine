@@ -49,13 +49,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
             }});
 
-   setTimeout(function() {
-         quillC = new Quill('#editorC', {
+     quillC = new Quill('#editorC', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-            }
-        }); }, 500);
+        }});
+
 
   setTimeout(function() {
          quillM = new Quill('#editorM', {
@@ -381,9 +380,9 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // Temas
   // ------------------------------------
   $scope.consultarTemas = function () {
-    $http.post("../api/consultarTemas.php", { id_clase: $scope.id_clase }).then(
+    $http.post("../api/obtenerContenidoClase.php", { id_clase: $scope.id_clase }).then(
       function (response) {
-        $scope.temas = response.data;
+        $scope.temas = response.data;        
       },
       function (error) {
         alert("Error al consultar temas: " + error);
@@ -431,12 +430,9 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     $("#modalEditarTema").modal();
   };
 
-  $scope.guardarEdicionTema = function () {
-    if (confirm("¿Estás seguro de guardar los cambios del tema?")) {
+  $scope.guardarEdicionTema = function () {  
       $http.post("../api/modificarTema.php", $scope.temaEditar).then(
         function () {
-          alert("Tema modificado");
-          console.log("Tema modificado:", $scope.temaEditar);
           $scope.consultarTemas();
           $("#modalEditarTema").modal("hide");
         },
@@ -444,7 +440,6 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           alert("Error al modificar tema: " + error.statusText);
         }
       );
-    }
   };
 
   
@@ -927,20 +922,20 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // -----------------------------------
     $scope.consultarCuestionario = function () {
       
-    $http
-      .post("../api/consultarCuestionario.php", { id: getParameterByName("id_cuestionario") })
+     if( getParameterByName("id_cuestionario") !== ""){
+      $http.post("../api/consultarCuestionario.php", { id: getParameterByName("id_cuestionario") })
       .success(function (data) {
          $scope.nuevoCuestionario = data;
         quillCu.clipboard.dangerouslyPasteHTML( $scope.nuevoCuestionario.descripcion);
-       
       })
       .error(function (err) {
         alert("Error al consultar cuestionarios: " + err);
       });
+    }
+
   };
   $scope.consultarCuestionarios = function () {
-    $http
-      .post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
+    $http.post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
       .success(function (data) {
         $scope.cuestionarios = data;
       })
@@ -957,22 +952,22 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       alert("El tema del cuestionario es obligatorio.");
       return;
     } 
+
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
      var contenido = quillC.root.innerHTML;
     $scope.nuevoCuestionario.descripcion= contenido;
-    $http.post("../api/guardarCuestionario.php", $scope.nuevoCuestionario).then(
-      function (response) {
-        console.log("Respuesta del servidor:", response.data);
-        const nuevoId = response.data.id;
-        if (!nuevoId) {
+  
+     $http.post('../api/guardarCuestionario.php',$scope.nuevoCuestionario)
+				.success(function(data,status,headers,config){
+				 const nuevoId = data.id;
+       if (!nuevoId) {
           alert("No se pudo obtener el ID del cuestionario creado.");
           return;
         }
         window.location.href = `editCuestionario.php?id_clase=${$scope.nuevoCuestionario.id_clase}&id_cuestionario=${nuevoId}`;
-      },function (error) {
-        alert("Error al guardar cuestionario: " + error.data);
-      }
-    );
+     }).error(function(data,status,headers,config){
+					alert("Error BD" + data);
+		 });
   };
 
   $scope.modificarCuestionario = function () {

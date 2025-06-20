@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 require_once 'conexion.php';
-
 $obj = json_decode(file_get_contents("php://input"));
 
 $stmt = $db->prepare("INSERT INTO cuestionarios(id_tema, titulo, descripcion, id_clase) VALUES(?, ?, ?, ?)");
