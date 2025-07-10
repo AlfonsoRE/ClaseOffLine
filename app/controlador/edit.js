@@ -446,6 +446,17 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // -----------------------------------
   // TAREAS
   // -----------------------------------
+  
+  $scope.abrirModalTarea = function () {
+    $scope.consultarTemas();
+    $scope.nuevaTarea = {};
+    quill.setText('');		
+		$scope.consultarArchivosT();	
+		$scope.consultarEnlacesT();
+    $('#modalAgregarTarea').modal('show');
+  };
+
+
   $scope.consultarTareas = function () {
     $http
       .post("../api/consultarTareas.php", { id_clase: $scope.id_clase })
@@ -472,25 +483,27 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         if($scope.nuevaTarea.id == null){	
           $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
           .success(function(data,status,headers,config) {  
-             $scope.consultarTareas();
-             $scope.nuevaTarea = {};
-             quill.setText('');		
-					   $scope.consultarArchivosT();	
-					   $scope.consultarEnlacesT();
-             $("#ModalTareaClose").click();             
+             //$scope.consultarTareas();
+            $scope.consultarTemas();
+            $scope.nuevaTarea = {};
+            quill.setText('');		
+					  $scope.consultarArchivosT();	
+					  $scope.consultarEnlacesT();
+            $("#ModalTareaClose").click();             
             }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});          
       }else{
         $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
         .success(function(data,status,headers,config) {          
-              $scope.consultarTareas();
-             $scope.nuevaTarea = {};
-             quill.setText('');		
-					   $scope.consultarArchivosT();	
-					   $scope.consultarEnlacesT();
-             $("#ModalTareaClose").click(); 
-           }).error(function(data,status,headers,config){
+              //$scope.consultarTareas();
+            $scope.consultarTemas();
+            $scope.nuevaTarea = {};
+            quill.setText('');		
+					  $scope.consultarArchivosT();	
+					  $scope.consultarEnlacesT();
+            $("#ModalTareaClose").click(); 
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
           }
@@ -501,8 +514,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       $http
         .post("../api/eliminarTarea.php", { id: tarea.id })
         .success(function () {
-          alert("Tarea eliminada");
-          $scope.consultarTareas();
+          $scope.consultarTemas();
         })
         .error(function (err) {
           alert("Error al eliminar tarea: " + err);
@@ -511,8 +523,14 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   };
 
   $scope.abrirModalEditarTarea = function (tarea) {
-    $scope.tareaEditar = angular.copy(tarea);
-    $("#modalEditarTarea").modal();
+    $scope.nuevaTarea = angular.copy(tarea);
+    $scope.archivo={};
+		$scope.documento = null;
+		$scope.consultarArchivosT();
+    $scope.enlace={};
+		$scope.consultarEnlacesT();	
+    quill.clipboard.dangerouslyPasteHTML($scope.nuevaTarea.descripcion);
+    $("#modalAgregarTarea").modal();
   };
 
   $scope.guardarEdicionTarea = function () {
@@ -563,7 +581,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
         .success(function(data,status,headers,config) {          
               $('#ModalArchivo').modal('show');
-           }).error(function(data,status,headers,config){
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
           }
@@ -605,7 +623,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           alert("El tema de la tarea es obligatorio.");
           return;
         }
-       if (!$scope.nuevaTarea.titulo) {
+      if (!$scope.nuevaTarea.titulo) {
           alert("El título de la tarea es obligatorio.");
           return;
         }         
@@ -624,7 +642,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
         .success(function(data,status,headers,config) {          
               $('#ModalEnlace').modal('show');
-           }).error(function(data,status,headers,config){
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
           }
@@ -680,6 +698,15 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // -----------------------------------
   // MATERIALES
   // -----------------------------------
+
+  $scope.abrirModalMaterial = function () {
+    $scope.consultarTemas();
+    $scope.nuevoMaterial = {};
+    quillM.setText('');		
+		$scope.consultarArchivosM();	
+		$scope.consultarEnlacesM();
+    $('#modalAgregarMaterial').modal('show');
+  };
   $scope.consultarMateriales = function () {
     $http
       .post("../api/consultarMaterial.php", { id_clase: $scope.id_clase })
@@ -693,7 +720,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 
   // Función para guardar un material
   $scope.guardarMaterial = function () {
-    if (!$scope.nuevoMaterial.titulo || !$scope.nuevoMaterial.descripcion) {
+    if (!$scope.nuevoMaterial.titulo || !$scope.nuevoMaterial.id_tema) {
       alert("El título y la descripción del material son obligatorios.");
       return;
     }
@@ -716,12 +743,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       }else{
         $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
         .success(function(data,status,headers,config) {          
-             $scope.nuevoMaterial = {};
-             quillM.setText('');		
-              $scope.consultarTemas();
-					   $scope.consultarArchivosM();	
-					   $scope.consultarEnlacesM();
-             $("#ModalMaterialClose").click(); 
+            $scope.nuevoMaterial = {};
+            quillM.setText('');		
+            $scope.consultarTemas();
+					  $scope.consultarArchivosM();	
+					  $scope.consultarEnlacesM();
+            $("#ModalMaterialClose").click(); 
            }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
@@ -733,7 +760,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       $http
         .post("../api/eliminarMaterial.php", { id: material.id })
         .success(function () {         
-          //$scope.consultarMaterial();
+          $scope.consultarTemas();
         })
         .error(function (err) {
           alert("Error al eliminar material: " + err);
@@ -882,13 +909,17 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 			}
 		}
 
-
-
-
-  $scope.abrirModalEditarMaterial = function (material) {
-    $scope.materialEditar = angular.copy(material);
-    $("#modalEditarMaterial").modal();
+ $scope.abrirModalEditarMaterial = function (material) {
+    $scope.nuevoMaterial = angular.copy(material);
+    $scope.archivo={};
+		$scope.documento = null;
+		$scope.consultarArchivosM();
+    $scope.enlace={};
+		$scope.consultarEnlacesM();	
+    quillM.clipboard.dangerouslyPasteHTML($scope.nuevoMaterial.descripcion);
+    $("#modalAgregarMaterial").modal();
   };
+
 
   $scope.guardarEdicionMaterial = function () {
     if (confirm("¿Estás seguro de guardar los cambios del material?")) {
@@ -968,6 +999,11 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
      }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 		 });
+  };
+
+  $scope.editarCuestionario = function (cues) {
+   window.location.href = 
+   `editCuestionario.php?id_clase=${cues.id_clase}&id_cuestionario=${cues.id}`;
   };
 
   $scope.modificarCuestionario = function () {
@@ -1106,16 +1142,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 			}
 		}
 
-
-
- 
   $scope.eliminarCuestionario = function (cuestionario) {
     if (confirm("¿Eliminar este cuestionario?")) {
       $http
         .post("../api/eliminarCuestionario.php", { id: cuestionario.id })
         .success(function () {
-          alert("Cuestionario eliminado");
-          $scope.consultarCuestionarios();
+              $scope.consultarTemas();
         })
         .error(function (err) {
           alert("Error al eliminar cuestionario: " + err);
@@ -1182,7 +1214,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 
   $scope.consultarTareasAlumnos();
   $scope.consultarTemas();
-  $scope.consultarTareas();
+  //$scope.consultarTareas();
   $scope.consultarClases();
   $scope.consultarDatosMaestro();
   $scope.consultarCuestionario();

@@ -10,10 +10,10 @@
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalAgregarTema">
          <span class="glyphicon glyphicon-list"></span> Tema
     </button>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalAgregarTarea">
+    <button type="button" class="btn btn-primary btn-lg" ng-click="abrirModalTarea()">
        <span class="glyphicon glyphicon-edit"></span> Tarea
-    </button>    
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalAgregarMaterial">
+    </button>
+    <button type="button" class="btn btn-primary btn-lg" ng-click="abrirModalMaterial()">
        <span class="glyphicon glyphicon-book"></span> Material
     </button>
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalAgregarCuestionario">
@@ -27,7 +27,7 @@
       <h4 style="display: flex; justify-content: space-between; align-items: center;">
         <strong><span class="glyphicon glyphicon-list"></span> {{tema.titulo }}</strong>
           <span>
-            <button class="btn btn-xs btn-default" ng-click="abrirModalEditarTema(tema)">
+            <button class="btn btn-xs btn-warning" ng-click="abrirModalEditarTema(tema)">
               <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <button class="btn btn-xs btn-danger" ng-click="eliminarTema(tema)">
@@ -43,11 +43,44 @@
             <i class="glyphicon glyphicon-edit icono-grande text-warning"></i>
           </div>
           <div class="media-body">
-           {{ tarea.titulo }}
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>{{ tarea.titulo }}</strong>
+            <span>
+              <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); abrirModalEditarTarea(tarea)" >
+                <i class="glyphicon glyphicon-pencil"></i>
+              </button>
+              <button class="btn btn-xs btn-danger" ng-click="$event.stopPropagation(); eliminarTarea(tarea)" >
+                <i class="glyphicon glyphicon-trash"></i>
+              </button>
+            </span>
+          </div>
             <div ng-show="tarea.abierto" class="contenido-detalle">
               <p><div ng-bind-html="tarea.descripcion"></div></p>              
               <p><strong>Valor:</strong> {{ tarea.valor }}</p>
               <p><strong>Fecha de entrega:</strong> {{ tarea.fecha_entrega | date:'mediumDate' }}</p>
+              <!-- Archivos (tarea o material) -->
+                <div ng-if="tarea.archivos.length > 0">
+                  <strong>Archivos:</strong>
+                  <ul>
+                    <li ng-repeat="a in tarea.archivos">
+                      <a ng-href="../api/descargarArchivoTarea.php?id={{a.id}}" target="_blank" ng-click="$event.stopPropagation()">
+                        <i class="glyphicon glyphicon-file"></i> {{a.nombre}}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Enlaces (tarea o material) -->
+                <div ng-if="tarea.enlaces.length > 0">
+                  <strong>Enlaces:</strong>
+                  <ul>
+                    <li ng-repeat="e in tarea.enlaces">
+                      <a ng-href="{{e.enlace}}" target="_blank" ng-click="$event.stopPropagation()">
+                        <i class="glyphicon glyphicon-link"></i> {{e.enlace}}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
             </div>
           </div>
         </div>
@@ -60,9 +93,43 @@
             <i class="glyphicon glyphicon-book icono-grande text-success"></i>
           </div>
           <div class="media-body">
-            {{ mat.titulo }}
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <strong>{{ mat.titulo }}</strong>
+              <span>
+                <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); abrirModalEditarMaterial(mat)">
+                  <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+                <button class="btn btn-xs btn-danger" ng-click="$event.stopPropagation(); eliminarMaterial(mat)">
+                  <i class="glyphicon glyphicon-trash"></i>
+                </button>
+              </span>
+            </div>
+
             <div ng-show="mat.abierto" class="contenido-detalle">
               <p><div ng-bind-html="mat.descripcion"></div></p>
+               <!-- Archivos (tarea o material) -->
+                <div ng-if="mat.archivos.length > 0">
+                  <strong>Archivos:</strong>
+                  <ul>
+                    <li ng-repeat="a in mat.archivos">
+                      <a ng-href="../api/descargarArchivoMaterial.php?id={{a.id}}" target="_blank" ng-click="$event.stopPropagation()">
+                        <i class="glyphicon glyphicon-file"></i> {{a.nombre}}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Enlaces (tarea o material) -->
+                <div ng-if="mat.enlaces.length > 0">
+                  <strong>Enlaces:</strong>
+                  <ul>
+                    <li ng-repeat="e in mat.enlaces">
+                      <a ng-href="{{e.enlace}}" target="_blank" ng-click="$event.stopPropagation()">
+                        <i class="glyphicon glyphicon-link"></i> {{e.enlace}}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
             </div>
           </div>
         </div>
@@ -75,7 +142,18 @@
             <i class="glyphicon glyphicon-certificate icono-grande text-primary"></i>
           </div>
           <div class="media-body">
-           {{ cues.titulo }}
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>{{ cues.titulo }}</strong>
+            <span>
+              <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); editarCuestionario(cues)" >
+                <i class="glyphicon glyphicon-pencil"></i>
+              </button>
+              <button class="btn btn-xs btn-danger" ng-click="$event.stopPropagation(); eliminarCuestionario(cues)">
+                <i class="glyphicon glyphicon-trash"></i>
+              </button>
+            </span>
+          </div>
+
             <div ng-show="cues.abierto" class="contenido-detalle">
               <p><div ng-bind-html="cues.descripcion"></div></p>
               <p><strong>Fecha creación:</strong> {{ cues.fecha_creacion | date:'mediumDate' }}</p>
@@ -118,96 +196,11 @@
   </div>
 
   <!-- Modal para editar material -->
-<div class="modal fade" id="modalEditarMaterial" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Editar Material</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form name="formEditarMaterial">
-            <div class="form-group">
-              <label for="tituloMaterial">Título</label>
-              <input id="tituloMaterial" type="text" class="form-control" ng-model="materialEditar.titulo" required>
-              <label for="descripcionMaterial">Descripción</label>
-              <textarea id="descripcionMaterial" class="form-control" ng-model="materialEditar.descripcion" required></textarea>
-              <input type="hidden" name="id" ng-model="materialEditar.id">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="guardarEdicionMaterial()">Guardar cambios</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-    <!-- Modal para editar tarea -->
-  <div class="modal fade" id="modalEditarTarea" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Editar Tarea</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form name="formEditarTarea">
-            <div class="form-group">
-              <label for="titulo">Título</label>
-              <input id="titulo" type="text" class="form-control" ng-model="tareaEditar.titulo" required>
-              <label for="descripcion">Descripción</label>
-              <textarea id="descripcion" class="form-control" ng-model="tareaEditar.descripcion" required></textarea>
-              <label for="valor">Valor</label>
-              <input id="valor" type="number" class="form-control" ng-model="tareaEditar.valor" required>
-              <label for="fecha_entrega">Fecha de Entrega</label>
-              <input id="fecha_entrega" type="date" class="form-control" ng-model="tareaEditar.fecha_entrega" required>
-              <input type="hidden" name="id" ng-model="tareaEditar.id">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="guardarEdicionTarea()">Guardar cambios</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+  <!-- Modal para editar tarea -->
 
   <!-- Modal para editar cuestionario -->
-  <div class="modal fade" id="modalEditarCuestionario" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Editar Cuestionario</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form name="formEditarCuestionario">
-            <div class="form-group">
-              <label for="titulo">Título</label>
-              <input id="titulo" type="text" class="form-control" ng-model="cuestionarioEditar.titulo" required>
-              <label for="descripcion">Descripción</label>
-              <textarea id="descripcion" class="form-control" ng-model="cuestionarioEditar.descripcion" required></textarea>
-              <input type="hidden" name="id" ng-model="cuestionarioEditar.id">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="guardarEdicionCuestionario()">Guardar cambios</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Modal Agregar Tema-->
 <div id="modalAgregarTema" class="modal fade">
@@ -235,7 +228,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h4 class="modal-title">  <span class="glyphicon glyphicon-edit"></span> Agregar Tarea</h4>
+        <h4 class="modal-title">  <span class="glyphicon glyphicon-edit"></span> Modulo Tarea</h4>
       </div>
       <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
         <form  class="form-horizontal" >
@@ -261,14 +254,14 @@
             <div class="form-group">
               <label  class="col-sm-2 control-label"> Valor: </label>
               <div class="col-sm-10">
-              <input type="number" class="form-control"  ng-model="nuevaTarea.valor" placeholder="Valor" >
+              <input type="text" class="form-control"  ng-model="nuevaTarea.valor" placeholder="Valor" >
               </div>
             </div> 
 
             <div class="form-group">
               <label  class="col-sm-2 control-label"> Fecha de Entrega: </label>
               <div class="col-sm-10">
-              <input type="date" class="form-control"  ng-model="nuevaTarea.fecha_entrega" >
+              <input type="datetime-local" class="form-control"  ng-model="nuevaTarea.fecha_entrega" >
               </div>
             </div> 
           </div>
@@ -363,7 +356,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary">
-        <h4 class="modal-title">  <span class="glyphicon glyphicon-edit"></span> Agregar Material</h4>
+        <h4 class="modal-title">  <span class="glyphicon glyphicon-edit"></span> Modulo Material</h4>
       </div>
       <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
         <form  class="form-horizontal" >

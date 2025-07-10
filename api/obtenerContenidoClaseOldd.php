@@ -22,47 +22,19 @@ $temas = [];
 while ($tema = $resultTemas->fetch_assoc()) {
   $tema_id = $tema['id'];
 
-  // === TAREAS ===
+  // 2. Tareas del tema
   $stmtTareas = $db->prepare("SELECT * FROM tareas WHERE id_tema = ?");
   $stmtTareas->bind_param("i", $tema_id);
   $stmtTareas->execute();
-  $tareas = [];
-  $resultTareas = $stmtTareas->get_result();
-  while ($tarea = $resultTareas->fetch_assoc()) {
-    $tarea_id = $tarea['id'];
+  $tareas = $stmtTareas->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    // Archivos de tarea
-    $archivosTarea = $db->query("SELECT id, nombre FROM archivos_tarea WHERE id_tareas = $tarea_id")->fetch_all(MYSQLI_ASSOC);
-
-    // Enlaces de tarea
-    $enlacesTarea = $db->query("SELECT enlace FROM enlace_tarea WHERE id_tareas = $tarea_id")->fetch_all(MYSQLI_ASSOC);
-
-    $tarea['archivos'] = $archivosTarea;
-    $tarea['enlaces'] = $enlacesTarea;
-    $tareas[] = $tarea;
-  }
-
-  // === MATERIALES ===
+  // 3. Material del tema
   $stmtMaterial = $db->prepare("SELECT * FROM material WHERE id_tema = ?");
   $stmtMaterial->bind_param("i", $tema_id);
   $stmtMaterial->execute();
-  $materiales = [];
-  $resultMateriales = $stmtMaterial->get_result();
-  while ($material = $resultMateriales->fetch_assoc()) {
-    $material_id = $material['id'];
+  $materiales = $stmtMaterial->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    // Archivos de material
-    $archivosMaterial = $db->query("SELECT id, nombre FROM archivos_material WHERE id_material = $material_id")->fetch_all(MYSQLI_ASSOC);
-
-    // Enlaces de material
-    $enlacesMaterial = $db->query("SELECT enlace FROM enlace_material WHERE id_material = $material_id")->fetch_all(MYSQLI_ASSOC);
-
-    $material['archivos'] = $archivosMaterial;
-    $material['enlaces'] = $enlacesMaterial;
-    $materiales[] = $material;
-  }
-
-  // === CUESTIONARIOS ===
+  // 4. Cuestionarios del tema
   $stmtCuest = $db->prepare("SELECT * FROM cuestionarios WHERE id_tema = ?");
   $stmtCuest->bind_param("i", $tema_id);
   $stmtCuest->execute();
