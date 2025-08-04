@@ -1,7 +1,6 @@
 var App = angular.module("app",['ngSanitize']);
 
 App.controller("editCtrl",  function($scope,$http, $sce) {
-  	
 	// Anuncios
   $scope.clase = {};
   $scope.tareasAlumnos = [];
@@ -37,19 +36,19 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   var quillCu;
   var quillPe;
 
-   quillCu = new Quill('#editorCu', {
+  quillCu = new Quill('#editorCu', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
             }});
 
-   quillPe = new Quill('#editorPe', {
+  quillPe = new Quill('#editorPe', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
             }});
 
-     quillC = new Quill('#editorC', {
+    quillC = new Quill('#editorC', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
@@ -57,7 +56,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 
 
   setTimeout(function() {
-         quillM = new Quill('#editorM', {
+        quillM = new Quill('#editorM', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
@@ -65,7 +64,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         }); }, 500);
 
 	setTimeout(function() {
-         quill = new Quill('#editor', {
+        quill = new Quill('#editor', {
             theme: 'snow',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
@@ -117,14 +116,14 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 				}).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});
-		  }	else{
+		}	else{
 			$http.post('../api/modificarAnuncio.php',$scope.anuncio)
 				.success(function(data,status,headers,config){
 					$('#ModalArchivo').modal('show');
 				}).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});
-		  }
+		}
 		}
 
 		$scope.agregarEnlace = function(){
@@ -140,14 +139,14 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 				}).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});
-		  }	else{
+		}	else{
 			$http.post('../api/modificarAnuncio.php',$scope.anuncio)
 				.success(function(data,status,headers,config){
 					$('#ModalEnlace').modal('show');
 				}).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});
-		  }
+		}
 		}
 
 		$scope.guardarArchivo = function(){
@@ -473,12 +472,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           alert("El título de la tarea es obligatorio.");
           return;
         }
-         if (!$scope.nuevaTarea.id_tema) {
+        if (!$scope.nuevaTarea.id_tema) {
           alert("El tema de la tarea es obligatorio.");
           return;
         }
         $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			  var contenido = quill.root.innerHTML;
+			var contenido = quill.root.innerHTML;
         $scope.nuevaTarea.descripcion= contenido;
         if($scope.nuevaTarea.id == null){	
           $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
@@ -487,8 +486,8 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
             $scope.consultarTemas();
             $scope.nuevaTarea = {};
             quill.setText('');		
-					  $scope.consultarArchivosT();	
-					  $scope.consultarEnlacesT();
+					$scope.consultarArchivosT();	
+					$scope.consultarEnlacesT();
             $("#ModalTareaClose").click();             
             }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
@@ -500,8 +499,8 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
             $scope.consultarTemas();
             $scope.nuevaTarea = {};
             quill.setText('');		
-					  $scope.consultarArchivosT();	
-					  $scope.consultarEnlacesT();
+					$scope.consultarArchivosT();	
+					$scope.consultarEnlacesT();
             $("#ModalTareaClose").click(); 
           }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
@@ -567,7 +566,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         }
         
         $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			  var contenido = quill.root.innerHTML;
+			var contenido = quill.root.innerHTML;
         $scope.nuevaTarea.descripcion= contenido;
         if($scope.nuevaTarea.id == null){	
           $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
@@ -628,7 +627,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           return;
         }         
         $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			  var contenido = quill.root.innerHTML;
+			var contenido = quill.root.innerHTML;
         $scope.nuevaTarea.descripcion= contenido;
         if($scope.nuevaTarea.id == null){	
           $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
@@ -683,7 +682,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 			}
 		}
 
-    	$scope.eliminarEnlaceT = function (id){
+    $scope.eliminarEnlaceT = function (id){
 			if (confirm("¿Estás seguro de eliminar este enlace?")) {
 				$scope.buscar.id = id;
 				$http.post('../api/eliminarEnlaceTarea.php',$scope.buscar)
@@ -727,16 +726,16 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 
       $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
       var contenido = quillM.root.innerHTML;
-       $scope.nuevoMaterial.descripcion = contenido;
+      $scope.nuevoMaterial.descripcion = contenido;
         if($scope.nuevoMaterial.id == null){	
           $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
           .success(function(data,status,headers,config) {  
-             $scope.nuevoMaterial = {};
-             quillM.setText('');		
-					   $scope.consultarArchivosM();	
-					   $scope.consultarEnlacesM();
+            $scope.nuevoMaterial = {};
+            quillM.setText('');		
+					$scope.consultarArchivosM();	
+					$scope.consultarEnlacesM();
               $scope.consultarTemas();
-             $("#ModalMaterialClose").click();             
+            $("#ModalMaterialClose").click();             
             }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});          
@@ -746,10 +745,10 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
             $scope.nuevoMaterial = {};
             quillM.setText('');		
             $scope.consultarTemas();
-					  $scope.consultarArchivosM();	
-					  $scope.consultarEnlacesM();
+					$scope.consultarArchivosM();	
+					$scope.consultarEnlacesM();
             $("#ModalMaterialClose").click(); 
-           }).error(function(data,status,headers,config){
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
           } 
@@ -779,7 +778,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         }
         
         $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-			  var contenido = quillM.root.innerHTML;
+			var contenido = quillM.root.innerHTML;
         $scope.nuevoMaterial.descripcion= contenido;
         if($scope.nuevoMaterial.id == null){	
           $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
@@ -793,7 +792,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
         .success(function(data,status,headers,config) {          
               $('#ModalArchivoM').modal('show');
-           }).error(function(data,status,headers,config){
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
       }
@@ -840,26 +839,25 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
           return;
         }
 
-         $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-			  var contenido = quillM.root.innerHTML;
+      $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+			var contenido = quillM.root.innerHTML;
         $scope.nuevoMaterial.descripcion= contenido;
         if($scope.nuevoMaterial.id == null){	
           $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
           .success(function(data,status,headers,config) {          
               $scope.nuevoMaterial.id = data;
-               $('#ModalEnlaceM').modal('show');
+              $('#ModalEnlaceM').modal('show');
             }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});          
       }else{
         $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
         .success(function(data,status,headers,config) {          
-               $('#ModalEnlaceM').modal('show');
-           }).error(function(data,status,headers,config){
+              $('#ModalEnlaceM').modal('show');
+          }).error(function(data,status,headers,config){
               alert("Error al guardar tarea: " + error);
             });
       }                
-       
 		}
 
       $scope.guardarEnlaceM = function(){			
@@ -897,7 +895,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 			}
 		}
 
-    	$scope.eliminarEnlaceM = function (id){
+    $scope.eliminarEnlaceM = function (id){
 			if (confirm("¿Estás seguro de eliminar este enlace?")) {
 				$scope.buscar.id = id;
 				$http.post('../api/eliminarEnlaceMaterial.php',$scope.buscar)
@@ -909,7 +907,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 			}
 		}
 
- $scope.abrirModalEditarMaterial = function (material) {
+$scope.abrirModalEditarMaterial = function (material) {
     $scope.nuevoMaterial = angular.copy(material);
     $scope.archivo={};
 		$scope.documento = null;
@@ -953,10 +951,10 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // -----------------------------------
     $scope.consultarCuestionario = function () {
       
-     if( getParameterByName("id_cuestionario") !== ""){
+    if( getParameterByName("id_cuestionario") !== ""){
       $http.post("../api/consultarCuestionario.php", { id: getParameterByName("id_cuestionario") })
       .success(function (data) {
-         $scope.nuevoCuestionario = data;
+        $scope.nuevoCuestionario = data;
         quillCu.clipboard.dangerouslyPasteHTML( $scope.nuevoCuestionario.descripcion);
       })
       .error(function (err) {
@@ -985,25 +983,25 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     } 
 
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
-     var contenido = quillC.root.innerHTML;
+    var contenido = quillC.root.innerHTML;
     $scope.nuevoCuestionario.descripcion= contenido;
   
-     $http.post('../api/guardarCuestionario.php',$scope.nuevoCuestionario)
+    $http.post('../api/guardarCuestionario.php',$scope.nuevoCuestionario)
 				.success(function(data,status,headers,config){
-				 const nuevoId = data.id;
-       if (!nuevoId) {
+				const nuevoId = data.id;
+      if (!nuevoId) {
           alert("No se pudo obtener el ID del cuestionario creado.");
           return;
         }
         window.location.href = `editCuestionario.php?id_clase=${$scope.nuevoCuestionario.id_clase}&id_cuestionario=${nuevoId}`;
-     }).error(function(data,status,headers,config){
+    }).error(function(data,status,headers,config){
 					alert("Error BD" + data);
-		 });
+		});
   };
 
   $scope.editarCuestionario = function (cues) {
-   window.location.href = 
-   `editCuestionario.php?id_clase=${cues.id_clase}&id_cuestionario=${cues.id}`;
+    window.location.href = 
+    `editCuestionario.php?id_clase=${cues.id_clase}&id_cuestionario=${cues.id}`;
   };
 
   $scope.modificarCuestionario = function () {
@@ -1015,11 +1013,11 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       return;
     } 
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
-     var contenido = quillCu.root.innerHTML;
+    var contenido = quillCu.root.innerHTML;
     $scope.nuevoCuestionario.descripcion= contenido;
     $http.post("../api/modificarCuestionario.php", $scope.nuevoCuestionario).then(
       function (response) {
-       alert("Cuestionario modificado");
+      alert("Cuestionario modificado");
       },function (error) {
         alert("Error al guardar cuestionario: " + error.data);
       }
@@ -1027,12 +1025,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   };
 
   $scope.guardarPregunta = function () {
-     var contenido = quillC.root.innerHTML;
-     var valid = quillC.getText().trim();
-     $scope.pregunta.pregunta= contenido;
-     $scope.pregunta.id_cuestionario= $scope.nuevoCuestionario.id;     
+    var contenido = quillC.root.innerHTML;
+    var valid = quillC.getText().trim();
+    $scope.pregunta.pregunta= contenido;
+    $scope.pregunta.id_cuestionario= $scope.nuevoCuestionario.id;     
     if (
-     valid === '' ||
+    valid === '' ||
       !$scope.pregunta.opcion1 ||
       !$scope.pregunta.opcion2 ||
       !$scope.pregunta.opcion3 ||
@@ -1063,11 +1061,9 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       .error(function (err) {
         alert("Error al consultar cuestionarios: " + err);
       });
- 
   };
 
-   $scope.consultarPreguntas = function () {
-
+  $scope.consultarPreguntas = function () {
     $http.post("../api/consultarCuestionarioContenidoIdCuestionario.php", { id_cuestionario:   getParameterByName("id_cuestionario") })
       .success(function (data) {
         $scope.preguntas = data;
@@ -1077,7 +1073,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       });
   };
 
-   $scope.formatQuill = function (pregunta) {
+  $scope.formatQuill = function (pregunta) {
     let textoPlano = pregunta.replace(/<[^>]+>/g, '').trim(); // Elimina etiquetas
     let resumen = textoPlano.length > 60 
               ? textoPlano.slice(0, 60) + "..." 
@@ -1086,17 +1082,17 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   };
 
   $scope.modalModificarPregunta = function (pregunta) {
-   $scope.preguntaMod = pregunta;
-   quillPe.clipboard.dangerouslyPasteHTML($scope.preguntaMod.pregunta);
-   $("#modalModPregunta").modal();
+  $scope.preguntaMod = pregunta;
+  quillPe.clipboard.dangerouslyPasteHTML($scope.preguntaMod.pregunta);
+  $("#modalModPregunta").modal();
   };
 
-   $scope.modificarPregunta = function () {
-     var contenido = quillPe.root.innerHTML;
-     var valid = quillPe.getText().trim();
-     $scope.preguntaMod.pregunta= contenido;
+  $scope.modificarPregunta = function () {
+    var contenido = quillPe.root.innerHTML;
+    var valid = quillPe.getText().trim();
+    $scope.preguntaMod.pregunta= contenido;
     if (
-     valid === '' ||
+    valid === '' ||
       !$scope.preguntaMod.opcion1 ||
       !$scope.preguntaMod.opcion2 ||
       !$scope.preguntaMod.opcion3 ||
@@ -1127,7 +1123,6 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       .error(function (err) {
         alert("Error al consultar cuestionarios: " + err);
       });
- 
   };
 
   $scope.eliminarPregunta = function (id){
@@ -1135,7 +1130,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 				$scope.buscar.id = id;
 				$http.post('../api/eliminarCuestionariosContenido.php',$scope.buscar)
 				.success(function(data,status,headers,config){
-				 $scope.consultarPreguntas();
+				$scope.consultarPreguntas();
 				}).error(function(data,status,headers,config){
 					alert("Error BD" + data);
 				});
@@ -1189,7 +1184,6 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
    // Consultar alumnos con sus tareas asignadas
     $scope.consultarTareasAlumnos = function () {
         $scope.clase.id = getParameterByName('id_clase');
-
         // Hacer la petición HTTP
         $http.post('../api/consultarHistorial_tareas.php', $scope.clase)
             .success(function (data) {
@@ -1204,13 +1198,12 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     $scope.actualizarCalificacion = function (tarea) {
         $http.post('../api/modificarHistorialTareas.php', tarea)
             .success(function (data) {
-                alert("Calificación actualizada");
+                $scope.consultarTareasAlumnos();
             })
             .error(function (data) {
                 alert("Error BD: " + data);
             });
     };
-
 
   $scope.consultarTareasAlumnos();
   $scope.consultarTemas();
@@ -1222,7 +1215,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   $scope.consultarPreguntas();
   //$scope.obtenerPreguntaInicial(); // ✅ solo una vez
 });
- 
+
 App.directive('uploaderModel', ["$parse", function ($parse) {
 	return {
 		restrict: 'A',
