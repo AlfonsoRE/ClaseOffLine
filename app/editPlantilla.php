@@ -1,9 +1,9 @@
 <?php require_once 'encabezadoEdit.php'; ?>
 <div id="content" class="container">
- 
-  
 
- </div>
+
+
+</div>
 </body>
 
 </div>

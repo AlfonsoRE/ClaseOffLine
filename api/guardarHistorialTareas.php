@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 require_once 'conexion.php';
 
-define('MAX_FILE_SIZE', 3 * 1024 * 1024); // 3MB
+define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['json']) && isset($_FILES['archivo'])) {
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($json && isset($json->id_tareas) && isset($json->id_usuario) && isset($_FILES['archivo'])) {
             if ($_FILES['archivo']['size'] > MAX_FILE_SIZE) {
-                echo json_encode(["status" => "error", "message" => "El archivo excede el límite de 3MB"]);
+                echo json_encode(["status" => "error", "message" => "El archivo excede el límite de 10MB"]);
                 exit;
             }
 
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_usuario = intval($json->id_usuario);
             $nombre = $_FILES['archivo']['name'];
             $archivo = file_get_contents($_FILES['archivo']['tmp_name']);
-            $tipo = $_FILES['archivo']['type']; 
+            $tipo = $_FILES['archivo']['type'];
 
             $stmt = $db->prepare("INSERT INTO historial_tareas (id_tareas, id_usuario, nombre, archivo, ruta) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param('iisss', $id_tareas, $id_usuario, $nombre, $archivo, $tipo);
@@ -39,4 +39,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(["status" => "error", "message" => "Método no permitido"]);
 }
-?>

@@ -1,13 +1,14 @@
 <?php require_once 'encabezadoClase.php'; ?>
 <div id="content" class="container">
 
-<style>
+  <style>
     .section-title {
       font-size: 24px;
       margin-top: 30px;
       margin-bottom: 15px;
       font-weight: bold;
     }
+
     .user-name {
       padding: 10px 0;
       border-bottom: 1px solid #ccc;
@@ -15,9 +16,9 @@
     }
   </style>
 
-<!-- Profesores -->
-<div class="section-title">Profesor</div>
-  <div class="user-name" >
+  <!-- Profesores -->
+  <div class="section-title">Profesor</div>
+  <div class="user-name">
     {{ buscarMaestroPorIdClase(clase.id) }}
   </div>
 
@@ -27,9 +28,7 @@
     {{ alumno.nombre }}
   </div>
 
-  
-
- </div>
+</div>
 </body>
 
 </div>

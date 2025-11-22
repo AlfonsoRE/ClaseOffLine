@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 require_once 'conexion.php';
 
-define('MAX_FILE_SIZE', 3 * 1024 * 1024); // 3MB
+define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 3MB
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['json']) && isset($_FILES['archivo'])) {
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($json && isset($json->id_material) && isset($_FILES['archivo'])) {
             if ($_FILES['archivo']['size'] > MAX_FILE_SIZE) {
-                echo json_encode(["status" => "error", "message" => "El archivo excede el límite de 3MB"]);
+                echo json_encode(["status" => "error", "message" => "El archivo excede el límite de 10MB"]);
                 exit;
             }
 

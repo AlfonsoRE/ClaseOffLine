@@ -1,279 +1,325 @@
-var App = angular.module("app",['ngSanitize']);
+var App = angular.module("app", ["ngSanitize"]);
 
-App.controller("editCtrl",  function($scope,$http, $sce) {
-	// Anuncios
+App.controller("editCtrl", function ($scope, $http, $sce) {
+  // Anuncios
   $scope.clase = {};
   $scope.tareasAlumnos = [];
-	$scope.anuncio ={};
-	$scope.anuncios ={};
-	$scope.nuevoAnuncio = '';
-	$scope.documento = null;
-	$scope.archivo ={};
-	$scope.archivos ={};
-	$scope.enlace ={};
-	$scope.enlaces ={};
-	$scope.buscar ={};
-	$scope.id_clase = getParameterByName("id_clase");
-	$scope.contenidos = [];
-	$scope.temas = [];
-	$scope.nuevoTema = {};
-	$scope.temaEditar = {};
-	$scope.tareas = [];
-	$scope.nuevaTarea = {};
-	$scope.tarea = {};
-	$scope.cuestionarios = [];
-	$scope.nuevoCuestionario = {};
-	$scope.cuestionario = {}; // ✅ Agregada
-	$scope.materiales = [];
-	$scope.nuevoMaterial = {};
-	$scope.material = {};
-  $scope.pregunta={};
-  $scope.preguntaMod={};
-  $scope.preguntas={};
+  $scope.anuncio = {}; //
+  $scope.anuncios = {}; //
+  $scope.nuevoAnuncio = ""; //
+  $scope.documento = null; //
+  $scope.archivo = {}; //
+  $scope.archivos = {}; //
+  $scope.enlace = {}; //
+  $scope.enlaces = {}; //
+  $scope.buscar = {}; //
+  $scope.id_clase = getParameterByName("id_clase");
+  $scope.contenidos = [];
+  $scope.temas = [];
+  $scope.nuevoTema = {};
+  $scope.temaEditar = {};
+  $scope.tareas = [];
+  $scope.nuevaTarea = {};
+  $scope.tarea = {};
+  $scope.cuestionarios = [];
+  $scope.nuevoCuestionario = {};
+  $scope.cuestionario = {}; // ✅ Agregada
+  $scope.materiales = [];
+  $scope.nuevoMaterial = {};
+  $scope.material = {};
+  $scope.pregunta = {};
+  $scope.preguntaMod = {};
+  $scope.preguntas = {};
   var quill;
   var quillM;
   var quillC;
   var quillCu;
   var quillPe;
 
-  quillCu = new Quill('#editorCu', {
-            theme: 'snow',
-            modules: {
-                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-            }});
+  quillCu = new Quill("#editorCu", {
+    theme: "snow",
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+      ],
+    },
+  });
 
-  quillPe = new Quill('#editorPe', {
-            theme: 'snow',
-            modules: {
-                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-            }});
+  quillPe = new Quill("#editorPe", {
+    theme: "snow",
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+      ],
+    },
+  });
 
-    quillC = new Quill('#editorC', {
-            theme: 'snow',
-            modules: {
-                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-        }});
+  quillC = new Quill("#editorC", {
+    theme: "snow",
+    modules: {
+      toolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+      ],
+    },
+  });
 
+  setTimeout(function () {
+    quillM = new Quill("#editorM", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+        ],
+      },
+    });
+  }, 500);
 
-  setTimeout(function() {
-        quillM = new Quill('#editorM', {
-            theme: 'snow',
-            modules: {
-                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-            }
-        }); }, 500);
+  setTimeout(function () {
+    quill = new Quill("#editor", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+        ],
+      },
+    });
 
-	setTimeout(function() {
-        quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }]]
-            }
+    $scope.guardarAnuncio = function () {
+      var contenido = quill.root.innerHTML;
+      $scope.anuncio.id_clase = getParameterByName("id_clase");
+      $scope.anuncio.mensaje = contenido;
+      $scope.anuncio.id_usuario = $scope.usuario.id_usuario;
+
+      //alert($scope.anuncio.mensaje+ " "+ $scope.anuncio.id_clase);
+      if ($scope.anuncio.id == null) {
+        $http
+          .post("../api/guardarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            quill.setText("");
+            $scope.anuncio = {};
+            $scope.consultarAnuncios();
+            $scope.consultarArchivos();
+            $scope.consultarEnlaces();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      } else {
+        $http
+          .post("../api/modificarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            quill.setText("");
+            $scope.anuncio = {};
+            $scope.consultarAnuncios();
+            $scope.consultarArchivos();
+            $scope.consultarEnlaces();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
+
+    $scope.subirArchivo = function () {
+      var contenido = quill.root.innerHTML;
+      $scope.anuncio.id_clase = getParameterByName("id_clase");
+      $scope.anuncio.mensaje = contenido;
+      $scope.anuncio.id_usuario = $scope.usuario.id_usuario;
+      if ($scope.anuncio.id == null) {
+        $http
+          .post("../api/guardarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            $scope.anuncio.id = data;
+            $("#ModalArchivo").modal("show");
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      } else {
+        $http
+          .post("../api/modificarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            $("#ModalArchivo").modal("show");
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
+
+    $scope.agregarEnlace = function () {
+      var contenido = quill.root.innerHTML;
+      $scope.anuncio.id_clase = getParameterByName("id_clase");
+      $scope.anuncio.mensaje = contenido;
+      $scope.anuncio.id_usuario = $scope.usuario.id_usuario;
+      if ($scope.anuncio.id == null) {
+        $http
+          .post("../api/guardarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            $scope.anuncio.id = data;
+            $("#ModalEnlace").modal("show");
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      } else {
+        $http
+          .post("../api/modificarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            $("#ModalEnlace").modal("show");
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
+
+    $scope.guardarArchivo = function () {
+      $scope.archivo.id_anuncios = $scope.anuncio.id;
+      var formData = new FormData();
+      formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
+      formData.append("archivo", $scope.documento); // Enviar archivo
+
+      $http
+        .post("../api/guardarArchivoAnuncio.php", formData, {
+          headers: { "Content-Type": undefined },
+          transformRequest: angular.identity,
+        })
+        .then(
+          function (response) {
+            $scope.archivo = {};
+            $scope.documento = null;
+            $scope.consultarArchivos();
+            $("#ModalArchivoClose").click();
+          },
+          function (error) {
+            $scope.mensaje = "Error al subir archivo";
+            alert("Error BD" + data);
+          }
+        );
+    };
+
+    $scope.guardarEnlace = function () {
+      $scope.enlace.id_anuncios = $scope.anuncio.id;
+      $http
+        .post("../api/guardarEnlacesAnuncios.php", $scope.enlace)
+        .success(function (data, status, headers, config) {
+          $scope.enlace = {};
+          $scope.consultarEnlaces();
+          $("#ModalEnlaceClose").click();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
         });
+    };
 
-		$scope.guardarAnuncio = function(){
-			var contenido = quill.root.innerHTML;
-			$scope.anuncio.id_clase  = getParameterByName('id_clase');
-			$scope.anuncio.mensaje= contenido;
-			$scope.anuncio.id_usuario=$scope.usuario.id_usuario;	
-			
-		//alert($scope.anuncio.mensaje+ " "+ $scope.anuncio.id_clase);
-			if($scope.anuncio.id == null){		
-				$http.post('../api/guardarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					quill.setText('');
-					$scope.anuncio = {};
-					$scope.consultarAnuncios();
-					$scope.consultarArchivos();	
-					$scope.consultarEnlaces();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}else{
-				$http.post('../api/modificarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					quill.setText('');
-					$scope.anuncio = {};	
-					$scope.consultarAnuncios();
-					$scope.consultarArchivos();	
-					$scope.consultarEnlaces();					
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}		
-		}
+    $scope.consultarArchivos = function () {
+      $scope.buscar.id_anuncio = $scope.anuncio.id;
+      //$scope.buscar.id_anuncio = 22;
+      $http
+        .post("../api/consultarArchivoAnunciosPorAnuncio.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.archivos = data;
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    };
 
-		$scope.subirArchivo = function(){
-			var contenido = quill.root.innerHTML;
-			$scope.anuncio.id_clase  = getParameterByName('id_clase');
-			$scope.anuncio.mensaje= contenido;
-			$scope.anuncio.id_usuario=$scope.usuario.id_usuario;
-			if($scope.anuncio.id == null){		
-				$http.post('../api/guardarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					$scope.anuncio.id = data;	
-					$('#ModalArchivo').modal('show');
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}	else{
-			$http.post('../api/modificarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					$('#ModalArchivo').modal('show');
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}
-		}
+    $scope.consultarEnlaces = function () {
+      $scope.buscar.id_anuncios = $scope.anuncio.id;
+      // $scope.buscar.id_anuncios = 19;
+      $http
+        .post("../api/consultarEnlacesAnuncioIdAnuncios.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.enlaces = data;
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    };
 
-		$scope.agregarEnlace = function(){
-			var contenido = quill.root.innerHTML;
-			$scope.anuncio.id_clase  = getParameterByName('id_clase');
-			$scope.anuncio.mensaje= contenido;
-			$scope.anuncio.id_usuario=$scope.usuario.id_usuario;
-			if($scope.anuncio.id == null){		
-				$http.post('../api/guardarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					$scope.anuncio.id = data;	
-					$('#ModalEnlace').modal('show');
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}	else{
-			$http.post('../api/modificarAnuncio.php',$scope.anuncio)
-				.success(function(data,status,headers,config){
-					$('#ModalEnlace').modal('show');
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}
-		}
+    $scope.eliminarArchivo = function (id) {
+      if (confirm("¿Estás seguro de eliminar este archivo?")) {
+        $scope.buscar.id = id;
+        $http
+          .post("../api/eliminarArchivoAnuncio.php", $scope.buscar)
+          .success(function (data, status, headers, config) {
+            $scope.consultarArchivos();
+            $scope.consultarAnuncios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
 
-		$scope.guardarArchivo = function(){
-			$scope.archivo.id_anuncios = $scope.anuncio.id;
-			var formData = new FormData();
-			formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
-			formData.append("archivo", $scope.documento); // Enviar archivo
+    $scope.eliminarEnlace = function (id) {
+      if (confirm("¿Estás seguro de eliminar este enlace?")) {
+        $scope.buscar.id = id;
+        $http
+          .post("../api/eliminarEnlacesAnuncios.php", $scope.buscar)
+          .success(function (data, status, headers, config) {
+            $scope.consultarEnlaces();
+            $scope.consultarAnuncios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
 
-			$http.post('../api/guardarArchivoAnuncio.php', formData, {
-				headers: { "Content-Type": undefined },
-				transformRequest: angular.identity
-			}).then(function (response) {
-				$scope.archivo={};
-				$scope.documento = null;
-				$scope.consultarArchivos();
-				$('#ModalArchivoClose').click();
-			}, function (error) {
-				$scope.mensaje = "Error al subir archivo";
-				alert("Error BD" + data);
-			});
-		}
+    $scope.consultarAnuncios = function () {
+      $scope.buscar.id_clase = getParameterByName("id_clase");
+      $http
+        .post("../api/consultarAnunciosArchivosEnlaces.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.anuncios = data;
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    };
 
-		$scope.guardarEnlace = function(){			
-			$scope.enlace.id_anuncios = $scope.anuncio.id;
-				$http.post('../api/guardarEnlacesAnuncios.php',$scope.enlace)
-				.success(function(data,status,headers,config){	
-					$scope.enlace={};
-					$scope.consultarEnlaces();				
-					$('#ModalEnlaceClose').click();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}
+    $scope.tiempoTranscurrido = function (fechaString) {
+      var fecha = new Date(fechaString);
+      var ahora = new Date();
+      var diffMs = ahora - fecha;
 
-		$scope.consultarArchivos = function(){
-			$scope.buscar.id_anuncio = $scope.anuncio.id;
-			//$scope.buscar.id_anuncio = 22;
-			$http.post('../api/consultarArchivoAnunciosPorAnuncio.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.archivos = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+      var segundos = Math.floor(diffMs / 1000);
+      var minutos = Math.floor(segundos / 60);
+      var horas = Math.floor(minutos / 60);
+      var dias = Math.floor(horas / 24);
 
-		$scope.consultarEnlaces = function(){
-			$scope.buscar.id_anuncios = $scope.anuncio.id;
-		   // $scope.buscar.id_anuncios = 19;
-			$http.post('../api/consultarEnlacesAnuncioIdAnuncios.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.enlaces = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+      if (dias > 0) return "Publicado hace " + dias + " día(s)";
+      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
+      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
+      return "Publicado hace unos segundos";
+    };
 
-		$scope.eliminarArchivo = function (id){
-			if (confirm("¿Estás seguro de eliminar este archivo?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarArchivoAnuncio.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarArchivos();
-					$scope.consultarAnuncios();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
+    $scope.eliminarAnuncio = function (id) {
+      if (confirm("¿Estás seguro de eliminar este anuncio?")) {
+        $scope.buscar.id = id;
+        $http
+          .post("../api/eliminarAnuncio.php", $scope.buscar)
+          .success(function (data, status, headers, config) {
+            $scope.consultarAnuncios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
 
-		$scope.eliminarEnlace = function (id){
-			if (confirm("¿Estás seguro de eliminar este enlace?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarEnlacesAnuncios.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarEnlaces();
-					$scope.consultarAnuncios();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
+    $scope.consultarAnuncios();
+  }, 500);
 
-		$scope.consultarAnuncios = function(){
-			$scope.buscar.id_clase =getParameterByName('id_clase');		
-			$http.post('../api/consultarAnunciosArchivosEnlaces.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.anuncios = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
-
-		$scope.tiempoTranscurrido = function(fechaString) {
-			var fecha = new Date(fechaString);
-			var ahora = new Date();
-			var diffMs = ahora - fecha;
-		
-			var segundos = Math.floor(diffMs / 1000);
-			var minutos = Math.floor(segundos / 60);
-			var horas = Math.floor(minutos / 60);
-			var dias = Math.floor(horas / 24);
-		
-			if (dias > 0) return "Publicado hace " + dias + " día(s)";
-			if (horas > 0) return "Publicado hace " + horas + " hora(s)";
-			if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
-			return "Publicado hace unos segundos";
-		};
-
-		$scope.eliminarAnuncio = function (id){
-			if (confirm("¿Estás seguro de eliminar este anuncio?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarAnuncio.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarAnuncios();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
-
-		$scope.consultarAnuncios();
-
-	}, 500);
-
-
-
-//Cierra anuncios
+  //Cierra anuncios
   $scope.clase = {};
   $scope.usuario = {};
   $scope.clasesImpartidas = {};
@@ -379,14 +425,16 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   // Temas
   // ------------------------------------
   $scope.consultarTemas = function () {
-    $http.post("../api/obtenerContenidoClase.php", { id_clase: $scope.id_clase }).then(
-      function (response) {
-        $scope.temas = response.data;        
-      },
-      function (error) {
-        alert("Error al consultar temas: " + error);
-      }
-    );
+    $http
+      .post("../api/obtenerContenidoClase.php", { id_clase: $scope.id_clase })
+      .then(
+        function (response) {
+          $scope.temas = response.data;
+        },
+        function (error) {
+          alert("Error al consultar temas: " + error);
+        }
+      );
   };
 
   $scope.guardarTema = function () {
@@ -398,7 +446,7 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     $scope.nuevoTema.id_clase = getParameterByName("id_clase");
     $http.post("../api/guardarTema.php", $scope.nuevoTema).then(
       function () {
-       // alert("Tema guardado");
+        // alert("Tema guardado");
         $scope.consultarTemas();
         $scope.nuevoTema = {};
         $("#ModalTemaClose").click();
@@ -429,33 +477,45 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     $("#modalEditarTema").modal();
   };
 
-  $scope.guardarEdicionTema = function () {  
-      $http.post("../api/modificarTema.php", $scope.temaEditar).then(
-        function () {
-          $scope.consultarTemas();
-          $("#modalEditarTema").modal("hide");
-        },
-        function (error) {
-          alert("Error al modificar tema: " + error.statusText);
-        }
-      );
+  $scope.guardarEdicionTema = function () {
+    $http.post("../api/modificarTema.php", $scope.temaEditar).then(
+      function () {
+        $scope.consultarTemas();
+        $("#modalEditarTema").modal("hide");
+      },
+      function (error) {
+        alert("Error al modificar tema: " + error.statusText);
+      }
+    );
   };
 
-  
   // -----------------------------------
   // TAREAS
   // -----------------------------------
-  
+
   $scope.abrirModalTarea = function () {
     $scope.consultarTemas();
     $scope.nuevaTarea = {};
-    quill.setText('');		
-		$scope.consultarArchivosT();	
-		$scope.consultarEnlacesT();
-    $('#modalAgregarTarea').modal('show');
+    quill.setText("");
+    $scope.consultarArchivosT();
+    $scope.consultarEnlacesT();
+    $("#modalAgregarTarea").modal("show");
   };
 
-
+  $scope.consultarTarea = function () {
+    $scope.id_buscartarea = getParameterByName("id_tarea");
+    $http
+      .post("../api/consultarTarea.php", { id: $scope.id_buscartarea })
+      .success(function (data) {
+        $scope.tarea = data;
+        // Verificamos si hay archivos
+        $scope.tarea.tieneArchivo =
+          $scope.tarea.archivos && $scope.tarea.archivos.length > 0;
+      })
+      .error(function (err) {
+        alert("Error al consultar tareas: " + err);
+      });
+  };
   $scope.consultarTareas = function () {
     $http
       .post("../api/consultarTareas.php", { id_clase: $scope.id_clase })
@@ -466,47 +526,67 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
         alert("Error al consultar tareas: " + err);
       });
   };
+  $scope.consultarTareaComentarios = function () {
+    $scope.buscarcomentario.id_tarea = getParameterByName("id_tarea");
+    $scope.buscarcomentario.id_usuario =
+      document.getElementById("idUsuario").value;
 
+    $http
+      .post(
+        "../api/consultarComentariosPorUsuarioYTarea.php",
+        $scope.buscarcomentario
+      )
+      .success(function (data, status, headers, config) {
+        $scope.tareacomentarios = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
   $scope.guardarTarea = function () {
     if (!$scope.nuevaTarea.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }
-        if (!$scope.nuevaTarea.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
-        }
-        $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			var contenido = quill.root.innerHTML;
-        $scope.nuevaTarea.descripcion= contenido;
-        if($scope.nuevaTarea.id == null){	
-          $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
-          .success(function(data,status,headers,config) {  
-             //$scope.consultarTareas();
-            $scope.consultarTemas();
-            $scope.nuevaTarea = {};
-            quill.setText('');		
-					$scope.consultarArchivosT();	
-					$scope.consultarEnlacesT();
-            $("#ModalTareaClose").click();             
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
-        .success(function(data,status,headers,config) {          
-              //$scope.consultarTareas();
-            $scope.consultarTemas();
-            $scope.nuevaTarea = {};
-            quill.setText('');		
-					$scope.consultarArchivosT();	
-					$scope.consultarEnlacesT();
-            $("#ModalTareaClose").click(); 
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-          }
-  }
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+    if (!$scope.nuevaTarea.id_tema) {
+      alert("El tema de la tarea es obligatorio.");
+      return;
+    }
+    $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
+    var contenido = quill.root.innerHTML;
+    $scope.nuevaTarea.descripcion = contenido;
+    if ($scope.nuevaTarea.id == null) {
+      $http
+        .post("../api/guardarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          //$scope.consultarTareas();
+          $scope.consultarTemas();
+          $scope.nuevaTarea = {};
+          quill.setText("");
+          $scope.consultarArchivosT();
+          $scope.consultarEnlacesT();
+          $("#ModalTareaClose").click();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          //$scope.consultarTareas();
+          $scope.consultarTemas();
+          $scope.nuevaTarea = {};
+          quill.setText("");
+          $scope.consultarArchivosT();
+          $scope.consultarEnlacesT();
+          $("#ModalTareaClose").click();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
+  };
 
   $scope.eliminarTarea = function (tarea) {
     if (confirm("¿Eliminar esta tarea?")) {
@@ -523,11 +603,11 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
 
   $scope.abrirModalEditarTarea = function (tarea) {
     $scope.nuevaTarea = angular.copy(tarea);
-    $scope.archivo={};
-		$scope.documento = null;
-		$scope.consultarArchivosT();
-    $scope.enlace={};
-		$scope.consultarEnlacesT();	
+    $scope.archivo = {};
+    $scope.documento = null;
+    $scope.consultarArchivosT();
+    $scope.enlace = {};
+    $scope.consultarEnlacesT();
     quill.clipboard.dangerouslyPasteHTML($scope.nuevaTarea.descripcion);
     $("#modalAgregarTarea").modal();
   };
@@ -555,145 +635,256 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     window.history.back();
   };
 
-  $scope.subirArchivoT = function(){
-        if (!$scope.nuevaTarea.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
+  $scope.subirArchivoT = function () {
+    if (!$scope.nuevaTarea.id_tema) {
+      alert("El tema de la tarea es obligatorio.");
+      return;
+    }
+    if (!$scope.nuevaTarea.titulo) {
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+
+    $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
+    var contenido = quill.root.innerHTML;
+    $scope.nuevaTarea.descripcion = contenido;
+    if ($scope.nuevaTarea.id == null) {
+      $http
+        .post("../api/guardarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          $scope.nuevaTarea.id = data;
+          $("#ModalArchivo").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          $("#ModalArchivo").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
+  };
+
+  $scope.guardarArchivoT = function () {
+    $scope.archivo.id_tareas = $scope.nuevaTarea.id;
+    var formData = new FormData();
+    formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
+    formData.append("archivo", $scope.documento); // Enviar archivo
+
+    $http
+      .post("../api/guardarArchivoTarea.php", formData, {
+        headers: { "Content-Type": undefined },
+        transformRequest: angular.identity,
+      })
+      .then(
+        function (response) {
+          $scope.archivo = {};
+          $scope.documento = null;
+          $scope.consultarArchivosT();
+          $("#ModalArchivoClose").click();
+        },
+        function (error) {
+          $scope.mensaje = "Error al subir archivo";
+          alert("Error BD" + data);
         }
-        if (!$scope.nuevaTarea.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }
-        
-        $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			var contenido = quill.root.innerHTML;
-        $scope.nuevaTarea.descripcion= contenido;
-        if($scope.nuevaTarea.id == null){	
-          $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
-          .success(function(data,status,headers,config) {          
-              $scope.nuevaTarea.id = data;
-              $('#ModalArchivo').modal('show');
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
-        .success(function(data,status,headers,config) {          
-              $('#ModalArchivo').modal('show');
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-          }
-  }
+      );
+  };
 
-  $scope.guardarArchivoT = function(){
-			$scope.archivo.id_tareas =  $scope.nuevaTarea.id;
-			var formData = new FormData();
-			formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
-			formData.append("archivo", $scope.documento); // Enviar archivo
+  $scope.consultarArchivosT = function () {
+    $scope.buscar.id_tareas = $scope.nuevaTarea.id;
+    //$scope.buscar.id_anuncio = 22;
+    $http
+      .post("../api/consultarArchivoTareasporTarea.php", $scope.buscar)
+      .success(function (data, status, headers, config) {
+        $scope.archivos = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-			$http.post('../api/guardarArchivoTarea.php', formData, {
-				headers: { "Content-Type": undefined },
-				transformRequest: angular.identity
-			}).then(function (response) {
-				$scope.archivo={};
-				$scope.documento = null;
-				$scope.consultarArchivosT();
-				$('#ModalArchivoClose').click();
-			}, function (error) {
-				$scope.mensaje = "Error al subir archivo";
-				alert("Error BD" + data);
-			});
-		}
+  $scope.agregarEnlaceT = function () {
+    if (!$scope.nuevaTarea.id_tema) {
+      alert("El tema de la tarea es obligatorio.");
+      return;
+    }
+    if (!$scope.nuevaTarea.titulo) {
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+    $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
+    var contenido = quill.root.innerHTML;
+    $scope.nuevaTarea.descripcion = contenido;
+    if ($scope.nuevaTarea.id == null) {
+      $http
+        .post("../api/guardarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          $scope.nuevaTarea.id = data;
+          $("#ModalEnlace").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarTarea.php", $scope.nuevaTarea)
+        .success(function (data, status, headers, config) {
+          $("#ModalEnlace").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
+  };
 
-    $scope.consultarArchivosT = function(){
-			$scope.buscar.id_tareas = $scope.nuevaTarea.id;
-			//$scope.buscar.id_anuncio = 22;
-			$http.post('../api/consultarArchivoTareasporTarea.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.archivos = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+  $scope.guardarEnlaceT = function () {
+    $scope.enlace.id_tareas = $scope.nuevaTarea.id;
+    $http
+      .post("../api/guardarEnlaceTarea.php", $scope.enlace)
+      .success(function (data, status, headers, config) {
+        $scope.enlace = {};
+        $scope.consultarEnlacesT();
+        $("#ModalEnlaceClose").click();
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-    $scope.agregarEnlaceT = function(){
-      if (!$scope.nuevaTarea.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
-        }
-      if (!$scope.nuevaTarea.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }         
-        $scope.nuevaTarea.id_clase = getParameterByName("id_clase");
-			var contenido = quill.root.innerHTML;
-        $scope.nuevaTarea.descripcion= contenido;
-        if($scope.nuevaTarea.id == null){	
-          $http.post("../api/guardarTarea.php", $scope.nuevaTarea)
-          .success(function(data,status,headers,config) {          
-              $scope.nuevaTarea.id = data;
-              $('#ModalEnlace').modal('show');
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarTarea.php", $scope.nuevaTarea)
-        .success(function(data,status,headers,config) {          
-              $('#ModalEnlace').modal('show');
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-          }
-			}
+  $scope.consultarEnlacesT = function () {
+    $scope.buscar.id_tareas = $scope.nuevaTarea.id;
+    // $scope.buscar.id_anuncios = 19;
+    $http
+      .post("../api/consultarEnlaceTareaPorTarea.php", $scope.buscar)
+      .success(function (data, status, headers, config) {
+        $scope.enlaces = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-      $scope.guardarEnlaceT = function(){			
-			$scope.enlace.id_tareas = $scope.nuevaTarea.id;
-				$http.post('../api/guardarEnlaceTarea.php',$scope.enlace)
-				.success(function(data,status,headers,config){	
-					$scope.enlace={};
-					$scope.consultarEnlacesT();				
-					$('#ModalEnlaceClose').click();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}
+  $scope.eliminarArchivoT = function (id) {
+    if (confirm("¿Estás seguro de eliminar este archivo?")) {
+      $scope.buscar.id = id;
+      $http
+        .post("../api/eliminarArchivoTareas.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.consultarArchivosT();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    }
+  };
 
-    $scope.consultarEnlacesT = function(){
-			$scope.buscar.id_tareas = $scope.nuevaTarea.id;
-		   // $scope.buscar.id_anuncios = 19;
-			$http.post('../api/consultarEnlaceTareaPorTarea.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.enlaces = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+  $scope.eliminarEnlaceT = function (id) {
+    if (confirm("¿Estás seguro de eliminar este enlace?")) {
+      $scope.buscar.id = id;
+      $http
+        .post("../api/eliminarEnlaceTarea.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.consultarEnlacesT();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    }
+  };
+  setTimeout(function () {
+    var quill = new Quill("#editore", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+        ],
+      },
+    });
+    $scope.guardarTareaComentario = function () {
+      var contenido = quill.root.innerHTML;
+      $scope.anuncio.id_tarea = getParameterByName("id_tarea");
+      $scope.anuncio.id_usuario = document.getElementById("idUsuario").value; // As
+      $scope.anuncio.comentario = contenido;
 
-    $scope.eliminarArchivoT = function (id){
-			if (confirm("¿Estás seguro de eliminar este archivo?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarArchivoTareas.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarArchivosT();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
+      //alert($scope.anuncio.mensaje+ " "+ $scope.anuncio.id_clase);
+      if ($scope.anuncio.id == null) {
+        $http
+          .post("../api/guardarComentario.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            quill.setText("");
+            $scope.anuncio = {};
+            $scope.consultarTareaComentarios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      } else {
+        $http
+          .post("../api/modificarAnuncio.php", $scope.anuncio)
+          .success(function (data, status, headers, config) {
+            quill.setText("");
+            $scope.anuncio = {};
+            $scope.consultarTareaComentarios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
 
-    $scope.eliminarEnlaceT = function (id){
-			if (confirm("¿Estás seguro de eliminar este enlace?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarEnlaceTarea.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarEnlacesT();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
+    $scope.tiempoTranscurrido = function (fechaString) {
+      var fecha = new Date(fechaString);
+      var ahora = new Date();
+      var diffMs = ahora - fecha;
 
+      var segundos = Math.floor(diffMs / 1000);
+      var minutos = Math.floor(segundos / 60);
+      var horas = Math.floor(minutos / 60);
+      var dias = Math.floor(horas / 24);
+
+      if (dias > 0) return "Publicado hace " + dias + " día(s)";
+      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
+      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
+      return "Publicado hace unos segundos";
+    };
+
+    $scope.eliminarAnuncioComentarios = function (id) {
+      if (confirm("¿Estás seguro de eliminar este anuncio?")) {
+        $scope.buscar.id = id;
+        $http
+          .post("../api/eliminarAnuncio.php", $scope.buscar)
+          .success(function (data, status, headers, config) {
+            $scope.consultarAnuncios();
+          })
+          .error(function (data, status, headers, config) {
+            alert("Error BD" + data);
+          });
+      }
+    };
+  }, 500);
+  $scope.consultarTareaComentarios = function () {
+    $scope.buscarcomentario.id_tarea = getParameterByName("id_tarea");
+    $scope.buscarcomentario.id_usuario =
+      document.getElementById("idUsuario").value;
+
+    $http
+      .post(
+        "../api/consultarComentariosPorUsuarioYTarea.php",
+        $scope.buscarcomentario
+      )
+      .success(function (data, status, headers, config) {
+        $scope.tareacomentarios = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
   // -----------------------------------
   // MATERIALES
   // -----------------------------------
@@ -701,14 +892,26 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
   $scope.abrirModalMaterial = function () {
     $scope.consultarTemas();
     $scope.nuevoMaterial = {};
-    quillM.setText('');		
-		$scope.consultarArchivosM();	
-		$scope.consultarEnlacesM();
-    $('#modalAgregarMaterial').modal('show');
+    quillM.setText("");
+    $scope.consultarArchivosM();
+    $scope.consultarEnlacesM();
+    $("#modalAgregarMaterial").modal("show");
+  };
+
+  $scope.consultarMaterialId = function () {
+    $scope.id_buscarmaterial = getParameterByName("id_material");
+    $http
+      .post("../api/consultarMaterialId.php", { id: $scope.id_buscarmaterial })
+      .success(function (data) {
+        $scope.material = data;
+      })
+      .error(function (err) {
+        alert("Error al consultar tareas: " + err);
+      });
   };
   $scope.consultarMateriales = function () {
     $http
-      .post("../api/consultarMaterial.php", { id_clase: $scope.id_clase })
+      .post("../api/consultarMaterialId.php", { id_clase: $scope.id_clase })
       .success(function (data) {
         $scope.materiales = data;
       })
@@ -724,41 +927,45 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
       return;
     }
 
-      $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-      var contenido = quillM.root.innerHTML;
-      $scope.nuevoMaterial.descripcion = contenido;
-        if($scope.nuevoMaterial.id == null){	
-          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
-          .success(function(data,status,headers,config) {  
-            $scope.nuevoMaterial = {};
-            quillM.setText('');		
-					$scope.consultarArchivosM();	
-					$scope.consultarEnlacesM();
-              $scope.consultarTemas();
-            $("#ModalMaterialClose").click();             
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
-        .success(function(data,status,headers,config) {          
-            $scope.nuevoMaterial = {};
-            quillM.setText('');		
-            $scope.consultarTemas();
-					$scope.consultarArchivosM();	
-					$scope.consultarEnlacesM();
-            $("#ModalMaterialClose").click(); 
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-          } 
+    $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+    var contenido = quillM.root.innerHTML;
+    $scope.nuevoMaterial.descripcion = contenido;
+    if ($scope.nuevoMaterial.id == null) {
+      $http
+        .post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $scope.nuevoMaterial = {};
+          quillM.setText("");
+          $scope.consultarArchivosM();
+          $scope.consultarEnlacesM();
+          $scope.consultarTemas();
+          $("#ModalMaterialClose").click();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $scope.nuevoMaterial = {};
+          quillM.setText("");
+          $scope.consultarTemas();
+          $scope.consultarArchivosM();
+          $scope.consultarEnlacesM();
+          $("#ModalMaterialClose").click();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
   };
 
   $scope.eliminarMaterial = function (material) {
     if (confirm("¿Eliminar este material?")) {
       $http
         .post("../api/eliminarMaterial.php", { id: material.id })
-        .success(function () {         
+        .success(function () {
           $scope.consultarTemas();
         })
         .error(function (err) {
@@ -767,157 +974,179 @@ App.controller("editCtrl",  function($scope,$http, $sce) {
     }
   };
 
-  $scope.subirArchivoM = function(){
-        if (!$scope.nuevoMaterial.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
+  $scope.subirArchivoM = function () {
+    if (!$scope.nuevoMaterial.id_tema) {
+      alert("El tema de la tarea es obligatorio.");
+      return;
+    }
+    if (!$scope.nuevoMaterial.titulo) {
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+
+    $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+    var contenido = quillM.root.innerHTML;
+    $scope.nuevoMaterial.descripcion = contenido;
+    if ($scope.nuevoMaterial.id == null) {
+      $http
+        .post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $scope.nuevoMaterial.id = data;
+          $("#ModalArchivoM").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $("#ModalArchivoM").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
+  };
+
+  $scope.guardarArchivoM = function () {
+    $scope.archivo.id_material = $scope.nuevoMaterial.id;
+    var formData = new FormData();
+    formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
+    formData.append("archivo", $scope.documento); // Enviar archivo
+
+    $http
+      .post("../api/guardarArchivosMaterial.php", formData, {
+        headers: { "Content-Type": undefined },
+        transformRequest: angular.identity,
+      })
+      .then(
+        function (response) {
+          $scope.archivo = {};
+          $scope.documento = null;
+          $scope.consultarArchivosM();
+          $("#ModalArchivoMClose").click();
+        },
+        function (error) {
+          $scope.mensaje = "Error al subir archivo";
+          alert("Error BD" + data);
         }
-        if (!$scope.nuevoMaterial.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }
-        
-        $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-			var contenido = quillM.root.innerHTML;
-        $scope.nuevoMaterial.descripcion= contenido;
-        if($scope.nuevoMaterial.id == null){	
-          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
-          .success(function(data,status,headers,config) {          
-              $scope.nuevoMaterial.id = data;
-              $('#ModalArchivoM').modal('show');
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
-        .success(function(data,status,headers,config) {          
-              $('#ModalArchivoM').modal('show');
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-      }
-  }
+      );
+  };
 
-  $scope.guardarArchivoM = function(){
-			$scope.archivo.id_material =  $scope.nuevoMaterial.id;
-			var formData = new FormData();
-			formData.append("json", JSON.stringify($scope.archivo)); // Enviar JSON con los parámetros
-			formData.append("archivo", $scope.documento); // Enviar archivo
+  $scope.consultarArchivosM = function () {
+    $scope.buscar.id_material = $scope.nuevoMaterial.id;
+    //$scope.buscar.id_anuncio = 22;
+    $http
+      .post("../api/consultarArchivosMaterialIdMaterial.php", $scope.buscar)
+      .success(function (data, status, headers, config) {
+        $scope.archivos = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-			$http.post('../api/guardarArchivosMaterial.php', formData, {
-				headers: { "Content-Type": undefined },
-				transformRequest: angular.identity
-			}).then(function (response) {
-				$scope.archivo={};
-				$scope.documento = null;
-				$scope.consultarArchivosM();
-				$('#ModalArchivoMClose').click();
-			}, function (error) {
-				$scope.mensaje = "Error al subir archivo";
-				alert("Error BD" + data);
-			});
-		}
+  $scope.agregarEnlaceM = function () {
+    if (!$scope.nuevoMaterial.titulo) {
+      alert("El título de la tarea es obligatorio.");
+      return;
+    }
+    if (!$scope.nuevoMaterial.id_tema) {
+      alert("El tema de la tarea es obligatorio.");
+      return;
+    }
 
-    $scope.consultarArchivosM = function(){
-			$scope.buscar.id_material = $scope.nuevoMaterial.id;
-			//$scope.buscar.id_anuncio = 22;
-			$http.post('../api/consultarArchivosMaterialIdMaterial.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.archivos = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+    $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
+    var contenido = quillM.root.innerHTML;
+    $scope.nuevoMaterial.descripcion = contenido;
+    if ($scope.nuevoMaterial.id == null) {
+      $http
+        .post("../api/guardarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $scope.nuevoMaterial.id = data;
+          $("#ModalEnlaceM").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    } else {
+      $http
+        .post("../api/modificarMaterial.php", $scope.nuevoMaterial)
+        .success(function (data, status, headers, config) {
+          $("#ModalEnlaceM").modal("show");
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error al guardar tarea: " + error);
+        });
+    }
+  };
 
-    $scope.agregarEnlaceM = function(){
-      if (!$scope.nuevoMaterial.titulo) {
-          alert("El título de la tarea es obligatorio.");
-          return;
-        }
-      if (!$scope.nuevoMaterial.id_tema) {
-          alert("El tema de la tarea es obligatorio.");
-          return;
-        }
+  $scope.guardarEnlaceM = function () {
+    $scope.enlace.id_material = $scope.nuevoMaterial.id;
+    $http
+      .post("../api/guardarEnlaceMaterial.php", $scope.enlace)
+      .success(function (data, status, headers, config) {
+        $scope.enlace = {};
+        $scope.consultarEnlacesM();
+        $("#ModalEnlaceMClose").click();
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-      $scope.nuevoMaterial.id_clase = getParameterByName("id_clase");
-			var contenido = quillM.root.innerHTML;
-        $scope.nuevoMaterial.descripcion= contenido;
-        if($scope.nuevoMaterial.id == null){	
-          $http.post("../api/guardarMaterial.php", $scope.nuevoMaterial)
-          .success(function(data,status,headers,config) {          
-              $scope.nuevoMaterial.id = data;
-              $('#ModalEnlaceM').modal('show');
-            }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});          
-      }else{
-        $http.post("../api/modificarMaterial.php", $scope.nuevoMaterial)
-        .success(function(data,status,headers,config) {          
-              $('#ModalEnlaceM').modal('show');
-          }).error(function(data,status,headers,config){
-              alert("Error al guardar tarea: " + error);
-            });
-      }                
-		}
+  $scope.consultarEnlacesM = function () {
+    $scope.buscar.id_material = $scope.nuevoMaterial.id;
+    // $scope.buscar.id_anuncios = 19;
+    $http
+      .post("../api/consultarEnlaceMaterialPorMaterial.php", $scope.buscar)
+      .success(function (data, status, headers, config) {
+        $scope.enlaces = data;
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
+  };
 
-      $scope.guardarEnlaceM = function(){			
-			$scope.enlace.id_material = $scope.nuevoMaterial.id;
-				$http.post('../api/guardarEnlaceMaterial.php',$scope.enlace)
-				.success(function(data,status,headers,config){	
-					$scope.enlace={};
-					$scope.consultarEnlacesM();				
-					$('#ModalEnlaceMClose').click();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-		}
+  $scope.eliminarArchivoM = function (id) {
+    if (confirm("¿Estás seguro de eliminar este archivo?")) {
+      $scope.buscar.id = id;
+      $http
+        .post("../api/eliminarArchivosMaterial.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.consultarArchivosM();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    }
+  };
 
-    $scope.consultarEnlacesM = function(){
-			$scope.buscar.id_material = $scope.nuevoMaterial.id;
-		   // $scope.buscar.id_anuncios = 19;
-			$http.post('../api/consultarEnlaceMaterialPorMaterial.php',$scope.buscar)
-			.success(function(data,status,headers,config){
-				$scope.enlaces = data;					
-			}).error(function(data,status,headers,config){
-				alert("Error BD" + data);
-			});
-		}
+  $scope.eliminarEnlaceM = function (id) {
+    if (confirm("¿Estás seguro de eliminar este enlace?")) {
+      $scope.buscar.id = id;
+      $http
+        .post("../api/eliminarEnlaceMaterial.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.consultarEnlacesT();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    }
+  };
 
-    $scope.eliminarArchivoM = function (id){
-			if (confirm("¿Estás seguro de eliminar este archivo?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarArchivosMaterial.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarArchivosM();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
-
-    $scope.eliminarEnlaceM = function (id){
-			if (confirm("¿Estás seguro de eliminar este enlace?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarEnlaceMaterial.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-					$scope.consultarEnlacesT();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
-
-$scope.abrirModalEditarMaterial = function (material) {
+  $scope.abrirModalEditarMaterial = function (material) {
     $scope.nuevoMaterial = angular.copy(material);
-    $scope.archivo={};
-		$scope.documento = null;
-		$scope.consultarArchivosM();
-    $scope.enlace={};
-		$scope.consultarEnlacesM();	
+    $scope.archivo = {};
+    $scope.documento = null;
+    $scope.consultarArchivosM();
+    $scope.enlace = {};
+    $scope.consultarEnlacesM();
     quillM.clipboard.dangerouslyPasteHTML($scope.nuevoMaterial.descripcion);
     $("#modalAgregarMaterial").modal();
   };
-
 
   $scope.guardarEdicionMaterial = function () {
     if (confirm("¿Estás seguro de guardar los cambios del material?")) {
@@ -942,29 +1171,29 @@ $scope.abrirModalEditarMaterial = function (material) {
     window.history.back();
   };
 
-
-
-
-
   // -----------------------------------
   // CUESTIONARIOS
   // -----------------------------------
-    $scope.consultarCuestionario = function () {
-      
-    if( getParameterByName("id_cuestionario") !== ""){
-      $http.post("../api/consultarCuestionario.php", { id: getParameterByName("id_cuestionario") })
-      .success(function (data) {
-        $scope.nuevoCuestionario = data;
-        quillCu.clipboard.dangerouslyPasteHTML( $scope.nuevoCuestionario.descripcion);
-      })
-      .error(function (err) {
-        alert("Error al consultar cuestionarios: " + err);
-      });
+  $scope.consultarCuestionario = function () {
+    if (getParameterByName("id_cuestionario") !== "") {
+      $http
+        .post("../api/consultarCuestionario.php", {
+          id: getParameterByName("id_cuestionario"),
+        })
+        .success(function (data) {
+          $scope.nuevoCuestionario = data;
+          quillCu.clipboard.dangerouslyPasteHTML(
+            $scope.nuevoCuestionario.descripcion
+          );
+        })
+        .error(function (err) {
+          alert("Error al consultar cuestionarios: " + err);
+        });
     }
-
   };
   $scope.consultarCuestionarios = function () {
-    $http.post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
+    $http
+      .post("../api/consultarCuestionarios.php", { id_clase: $scope.id_clase })
       .success(function (data) {
         $scope.cuestionarios = data;
       })
@@ -977,60 +1206,66 @@ $scope.abrirModalEditarMaterial = function (material) {
     if (!$scope.nuevoCuestionario.id_tema) {
       alert("El título del cuestionario es obligatorio.");
       return;
-    }if (!$scope.nuevoCuestionario.titulo) {
+    }
+    if (!$scope.nuevoCuestionario.titulo) {
       alert("El tema del cuestionario es obligatorio.");
       return;
-    } 
+    }
 
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
     var contenido = quillC.root.innerHTML;
-    $scope.nuevoCuestionario.descripcion= contenido;
-  
-    $http.post('../api/guardarCuestionario.php',$scope.nuevoCuestionario)
-				.success(function(data,status,headers,config){
-				const nuevoId = data.id;
-      if (!nuevoId) {
+    $scope.nuevoCuestionario.descripcion = contenido;
+
+    $http
+      .post("../api/guardarCuestionario.php", $scope.nuevoCuestionario)
+      .success(function (data, status, headers, config) {
+        const nuevoId = data.id;
+        if (!nuevoId) {
           alert("No se pudo obtener el ID del cuestionario creado.");
           return;
         }
         window.location.href = `editCuestionario.php?id_clase=${$scope.nuevoCuestionario.id_clase}&id_cuestionario=${nuevoId}`;
-    }).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-		});
+      })
+      .error(function (data, status, headers, config) {
+        alert("Error BD" + data);
+      });
   };
 
   $scope.editarCuestionario = function (cues) {
-    window.location.href = 
-    `editCuestionario.php?id_clase=${cues.id_clase}&id_cuestionario=${cues.id}`;
+    window.location.href = `editCuestionario.php?id_clase=${cues.id_clase}&id_cuestionario=${cues.id}`;
   };
 
   $scope.modificarCuestionario = function () {
     if (!$scope.nuevoCuestionario.id_tema) {
       alert("El título del cuestionario es obligatorio.");
       return;
-    }if (!$scope.nuevoCuestionario.titulo) {
+    }
+    if (!$scope.nuevoCuestionario.titulo) {
       alert("El tema del cuestionario es obligatorio.");
       return;
-    } 
+    }
     $scope.nuevoCuestionario.id_clase = getParameterByName("id_clase");
     var contenido = quillCu.root.innerHTML;
-    $scope.nuevoCuestionario.descripcion= contenido;
-    $http.post("../api/modificarCuestionario.php", $scope.nuevoCuestionario).then(
-      function (response) {
-      alert("Cuestionario modificado");
-      },function (error) {
-        alert("Error al guardar cuestionario: " + error.data);
-      }
-    );
+    $scope.nuevoCuestionario.descripcion = contenido;
+    $http
+      .post("../api/modificarCuestionario.php", $scope.nuevoCuestionario)
+      .then(
+        function (response) {
+          alert("Cuestionario modificado");
+        },
+        function (error) {
+          alert("Error al guardar cuestionario: " + error.data);
+        }
+      );
   };
 
   $scope.guardarPregunta = function () {
     var contenido = quillC.root.innerHTML;
     var valid = quillC.getText().trim();
-    $scope.pregunta.pregunta= contenido;
-    $scope.pregunta.id_cuestionario= $scope.nuevoCuestionario.id;     
+    $scope.pregunta.pregunta = contenido;
+    $scope.pregunta.id_cuestionario = $scope.nuevoCuestionario.id;
     if (
-    valid === '' ||
+      valid === "" ||
       !$scope.pregunta.opcion1 ||
       !$scope.pregunta.opcion2 ||
       !$scope.pregunta.opcion3 ||
@@ -1047,16 +1282,19 @@ $scope.abrirModalEditarMaterial = function (material) {
       $scope.pregunta.opcion3 !== $scope.pregunta.respuesta &&
       $scope.pregunta.opcion4 !== $scope.pregunta.respuesta
     ) {
-      alert("Por favor, una opcion debe ser textualmente igual a la respuesta.");
+      alert(
+        "Por favor, una opcion debe ser textualmente igual a la respuesta."
+      );
       return;
     }
 
-    $http.post("../api/guardarCuestionariosContenido.php", $scope.pregunta)
+    $http
+      .post("../api/guardarCuestionariosContenido.php", $scope.pregunta)
       .success(function (data) {
         $scope.pregunta = {};
-        quillC.setText('');	
+        quillC.setText("");
         $scope.consultarPreguntas();
-        $("#ModalPreguntaClose").click(); 
+        $("#ModalPreguntaClose").click();
       })
       .error(function (err) {
         alert("Error al consultar cuestionarios: " + err);
@@ -1064,7 +1302,10 @@ $scope.abrirModalEditarMaterial = function (material) {
   };
 
   $scope.consultarPreguntas = function () {
-    $http.post("../api/consultarCuestionarioContenidoIdCuestionario.php", { id_cuestionario:   getParameterByName("id_cuestionario") })
+    $http
+      .post("../api/consultarCuestionarioContenidoIdCuestionario.php", {
+        id_cuestionario: getParameterByName("id_cuestionario"),
+      })
       .success(function (data) {
         $scope.preguntas = data;
       })
@@ -1074,25 +1315,24 @@ $scope.abrirModalEditarMaterial = function (material) {
   };
 
   $scope.formatQuill = function (pregunta) {
-    let textoPlano = pregunta.replace(/<[^>]+>/g, '').trim(); // Elimina etiquetas
-    let resumen = textoPlano.length > 60 
-              ? textoPlano.slice(0, 60) + "..." 
-              : textoPlano;
+    let textoPlano = pregunta.replace(/<[^>]+>/g, "").trim(); // Elimina etiquetas
+    let resumen =
+      textoPlano.length > 60 ? textoPlano.slice(0, 60) + "..." : textoPlano;
     return resumen;
   };
 
   $scope.modalModificarPregunta = function (pregunta) {
-  $scope.preguntaMod = pregunta;
-  quillPe.clipboard.dangerouslyPasteHTML($scope.preguntaMod.pregunta);
-  $("#modalModPregunta").modal();
+    $scope.preguntaMod = pregunta;
+    quillPe.clipboard.dangerouslyPasteHTML($scope.preguntaMod.pregunta);
+    $("#modalModPregunta").modal();
   };
 
   $scope.modificarPregunta = function () {
     var contenido = quillPe.root.innerHTML;
     var valid = quillPe.getText().trim();
-    $scope.preguntaMod.pregunta= contenido;
+    $scope.preguntaMod.pregunta = contenido;
     if (
-    valid === '' ||
+      valid === "" ||
       !$scope.preguntaMod.opcion1 ||
       !$scope.preguntaMod.opcion2 ||
       !$scope.preguntaMod.opcion3 ||
@@ -1109,40 +1349,45 @@ $scope.abrirModalEditarMaterial = function (material) {
       $scope.preguntaMod.opcion3 !== $scope.preguntaMod.respuesta &&
       $scope.preguntaMod.opcion4 !== $scope.preguntaMod.respuesta
     ) {
-      alert("Por favor, una opcion debe ser textualmente igual a la respuesta.");
+      alert(
+        "Por favor, una opcion debe ser textualmente igual a la respuesta."
+      );
       return;
     }
 
-    $http.post("../api/modificarCuestionariosContenido.php", $scope.preguntaMod)
+    $http
+      .post("../api/modificarCuestionariosContenido.php", $scope.preguntaMod)
       .success(function (data) {
         $scope.preguntaMod = {};
-        quillPe.setText('');	
+        quillPe.setText("");
         $scope.consultarPreguntas();
-        $("#ModalModPreguntaClose").click(); 
+        $("#ModalModPreguntaClose").click();
       })
       .error(function (err) {
         alert("Error al consultar cuestionarios: " + err);
       });
   };
 
-  $scope.eliminarPregunta = function (id){
-			if (confirm("¿Estás seguro de eliminar la pregunta?")) {
-				$scope.buscar.id = id;
-				$http.post('../api/eliminarCuestionariosContenido.php',$scope.buscar)
-				.success(function(data,status,headers,config){
-				$scope.consultarPreguntas();
-				}).error(function(data,status,headers,config){
-					alert("Error BD" + data);
-				});
-			}
-		}
+  $scope.eliminarPregunta = function (id) {
+    if (confirm("¿Estás seguro de eliminar la pregunta?")) {
+      $scope.buscar.id = id;
+      $http
+        .post("../api/eliminarCuestionariosContenido.php", $scope.buscar)
+        .success(function (data, status, headers, config) {
+          $scope.consultarPreguntas();
+        })
+        .error(function (data, status, headers, config) {
+          alert("Error BD" + data);
+        });
+    }
+  };
 
   $scope.eliminarCuestionario = function (cuestionario) {
     if (confirm("¿Eliminar este cuestionario?")) {
       $http
         .post("../api/eliminarCuestionario.php", { id: cuestionario.id })
         .success(function () {
-              $scope.consultarTemas();
+          $scope.consultarTemas();
         })
         .error(function (err) {
           alert("Error al eliminar cuestionario: " + err);
@@ -1181,48 +1426,56 @@ $scope.abrirModalEditarMaterial = function (material) {
   // CALIFICACIONES
   // -----------------------------------
 
-   // Consultar alumnos con sus tareas asignadas
-    $scope.consultarTareasAlumnos = function () {
-        $scope.clase.id = getParameterByName('id_clase');
-        // Hacer la petición HTTP
-        $http.post('../api/consultarHistorial_tareas.php', $scope.clase)
-            .success(function (data) {
-                $scope.tareasAlumnos = data;
-            })
-            .error(function (data) {
-                alert("Error BD: " + data);
-            });
-    };
-    
-    // Modificar calificación
-    $scope.actualizarCalificacion = function (tarea) {
-        $http.post('../api/modificarHistorialTareas.php', tarea)
-            .success(function (data) {
-                $scope.consultarTareasAlumnos();
-            })
-            .error(function (data) {
-                alert("Error BD: " + data);
-            });
-    };
+  // Consultar alumnos con sus tareas asignadas
+  $scope.consultarTareasAlumnos = function () {
+    $scope.clase.id = getParameterByName("id_clase");
+    // Hacer la petición HTTP
+    $http
+      .post("../api/consultarHistorial_tareas.php", $scope.clase)
+      .success(function (data) {
+        $scope.tareasAlumnos = data;
+      })
+      .error(function (data) {
+        alert("Error BD: " + data);
+      });
+  };
+
+  // Modificar calificación
+  $scope.actualizarCalificacion = function (tarea) {
+    $http
+      .post("../api/modificarHistorialTareas.php", tarea)
+      .success(function (data) {
+        $scope.consultarTareasAlumnos();
+      })
+      .error(function (data) {
+        alert("Error BD: " + data);
+      });
+  };
 
   $scope.consultarTareasAlumnos();
   $scope.consultarTemas();
   //$scope.consultarTareas();
+
+  $scope.consultarTarea();
   $scope.consultarClases();
   $scope.consultarDatosMaestro();
   $scope.consultarCuestionario();
   $scope.consultarMateriales();
   $scope.consultarPreguntas();
+  $scope.consultarMaterialId();
   //$scope.obtenerPreguntaInicial(); // ✅ solo una vez
 });
 
-App.directive('uploaderModel', ["$parse", function ($parse) {
-	return {
-		restrict: 'A',
-		link: function (scope, iElement, iAttrs) {
-			iElement.on("change", function (e) {
-				$parse(iAttrs.uploaderModel).assign(scope, iElement[0].files[0]);
-			});
-		}
-	};
-}]);
+App.directive("uploaderModel", [
+  "$parse",
+  function ($parse) {
+    return {
+      restrict: "A",
+      link: function (scope, iElement, iAttrs) {
+        iElement.on("change", function (e) {
+          $parse(iAttrs.uploaderModel).assign(scope, iElement[0].files[0]);
+        });
+      },
+    };
+  },
+]);

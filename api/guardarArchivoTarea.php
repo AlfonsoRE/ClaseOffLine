@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 require_once 'conexion.php';
 
-define('MAX_FILE_SIZE', 3 * 1024 * 1024); // 3MB
+define('MAX_FILE_SIZE', 16 * 1024 * 1024); // 3MB
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['json']) && isset($_FILES['archivo'])) {

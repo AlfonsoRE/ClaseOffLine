@@ -8,74 +8,73 @@
     <div class="jumbotron">
       <h2>{{clase.materia}}</h2>
       <p>{{clase.descripcion}}</p>
-      <h3>Codigo: {{clase.codigo}}</h3>
     </div>
   </div>
 
-    <div class="row">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Agregar Anuncio</div>
-        <div class="panel-body">
-          <div id="editor"></div><br>
-          <button class="btn btn-success btn-md" ng-click="guardarAnuncio()"><span class="glyphicon glyphicon-bullhorn"></span> Publicar Anuncio</button>
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary" ng-click="subirArchivo()"><span class="glyphicon glyphicon-cloud"></span> Subir archivo</button>
-            <button type="button" class="btn btn-primary" ng-click="agregarEnlace()"><span class="glyphicon glyphicon-link"></span> Agregar enlace</button>
-          </div>
-        </div>
-
-        <div class="container-fluid">
-
-          <!-- Sección de Archivos -->
-          <div class="row">
-            <div class="col-md-12">
-              <div class="panel panel-default">
-                <div class="panel-heading bg-primary text-white">
-                  <span class="glyphicon glyphicon-file"></span> Archivos
-                </div>
-                <div class="panel-body" ng-show='archivos.length>0'>
-                  <ul class="list-group">
-                    <div ng-repeat='a in archivos'>
-                      <li class="list-group-item">
-                        <span class="glyphicon glyphicon-file"></span>
-                        <a href="{{a.url}}" target="_blank"> {{a.nombre}}</a>
-                        <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarArchivo(a.id)">
-                          <span class="glyphicon glyphicon-trash"></span> Eliminar
-                        </button>
-                      </li>
-                    </div>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sección de URLs -->
-          <div class="row">
-            <div class="col-md-12">
-              <div class="panel panel-default">
-                <div class="panel-heading bg-success text-white">
-                  <span class="glyphicon glyphicon-link"></span> Enlaces Externos
-                </div>
-                <div class="panel-body" ng-show='enlaces.length>0'>
-                  <ul class="list-group">
-                    <div ng-repeat='e in enlaces'>
-                      <li class="list-group-item">
-                        <span class="glyphicon glyphicon-link"></span>
-                        <a href="{{e.enlace}}" target="_blank"> Enlace {{$index+1}}</a>
-                        <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarEnlace(e.id)">
-                          <span class="glyphicon glyphicon-trash"></span> Eliminar
-                        </button>
-                      </li>
-                    </div>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
+  <div class="row">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Agregar Anuncio</div>
+      <div class="panel-body">
+        <div id="editor"></div><br>
+        <button class="btn btn-success btn-md" ng-click="guardarAnuncio()"><span class="glyphicon glyphicon-bullhorn"></span> Publicar Anuncio</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" ng-click="subirArchivo()"><span class="glyphicon glyphicon-cloud"></span> Subir archivo</button>
+          <button type="button" class="btn btn-primary" ng-click="agregarEnlace()"><span class="glyphicon glyphicon-link"></span> Agregar enlace</button>
         </div>
       </div>
+
+      <div class="container-fluid">
+
+        <!-- Sección de Archivos -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading bg-primary text-white">
+                <span class="glyphicon glyphicon-file"></span> Archivos
+              </div>
+              <div class="panel-body" ng-show='archivos.length>0'>
+                <ul class="list-group">
+                  <div ng-repeat='a in archivos'>
+                    <li class="list-group-item">
+                      <span class="glyphicon glyphicon-file"></span>
+                      <a href="{{a.url}}" target="_blank"> {{a.nombre}}</a>
+                      <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarArchivo(a.id)">
+                        <span class="glyphicon glyphicon-trash"></span> Eliminar
+                      </button>
+                    </li>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de URLs -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading bg-success text-white">
+                <span class="glyphicon glyphicon-link"></span> Enlaces Externos
+              </div>
+              <div class="panel-body" ng-show='enlaces.length>0'>
+                <ul class="list-group">
+                  <div ng-repeat='e in enlaces'>
+                    <li class="list-group-item">
+                      <span class="glyphicon glyphicon-link"></span>
+                      <a href="{{e.enlace}}" target="_blank"> Enlace {{$index+1}}</a>
+                      <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarEnlace(e.id)">
+                        <span class="glyphicon glyphicon-trash"></span> Eliminar
+                      </button>
+                    </li>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- Sección de Anuncios -->
@@ -89,7 +88,7 @@
             <div class="clearfix"></div>
           </span>
           <div style="flex-grow: 1; text-align: center;">
-            {{tiempoTranscurrido(an.fecha)}}
+            {{tiempoTranscurrido(an.fecha_)}}
           </div>
         </div>
         <div class="panel-body">
@@ -109,9 +108,7 @@
                       <li class="list-group-item">
                         <span class="glyphicon glyphicon-file"></span>
                         <a href="../api/descargarArchivoAnuncio.php?id={{ar.id}}" target="_blank"> {{ar.nombre}}</a>
-                        <button class="btn btn-danger btn-xs pull-right" ng-show={{an.id_usuario==usuario.id_usuario}} ng-click="eliminarArchivo(ar.id)">
-                          <span class="glyphicon glyphicon-trash"></span> Eliminar
-                        </button>
+
                       </li>
                     </div>
                   </ul>
@@ -133,9 +130,7 @@
                       <li class="list-group-item">
                         <span class="glyphicon glyphicon-link"></span>
                         <a href="{{en.enlace}}" target="_blank"> Enlace {{$index+1}}</a>
-                        <button class="btn btn-danger btn-xs pull-right" ng-show={{an.id_usuario==usuario.id_usuario}} ng-click="eliminarEnlace(en.id)">
-                          <span class="glyphicon glyphicon-trash"></span> Eliminar
-                        </button>
+
                       </li>
                     </div>
                   </ul>
