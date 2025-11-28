@@ -246,7 +246,7 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
         });
     };
 
-    $scope.tiempoTranscurridoComentario = function (fechaString) {
+    $scope.tiempoTranscurrido = function (fechaString) {
       var fecha = new Date(fechaString);
       var ahora = new Date();
       var diffMs = ahora - fecha;
@@ -256,28 +256,10 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       var horas = Math.floor(minutos / 60);
       var dias = Math.floor(horas / 24);
 
-      // Formato de hora exacta
-      var fechaLocal = fecha.toLocaleDateString("es-MX", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-      var horaLocal = fecha.toLocaleTimeString("es-MX", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      // Texto del tiempo transcurrido
-      var textoTiempo;
-      if (dias > 0) textoTiempo = "hace " + dias + " día(s)";
-      else if (horas > 0) textoTiempo = "hace " + horas + " hora(s)";
-      else if (minutos > 0) textoTiempo = "hace " + minutos + " minuto(s)";
-      else if (segundos > 0) textoTiempo = "hace " + segundos + " segundo(s)";
-      else textoTiempo = "hace unos segundos";
-
-      return (
-        "Publicado el " + fechaLocal + " " + horaLocal + " — " + textoTiempo
-      );
+      if (dias > 0) return "Publicado hace " + dias + " día(s)";
+      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
+      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
+      return "Publicado hace unos segundos";
     };
 
     $scope.eliminarAnuncioComentario = function (id) {
@@ -676,8 +658,7 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
           });
       }
     };
-
-    $scope.tiempoTranscurrido = function (fechaString) {
+ $scope.tiempoTranscurridoComentario = function (fechaString) {
       var fecha = new Date(fechaString);
       var ahora = new Date();
       var diffMs = ahora - fecha;
@@ -687,12 +668,29 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       var horas = Math.floor(minutos / 60);
       var dias = Math.floor(horas / 24);
 
-      if (dias > 0) return "Publicado hace " + dias + " día(s)";
-      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
-      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
-      return "Publicado hace unos segundos";
-    };
+      // Formato de hora exacta
+      var fechaLocal = fecha.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      var horaLocal = fecha.toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
+      // Texto del tiempo transcurrido
+      var textoTiempo;
+      if (dias > 0) textoTiempo = "hace " + dias + " día(s)";
+      else if (horas > 0) textoTiempo = "hace " + horas + " hora(s)";
+      else if (minutos > 0) textoTiempo = "hace " + minutos + " minuto(s)";
+      else if (segundos > 0) textoTiempo = "hace " + segundos + " segundo(s)";
+      else textoTiempo = "hace unos segundos";
+
+      return (
+        "Publicado el " + fechaLocal + " " + horaLocal + " — " + textoTiempo
+      );
+    };
     $scope.eliminarAnuncioComentarios = function (id) {
       if (confirm("¿Estás seguro de eliminar este anuncio?")) {
         $scope.buscar.id = id;
@@ -754,6 +752,7 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
   $scope.cuestionario = {};
   $scope.preguntas = {};
   $scope.respuestas = {};
+  $scope.temas ={};
 
   $scope.consultarCuestionarioId = function () {
     $scope.id_buscarcuestionario = getParameterByName("id_cuestionario");
@@ -817,13 +816,70 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       });
   };
 
+$scope.consultarCuestionarioHistorial = function() {
+    $scope.clase.id = getParameterByName("id_clase");
+    $scope.usuario.id_usuario = document.getElementById("idUsuario").value;
+    $scope.id_buscarcuestionario = getParameterByName("id_cuestionario"); // Cuestionario actual
+
+    $http.post("../api/consultarHistorialCuestionarioUsuario.php", {
+        id_usuario: $scope.usuario.id_usuario,
+        id_cuestionario: $scope.id_buscarcuestionario
+    })
+    .success(function(data){
+        $scope.temas = [{ cuestionarios: [data] }]; // Solo un cuestionario
+    })
+    .error(function(err){
+        console.error(err);
+    });
+};
+
+$scope.consultarCuestionarioHistorial();
+
+
   // --- Función para enviar respuestas ---
   $scope.enviarRespuestas = function () {
     console.log("Respuestas del usuario:", $scope.respuestas);
     alert("Respuestas guardada.");
-  };
+  };  
   // -----------------------------------
   // Cierre de CUESTIONARIOS
+  // -----------------------------------
+
+  // -----------------------------------
+  // CALIFICACIONES
+  // -----------------------------------
+
+  // Consultar alumnos con sus tareas asignadas
+  $scope.consultarTareasCalificacion = function () {
+    $scope.clase.id = getParameterByName("id_clase");
+    $scope.id_buscartarea = getParameterByName("id_tarea");
+    // Hacer la petición HTTP
+    $http
+      .post("../api/consultarHistorial_tareas.php", $scope.clase)
+      .success(function (data) {
+        $scope.tareasAlumnos = data;
+      })
+      .error(function (data) {
+        alert("Error BD: " + data);
+      });
+  };
+     // Consultar alumnos con sus tareas asignadas
+  $scope.consultarCuestionariosCalificacion = function () {
+    $scope.clase.id = getParameterByName("id_clase");
+    // Hacer la petición HTTP
+    $http
+      .post("../api/consultarHistorial_Cuestionarios.php", $scope.clase)
+      .success(function (data) {
+        $scope.cuestionariosAlumnos = data;
+      })
+      .error(function (data) {
+        alert("Error BD: " + data);
+      });
+  };
+  
+ 
+  // -----------------------------------
+  // CALIFICACIONES
   // -----------------------------------
 
   // -----------------------------------
@@ -928,6 +984,8 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
   $scope.consultarMaterialId();
   $scope.consultarCuestionarioId();
   $scope.consultarTareaComentarios();
+   $scope.consultarTareasCalificacion();
+   $scope.consultarCuestionariosCalificacion();
 }); // Cierre APP.Controller
 
 App.directive("uploaderModel", [

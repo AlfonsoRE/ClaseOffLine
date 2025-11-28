@@ -38,7 +38,7 @@
                     <ul class="nav navbar-nav">
                         <li> <a href="./editClase.php?id_clase={{clase.id}}">{{ clase.materia.length > 40 ? (clase.materia | limitTo:40) + '...' : clase.materia }}</a></li>
                         <li><a href="./editAnuncio.php?id_clase={{clase.id}}">Anuncios</a></li>
-                        <li><a href="./editContenido.php?id_clase={{clase.id}}">Contenido</a></li>
+                        <li><a href="./editContenido.php?id_clase={{clase.id}}">Trabajo en clase</a></li>
                         <li><a href="./editAlumnos.php?id_clase={{clase.id}}">Alumnos</a></li>
                         <li><a href="./editCalificaciones.php?id_clase={{clase.id}}">Calificaciones</a></li>
                     </ul>

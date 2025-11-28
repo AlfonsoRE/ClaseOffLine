@@ -492,6 +492,9 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
   // -----------------------------------
   // TAREAS
   // -----------------------------------
+  $scope.anuncio = {};
+  $scope.tareacomentarios = {};
+  $scope.buscarcomentario = {};
 
   $scope.abrirModalTarea = function () {
     $scope.consultarTemas();
@@ -526,23 +529,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
         alert("Error al consultar tareas: " + err);
       });
   };
-  $scope.consultarTareaComentarios = function () {
-    $scope.buscarcomentario.id_tarea = getParameterByName("id_tarea");
-    $scope.buscarcomentario.id_usuario =
-      document.getElementById("idUsuario").value;
 
-    $http
-      .post(
-        "../api/consultarComentariosPorUsuarioYTarea.php",
-        $scope.buscarcomentario
-      )
-      .success(function (data, status, headers, config) {
-        $scope.tareacomentarios = data;
-      })
-      .error(function (data, status, headers, config) {
-        alert("Error BD" + data);
-      });
-  };
   $scope.guardarTarea = function () {
     if (!$scope.nuevaTarea.titulo) {
       alert("El título de la tarea es obligatorio.");
@@ -796,6 +783,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
         });
     }
   };
+
   setTimeout(function () {
     var quill = new Quill("#editore", {
       theme: "snow",
@@ -837,8 +825,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
           });
       }
     };
-
-    $scope.tiempoTranscurrido = function (fechaString) {
+    $scope.tiempoTranscurridoComentario = function (fechaString) {
       var fecha = new Date(fechaString);
       var ahora = new Date();
       var diffMs = ahora - fecha;
@@ -848,12 +835,29 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
       var horas = Math.floor(minutos / 60);
       var dias = Math.floor(horas / 24);
 
-      if (dias > 0) return "Publicado hace " + dias + " día(s)";
-      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
-      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
-      return "Publicado hace unos segundos";
-    };
+      // Formato de hora exacta
+      var fechaLocal = fecha.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      var horaLocal = fecha.toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
+      // Texto del tiempo transcurrido
+      var textoTiempo;
+      if (dias > 0) textoTiempo = "hace " + dias + " día(s)";
+      else if (horas > 0) textoTiempo = "hace " + horas + " hora(s)";
+      else if (minutos > 0) textoTiempo = "hace " + minutos + " minuto(s)";
+      else if (segundos > 0) textoTiempo = "hace " + segundos + " segundo(s)";
+      else textoTiempo = "hace unos segundos";
+
+      return (
+        "" + fechaLocal + " " + horaLocal + " — " + textoTiempo
+      );
+    };
     $scope.eliminarAnuncioComentarios = function (id) {
       if (confirm("¿Estás seguro de eliminar este anuncio?")) {
         $scope.buscar.id = id;
@@ -885,6 +889,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
         alert("Error BD" + data);
       });
   };
+  $scope.consultarTareaComentarios();
   // -----------------------------------
   // MATERIALES
   // -----------------------------------
@@ -1439,6 +1444,19 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
         alert("Error BD: " + data);
       });
   };
+   // Consultar alumnos con sus tareas asignadas
+  $scope.consultarCuestionariosAlumnos = function () {
+    $scope.clase.id = getParameterByName("id_clase");
+    // Hacer la petición HTTP
+    $http
+      .post("../api/consultarHistorial_Cuestionarios.php", $scope.clase)
+      .success(function (data) {
+        $scope.cuestionariosAlumnos = data;
+      })
+      .error(function (data) {
+        alert("Error BD: " + data);
+      });
+  };
 
   // Modificar calificación
   $scope.actualizarCalificacion = function (tarea) {
@@ -1453,6 +1471,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
   };
 
   $scope.consultarTareasAlumnos();
+  $scope.consultarCuestionariosAlumnos();
   $scope.consultarTemas();
   //$scope.consultarTareas();
 

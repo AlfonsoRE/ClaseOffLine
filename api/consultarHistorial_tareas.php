@@ -19,30 +19,30 @@ $informacion  = array();
 while ($stmt->fetch()) {
     $arr = array();
     if (array_key_exists($nombre, $mapa)) {
-        $arr=$mapa[$nombre];
+        $arr = $mapa[$nombre];
         $arr[] = array(
-        'titulo_tema' => $titulo_tema,
-        'id_tareas' => $id_tareas,
-        'titulo' => $titulo,
-        'valor' => $valor,
-        'id_usuario' => $id_usuario,
-        'id_historial' => $id_historial,
-        'id_tareas_ht' => $id_tareas_ht,
-        'nombre' => $nombre,
-        'calificacion' => $calificacion
+            'titulo_tema' => $titulo_tema,
+            'id_tareas' => $id_tareas,
+            'titulo' => $titulo,
+            'valor' => $valor,
+            'id_usuario' => $id_usuario,
+            'id_historial' => $id_historial,
+            'id_tareas_ht' => $id_tareas_ht,
+            'nombre' => $nombre,
+            'calificacion' => $calificacion
         );
         $mapa[$nombre] =  $arr;
-    }else{
+    } else {
         $arr[] = array(
-        'titulo_tema' => $titulo_tema,
-        'id_tareas' => $id_tareas,
-        'titulo' => $titulo,
-        'valor' => $valor,
-        'id_usuario' => $id_usuario,
-        'id_historial' => $id_historial,
-        'id_tareas' => $id_tareas,
-        'nombre' => $nombre,
-        'calificacion' => $calificacion
+            'titulo_tema' => $titulo_tema,
+            'id_tareas' => $id_tareas,
+            'titulo' => $titulo,
+            'valor' => $valor,
+            'id_usuario' => $id_usuario,
+            'id_historial' => $id_historial,
+            'id_tareas' => $id_tareas,
+            'nombre' => $nombre,
+            'calificacion' => $calificacion
         );
         $mapa[$nombre] =  $arr;
     }

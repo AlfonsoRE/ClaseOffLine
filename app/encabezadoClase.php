@@ -39,7 +39,7 @@
                     <ul class="nav navbar-nav">
                         <li> <a href="./claseAnuncio.php?id_clase={{clase.id}}">{{ clase.materia.length > 40 ? (clase.materia | limitTo:40) + '...' : clase.materia }}</a></li>
                         <li><a href="./claseAnuncio.php?id_clase={{clase.id}}">Anuncios</a></li>
-                        <li><a href="./claseContenido.php?id_clase={{clase.id}}">Contenido</a></li>
+                        <li><a href="./claseContenido.php?id_clase={{clase.id}}">Trabajo en clase</a></li>
                         <li><a href="./claseAlumnos.php?id_clase={{clase.id}}">Alumnos</a></li>
                         <li><a href="./claseCalificaciones.php?id_clase={{clase.id}}">Calificaciones</a></li>
                     </ul>
@@ -81,6 +81,7 @@
 
             </div>
         </div>
+          <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
     </body>
 
-    <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+  

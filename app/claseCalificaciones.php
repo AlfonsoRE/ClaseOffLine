@@ -1,10 +1,10 @@
-<?php require_once 'encabezadoEdit.php'; ?>
+<?php require_once 'encabezadoClase.php'; ?>
 <link rel="stylesheet" href="./css/quill.snow.css">
 <script src="./controlador/quill.min.js"></script>
 <script src="./controlador/angular-sanitize.min.js"></script>
-
 <div id="content" class="container">
-<body ng-controller="editCtrl">
+
+<body ng-controller="claseCtrl">
 
     <!-- ============================= -->
     <!--       TABLA DE TAREAS         -->
@@ -14,7 +14,6 @@
         <table class="table-colorful">
             <thead>
                 <tr>
-                    <th class="sticky-col">Estudiante</th>
                     <th ng-repeat="nombre in tareasAlumnos[1]">
                         {{ nombre }}
                     </th>
@@ -22,17 +21,15 @@
             </thead>
             <tbody>
                 <tr ng-repeat="(nombre, tareas) in tareasAlumnos[0]">
-                    <td class="sticky-col">{{nombre}}</td>
                     <td ng-repeat="tarea in tareas" style="text-align: center;">
-                        <input class="input-colorful" type="text" ng-model="tarea.calificacion">/{{tarea.valor}} 
-                        <br>
-                        <button class="btn-colorful" ng-click="actualizarCalificacion(tarea)">Actualizar</button>
-                    </td>
+                        {{tarea.calificacion}}/{{tarea.valor}}
+                    </td>                    
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <br><br>
 
     <!-- ====================================== -->
     <!--       TABLA DE CUESTIONARIOS           -->
@@ -42,7 +39,7 @@
         <table class="table-colorful">
             <thead>
                 <tr>
-                    <th class="sticky-col">Estudiante</th>
+                    
                     <th ng-repeat="nombre in cuestionariosAlumnos[1]">
                         {{ nombre }}
                     </th>
@@ -50,7 +47,6 @@
             </thead>
             <tbody>
                 <tr ng-repeat="(nombre, cuestionarios) in cuestionariosAlumnos[0]">
-                    <td class="sticky-col">{{nombre}}</td>
                     <td ng-repeat="cuest in cuestionarios" style="text-align: center;">
                         {{cuest.calificacion}}
                     </td>
@@ -61,7 +57,6 @@
 
 </body>
 </div>
-
 
 <style>
 /* TABLA COLORIDA ESTILO CLASSROOM */
@@ -85,7 +80,7 @@
 
 /* Filas */
 .table-colorful tbody tr {
-    background: #fefefe;
+    background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
@@ -98,13 +93,13 @@
 /* Celdas */
 .table-colorful tbody td {
     padding: 14px;
-    border-top: 1px solid #d3d9f0;
-    border-bottom: 1px solid #d3d9f0;
+    border-top: 2px solid #d3d9f0;
+    border-bottom: 2px solid #d3d9f0;
     font-size: 15px;
     text-align: center;
 }
 
-/* Sticky primera columna */
+/* Sticky primera columna (si decides aplicarla después) */
 .sticky-col {
     position: sticky;
     left: 0;
@@ -112,35 +107,6 @@
     background: #ffffff;
     font-weight: 600;
     border-right: 2px solid #d3d9f0;
-}
-
-/* Inputs coloridos */
-.input-colorful {
-    width: 70px;
-    padding: 6px;
-    border-radius: 6px;
-    border: 2px solid #4a90e2;
-    text-align: center;
-    font-weight: bold;
-    color: #1a1a1a;
-}
-
-/* Botones coloridos */
-.btn-colorful {
-    background: #ff7043;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    font-size: 14px;
-    border-radius: 6px;
-    margin-top: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-colorful:hover {
-    background: #ff5722;
 }
 
 /* Hover filas */

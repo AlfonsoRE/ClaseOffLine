@@ -348,7 +348,8 @@
     </div>
 </div>
 <!-- Termina Modal -->
-<!-- Modal enlace M-->
+
+<!-- Modal enlace -->
 <div id="ModalEnlace" class="modal fade" role="dialog">
     <div class="modal-dialog">
 

@@ -46,14 +46,7 @@
           <div class="media-body">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <strong>{{ tarea.titulo }}</strong>
-              <span>
-                <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); abrirModalEditarTarea(tarea)">
-                  <i class="glyphicon glyphicon-pencil"></i>
-                </button>
-                <button class="btn btn-xs btn-danger" ng-click="$event.stopPropagation(); eliminarTarea(tarea)">
-                  <i class="glyphicon glyphicon-trash"></i>
-                </button>
-              </span>
+             
             </div>
             <div ng-show="tarea.abierto" class="contenido-detalle">
               <p>
@@ -99,14 +92,6 @@
           <div class="media-body">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <strong>{{ mat.titulo }}</strong>
-              <span>
-                <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); abrirModalEditarMaterial(mat)">
-                  <i class="glyphicon glyphicon-pencil"></i>
-                </button>
-                <button class="btn btn-xs btn-danger" ng-click="$event.stopPropagation(); eliminarMaterial(mat)">
-                  <i class="glyphicon glyphicon-trash"></i>
-                </button>
-              </span>
             </div>
 
             <div ng-show="mat.abierto" class="contenido-detalle">
