@@ -81,7 +81,7 @@
 
             </div>
         </div>
-          <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+         
     </body>
 
-  
+   <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
