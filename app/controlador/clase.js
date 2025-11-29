@@ -256,24 +256,28 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       var horas = Math.floor(minutos / 60);
       var dias = Math.floor(horas / 24);
 
-      if (dias > 0) return "Publicado hace " + dias + " día(s)";
-      if (horas > 0) return "Publicado hace " + horas + " hora(s)";
-      if (minutos > 0) return "Publicado hace " + minutos + " minuto(s)";
-      return "Publicado hace unos segundos";
-    };
+      // Formato de hora exacta
+      var fechaLocal = fecha.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+      var horaLocal = fecha.toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
-    $scope.eliminarAnuncioComentario = function (id) {
-      if (confirm("¿Estás seguro de eliminar este anuncio?")) {
-        $scope.buscar.id = id;
-        $http
-          .post("../api/eliminarComentario.php", $scope.buscar)
-          .success(function (data, status, headers, config) {
-            $scope.consultarAnuncios();
-          })
-          .error(function (data, status, headers, config) {
-            alert("Error BD" + data);
-          });
-      }
+      // Texto del tiempo transcurrido
+      var textoTiempo;
+      if (dias > 0) textoTiempo = "hace " + dias + " día(s)";
+      else if (horas > 0) textoTiempo = "hace " + horas + " hora(s)";
+      else if (minutos > 0) textoTiempo = "hace " + minutos + " minuto(s)";
+      else if (segundos > 0) textoTiempo = "hace " + segundos + " segundo(s)";
+      else textoTiempo = "hace unos segundos";
+
+      return (
+        "Publicado el " + fechaLocal + " " + horaLocal + " — " + textoTiempo
+      );
     };
 
     $scope.consultarAnuncios();

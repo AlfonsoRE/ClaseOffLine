@@ -183,7 +183,7 @@
                         <div class="clearfix"></div>
                     </span>
                     <div style="flex-grow: 1; text-align: center;">
-                        {{tiempoTranscurrido(an.fecha)}}
+                        {{TiempoTranscurrido(an.fecha)}}
                     </div>
                 </div>
                 <div class="panel-body">
