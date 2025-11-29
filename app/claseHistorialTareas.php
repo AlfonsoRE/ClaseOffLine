@@ -158,13 +158,12 @@
 
             <br>
             <!-- Lista de comentarios -->
-            <!-- Sección de Anuncios -->
             <div ng-repeat='c in tareacomentarios'>
                 <div class="panel panel-success mb-3">
                     <div class="panel-heading">
                         <span class="pull-left"><b>{{c.nombre}} dijo:</b></span>
                         <span class="pull-right text-muted">
-                            <button class="btn btn-danger btn-xs pull-center" ng-show={{c.id_usuario==usuario.id_usuario}} ng-click="eliminarAnuncioComentario(c.id)">
+                            <button class="btn btn-danger btn-xs pull-center" ng-show={{c.id_usuario==usuario.id_usuario}} ng-click="eliminarTareaComentarios(c.id)">
                                 <span class="glyphicon glyphicon-trash"></span></button>
                             <div class="clearfix"></div>
                         </span>

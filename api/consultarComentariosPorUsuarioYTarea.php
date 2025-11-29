@@ -1,25 +1,47 @@
 <?php
-error_reporting(E_ALL);
+header("Content-Type: application/json");
 require_once 'conexion.php';
-$obj = json_decode(file_get_contents("php://input"));
 
-$stmt = $db->prepare("SELECT id,id_usuario, id_tarea, (select nombre from usuarios where id= ? ) as nombre , comentario, fecha_comentario FROM comentarios WHERE id_tarea = ? order by id  desc");
-$stmt->bind_param('ii', $obj->id_usuario, $obj->id_tarea);
-$stmt->execute();
-$stmt->bind_result($id,$id_usuario, $id_tarea,  $nombre, $comentario, $fecha_comentario);
+// Obtener datos enviados por POST
+$data = json_decode(file_get_contents("php://input"), true);
 
-$arr = array();
-while ($stmt->fetch()) {
-    $arr[] = array(
-        'id' => $id,
-        'id_usuario' => $id_usuario,
-        'id_tarea' => $id_tarea,
-        'nombre' => $nombre,
-        'comentario' => $comentario,
-        'fecha_comentario' => $fecha_comentario
-    );
+$id_tarea = isset($data['id_tarea']) ? intval($data['id_tarea']) : 0;
+$id_usuario = isset($data['id_usuario']) ? intval($data['id_usuario']) : 0;
+
+// Validación básica
+if ($id_tarea <= 0) {
+    echo json_encode(["status" => "error", "message" => "ID de tarea inválido"]);
+    exit;
 }
 
+/*
+    Consulta optimizada:
+
+    - Obtiene TODOS los comentarios de la tarea
+    - Obtiene el nombre del usuario que hizo cada comentario
+    - Ordena de más nuevo a más viejo
+*/
+
+$sql = "
+    SELECT c.id, c.id_usuario, c.id_tarea, c.comentario, c.fecha_comentario,
+           u.nombre
+    FROM comentarios c
+    INNER JOIN usuarios u ON u.id = c.id_usuario
+    WHERE c.id_tarea = ?
+    ORDER BY c.id DESC
+";
+
+$stmt = $db->prepare($sql);
+$stmt->bind_param("i", $id_tarea);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$comentarios = [];
+
+while ($row = $result->fetch_assoc()) {
+    $comentarios[] = $row;
+}
+
+echo json_encode($comentarios);
 $stmt->close();
-echo json_encode($arr);
 ?>

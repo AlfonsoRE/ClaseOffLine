@@ -649,18 +649,7 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
           .error(function (data, status, headers, config) {
             alert("Error BD" + data);
           });
-      } else {
-        $http
-          .post("../api/modificarAnuncio.php", $scope.anuncio)
-          .success(function (data, status, headers, config) {
-            quill.setText("");
-            $scope.anuncio = {};
-            $scope.consultarTareaComentarios();
-          })
-          .error(function (data, status, headers, config) {
-            alert("Error BD" + data);
-          });
-      }
+      } 
     };
  $scope.tiempoTranscurridoComentario = function (fechaString) {
       var fecha = new Date(fechaString);
@@ -695,11 +684,11 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
         "Publicado el " + fechaLocal + " " + horaLocal + " — " + textoTiempo
       );
     };
-    $scope.eliminarAnuncioComentarios = function (id) {
+    $scope.eliminarTareaComentarios = function (id) {
       if (confirm("¿Estás seguro de eliminar este anuncio?")) {
         $scope.buscar.id = id;
         $http
-          .post("../api/eliminarAnuncio.php", $scope.buscar)
+          .post("../api/eliminarComentario.php", $scope.buscar)
           .success(function (data, status, headers, config) {
             $scope.consultarAnuncios();
           })
