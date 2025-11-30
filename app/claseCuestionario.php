@@ -121,7 +121,7 @@
                                 
                                 <!-- Mensaje cuando ya lo contestó -->
                                 <span ng-if="calificacionRecibida" class="btn-abrir btn-bloqueado">
-                                    <i class="glyphicon glyphicon-ok"></i> Ya has contestado contestado :)
+                                    <i class="glyphicon glyphicon-ok"></i> ⚡¡Misión Cumplida! - ¡Completado al 100%!⚡
                                 </span>
                             </div>
                         </div>
