@@ -1,153 +1,92 @@
 <?php require_once 'encabezadoEdit.php'; ?>
 <link rel="stylesheet" href="./css/quill.snow.css">
+<link rel="stylesheet" href="./css/calificacionesMaestro.css"> 
 <script src="./controlador/quill.min.js"></script>
 <script src="./controlador/angular-sanitize.min.js"></script>
-
-<div id="content" class="container">
+<div class="classroom-container">
 <body ng-controller="editCtrl">
+
+    <!-- Header Classroom -->
+    <div class="classroom-header">
+          <br>
+        <h1 class="classroom-title">
+            <i class="glyphicon glyphicon-education"></i>
+            Gestión de Calificaciones
+        </h1>
+        
+    </div>
+
+
 
     <!-- ============================= -->
     <!--       TABLA DE TAREAS         -->
     <!-- ============================= -->
-    <h2>Tareas de la Clase</h2>
-    <div style="overflow-x: auto;">
-        <table class="table-colorful">
-            <thead>
-                <tr>
-                    <th class="sticky-col">Estudiante</th>
-                    <th ng-repeat="nombre in tareasAlumnos[1]">
-                        {{ nombre }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="(nombre, tareas) in tareasAlumnos[0]">
-                    <td class="sticky-col">{{nombre}}</td>
-                    <td ng-repeat="tarea in tareas" style="text-align: center;">
-                        <input class="input-colorful" type="text" ng-model="tarea.calificacion">/{{tarea.valor}} 
-                        <br>
-                        <button class="btn-colorful" ng-click="actualizarCalificacion(tarea)">Actualizar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="card">
+        <div class="card-header">
+            <i class="glyphicon glyphicon-edit"></i>
+            <h3>Tareas de la Clase</h3>
+        </div>
+        <div class="card-body">
+            <div style="overflow-x: auto;">
+                <table class="table-colorful">
+                    <thead>
+                        <tr>
+                            <th class="sticky-col">Estudiante</th>
+                            <th ng-repeat="nombre in tareasAlumnos[1]">
+                                {{ nombre }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(nombre, tareas) in tareasAlumnos[0]">
+                            <td class="sticky-col">{{nombre}}</td>
+                            <td ng-repeat="tarea in tareas" style="text-align: center;">
+                                <input class="input-colorful" type="text" ng-model="tarea.calificacion">/{{tarea.valor}} 
+                                <br>
+                                <button class="btn-colorful" ng-click="actualizarCalificacion(tarea)">
+                                    <i class="glyphicon glyphicon-refresh"></i> Actualizar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
 
     <!-- ====================================== -->
     <!--       TABLA DE CUESTIONARIOS           -->
     <!-- ====================================== -->
-    <h2>Cuestionarios de la Clase</h2>
-    <div style="overflow-x: auto;">
-        <table class="table-colorful">
-            <thead>
-                <tr>
-                    <th class="sticky-col">Estudiante</th>
-                    <th ng-repeat="nombre in cuestionariosAlumnos[1]">
-                        {{ nombre }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="(nombre, cuestionarios) in cuestionariosAlumnos[0]">
-                    <td class="sticky-col">{{nombre}}</td>
-                    <td ng-repeat="cuest in cuestionarios" style="text-align: center;">
-                        {{cuest.calificacion}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="card">
+        <div class="card-header">
+            <i class="glyphicon glyphicon-list-alt"></i>
+            <h3>Cuestionarios de la Clase</h3>
+        </div>
+        <div class="card-body">
+            <div style="overflow-x: auto;">
+                <table class="table-colorful">
+                    <thead>
+                        <tr>
+                            <th class="sticky-col">Estudiante</th>
+                            <th ng-repeat="nombre in cuestionariosAlumnos[1]">
+                                {{ nombre }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(nombre, cuestionarios) in cuestionariosAlumnos[0]">
+                            <td class="sticky-col">{{nombre}}</td>
+                            <td ng-repeat="cuest in cuestionarios" style="text-align: center;">
+                                {{cuest.calificacion}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 </body>
 </div>
-
-
-<style>
-/* TABLA COLORIDA ESTILO CLASSROOM */
-.table-colorful {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
-    font-family: "Roboto", sans-serif;
-}
-
-/* Encabezados */
-.table-colorful thead th {
-    background: linear-gradient(90deg, #4a90e2, #357ab8);
-    color: white;
-    font-weight: 600;
-    padding: 14px;
-    border-bottom: 3px solid #2a5d9f;
-    font-size: 15px;
-    text-align: center;
-}
-
-/* Filas */
-.table-colorful tbody tr {
-    background: #fefefe;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-/* Filas alternadas */
-.table-colorful tbody tr:nth-child(even) {
-    background: #f0f4ff;
-}
-
-/* Celdas */
-.table-colorful tbody td {
-    padding: 14px;
-    border-top: 1px solid #d3d9f0;
-    border-bottom: 1px solid #d3d9f0;
-    font-size: 15px;
-    text-align: center;
-}
-
-/* Sticky primera columna */
-.sticky-col {
-    position: sticky;
-    left: 0;
-    z-index: 3;
-    background: #ffffff;
-    font-weight: 600;
-    border-right: 2px solid #d3d9f0;
-}
-
-/* Inputs coloridos */
-.input-colorful {
-    width: 70px;
-    padding: 6px;
-    border-radius: 6px;
-    border: 2px solid #4a90e2;
-    text-align: center;
-    font-weight: bold;
-    color: #1a1a1a;
-}
-
-/* Botones coloridos */
-.btn-colorful {
-    background: #ff7043;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    font-size: 14px;
-    border-radius: 6px;
-    margin-top: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-colorful:hover {
-    background: #ff5722;
-}
-
-/* Hover filas */
-.table-colorful tbody tr:hover {
-    background: #dbe9ff;
-    transition: 0.2s;
-}
-</style>
 
 <?php require_once 'pie.php'; ?>

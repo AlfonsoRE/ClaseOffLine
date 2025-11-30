@@ -1,0 +1,768 @@
+
+/* ============================= */
+/*        ESTILOS GENERALES      */
+/* ============================= */
+.classroom-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Google Sans", "Roboto", Arial, sans-serif;
+}
+
+.classroom-header {
+    background: linear-gradient(135deg, #4285f4, #34a853);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.classroom-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.classroom-subtitle {
+    font-size: 1.6rem;
+    opacity: 0.9;
+    margin: 10px 0 0 0;
+}
+
+/* ============================= */
+/*        TARJETAS DE ESTADO     */
+/* ============================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #4285f4;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4285f4;
+    display: block;
+}
+
+.stat-label {
+    font-size: 1.4rem;
+    color: #5f6368;
+    margin-top: 5px;
+}
+
+/* ============================= */
+/*        SISTEMA DE PESTAÑAS    */
+/* ============================= */
+.tabs-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.tabs-header {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+    padding: 15px 25px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    color: #5f6368;
+}
+
+.tab:hover {
+    background: white;
+    color: #4285f4;
+}
+
+.tab.active {
+    border-bottom-color: #4285f4;
+    color: #4285f4;
+    background: white;
+}
+
+.tab-content {
+    padding: 0;
+}
+
+.tab-pane {
+    display: none;
+    padding: 30px;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* ============================= */
+/*        TARJETAS DE TRABAJO    */
+/* ============================= */
+.assignment-info {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.assignment-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.assignment-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 1.3rem;
+    color: #5f6368;
+    margin-bottom: 5px;
+}
+
+.meta-value {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #202124;
+}
+
+.assignment-description {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* ============================= */
+/*    TARJETAS DE ESTUDIANTES    */
+/* ============================= */
+.student-work-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #34a853;
+    transition: transform 0.3s ease;
+}
+
+.student-work-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.student-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.student-name {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #202124;
+}
+
+.submission-date {
+    font-size: 1.3rem;
+    color: #5f6368;
+}
+
+.student-status {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.status-submitted {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.status-graded {
+    background: #e8f0fe;
+    color: #1a73e8;
+}
+
+.status-pending {
+    background: #fef7e0;
+    color: #b06000;
+}
+
+.grade-display {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4285f4;
+}
+
+/* ============================= */
+/*        ARCHIVOS Y ENLACES     */
+/* ============================= */
+.student-files {
+    margin-top: 15px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.2s ease;
+}
+
+.file-item:hover {
+    background: #e8f0fe;
+}
+
+.file-item a {
+    text-decoration: none;
+    color: #1a73e8;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.file-item a:hover {
+    text-decoration: underline;
+}
+
+.student-comment {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #fbbc05;
+}
+
+.comment-label {
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+}
+
+/* ============================= */
+/*           BOTONES             */
+/* ============================= */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-end;
+}
+
+/* Botón Primario - Azul */
+.btn-primary {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: #1669d6;
+    box-shadow: 0 2px 4px rgba(26, 115, 232, 0.3);
+}
+
+.btn-primary:active {
+    background: #1557b7;
+    transform: translateY(1px);
+}
+
+/* Botón Secundario - Verde */
+.btn-success {
+    background: #34a853;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-success:hover {
+    background: #2e8b47;
+    box-shadow: 0 2px 4px rgba(52, 168, 83, 0.3);
+}
+
+.btn-success:active {
+    background: #2a7a3f;
+    transform: translateY(1px);
+}
+
+/* Botón de Peligro - Rojo */
+.btn-danger {
+    background: #ea4335;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-danger:hover {
+    background: #d33426;
+    box-shadow: 0 2px 4px rgba(234, 67, 53, 0.3);
+}
+
+.btn-danger:active {
+    background: #b32c20;
+    transform: translateY(1px);
+}
+
+/* Botón de Advertencia - Naranja */
+.btn-warning {
+    background: #fbbc05;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-warning:hover {
+    background: #e6a800;
+    box-shadow: 0 2px 4px rgba(251, 188, 5, 0.3);
+}
+
+.btn-warning:active {
+    background: #cc9200;
+    transform: translateY(1px);
+}
+
+/* Botón Neutral - Gris */
+.btn-secondary {
+    background: #5f6368;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary:hover {
+    background: #4e5154;
+    box-shadow: 0 2px 4px rgba(95, 99, 104, 0.3);
+}
+
+.btn-secondary:active {
+    background: #3c4043;
+    transform: translateY(1px);
+}
+
+/* Botones pequeños */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 1.2rem;
+}
+
+/* Botones grandes */
+.btn-lg {
+    padding: 14px 28px;
+    font-size: 1.6rem;
+}
+
+/* Botones de bloque completo */
+.btn-block {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Botones deshabilitados */
+.btn:disabled {
+    background: #dadce0;
+    color: #9aa0a6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn:disabled:hover {
+    background: #dadce0;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ============================= */
+/*        ESTADOS VACÍOS         */
+/* ============================= */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #5f6368;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #202124;
+}
+
+.empty-state p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+}
+
+/* ============================= */
+/*        TABLAS CLASSROOM       */
+/* ============================= */
+.table-classroom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-family: "Google Sans", "Roboto", sans-serif;
+}
+
+.table-classroom thead th {
+    background: linear-gradient(135deg, #4285f4, #34a853);
+    color: white;
+    font-weight: 500;
+    padding: 16px 12px;
+    border: none;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.table-classroom tbody tr {
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.table-classroom tbody td {
+    padding: 14px 12px;
+    border: none;
+    font-size: 14px;
+    text-align: center;
+    color: #202124;
+}
+
+.table-classroom tbody tr:hover {
+    background: #e8f0fe;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/*        INPUTS Y FORMULARIOS   */
+/* ============================= */
+.input-classroom {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    font-family: "Google Sans", "Roboto", sans-serif;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.input-classroom:focus {
+    border-color: #1a73e8;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.input-classroom::placeholder {
+    color: #9aa0a6;
+}
+
+/* Input pequeño para calificaciones */
+.input-grade {
+    width: 70px;
+    padding: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ============================= */
+/*        TARJETAS GENERALES     */
+/* ============================= */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e8eaed;
+}
+
+.card-header i {
+    font-size: 24px;
+    color: #4285f4;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #202124;
+}
+
+.card-body {
+    font-size: 1.4rem;
+    color: #202124;
+    line-height: 1.6;
+}
+
+/* ============================= */
+/*        TABLAS COLORIDAS       */
+/* ============================= */
+.table-colorful {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-family: "Google Sans", "Roboto", sans-serif;
+}
+
+.table-colorful thead th {
+    background: linear-gradient(135deg, #4285f4, #34a853);
+    color: white;
+    font-weight: 500;
+    padding: 16px 12px;
+    border: none;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.table-colorful tbody tr {
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.table-colorful tbody td {
+    padding: 14px 12px;
+    border: none;
+    font-size: 14px;
+    text-align: center;
+    color: #202124;
+}
+
+.table-colorful tbody tr:hover {
+    background: #e8f0fe;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Sticky primera columna */
+.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background: #ffffff;
+    font-weight: 500;
+    border-right: 2px solid #e8eaed;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+}
+
+/* Inputs coloridos */
+.input-colorful {
+    width: 60px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px solid #dadce0;
+    text-align: center;
+    font-weight: 500;
+    color: #202124;
+    font-size: 14px;
+    transition: border 0.2s ease;
+}
+
+.input-colorful:focus {
+    border-color: #4285f4;
+    outline: none;
+}
+
+/* Botones coloridos */
+.btn-colorful {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: none;
+    letter-spacing: 0.2px;
+}
+
+.btn-colorful:hover {
+    background: #1669d6;
+    box-shadow: 0 2px 4px rgba(26, 115, 232, 0.3);
+}
+
+/* ============================= */
+/*        UTILIDADES             */
+/* ============================= */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: 10px; }
+.mt-2 { margin-top: 20px; }
+.mt-3 { margin-top: 30px; }
+.mb-1 { margin-bottom: 10px; }
+.mb-2 { margin-bottom: 20px; }
+.mb-3 { margin-bottom: 30px; }
+
+.p-1 { padding: 10px; }
+.p-2 { padding: 20px; }
+.p-3 { padding: 30px; }
+
+.d-flex { display: flex; }
+.align-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+
+.gap-1 { gap: 10px; }
+.gap-2 { gap: 20px; }
+.gap-3 { gap: 30px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .classroom-container {
+        padding: 10px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tabs-header {
+        flex-direction: column;
+    }
+    
+    .tab {
+        text-align: center;
+    }
+    
+    .student-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .table-colorful {
+        font-size: 12px;
+    }
+    
+    .input-colorful {
+        width: 50px;
+        font-size: 12px;
+    }
+    
+    .btn-colorful {
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+}

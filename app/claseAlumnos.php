@@ -18,7 +18,7 @@
 
   <!-- Profesores -->
   <div class="section-title">Profesor</div>
-  <div class="user-name">
+  <div  class=" user-name ">
     {{ buscarMaestroPorIdClase(clase.id) }}
   </div>
 

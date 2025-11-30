@@ -131,7 +131,7 @@
       <div ng-repeat="cues in tema.cuestionarios | orderBy:'id':false" class="contenido-preview" ng-click="cues.abierto = !cues.abierto">
         <div class="media">
           <div class="media-left">
-            <i class="glyphicon glyphicon-certificate icono-grande text-primary"></i>
+            <i class="glyphicon glyphicon-list-alt icono-grande text-primary"></i>
           </div>
           <div class="media-body">
             <div style="display: flex; justify-content: space-between; align-items: center;">
