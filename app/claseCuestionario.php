@@ -82,7 +82,7 @@
             <div class="main-layout">
                 <!-- Columna principal (contenido) -->
                 <div class="content-column">
-                    <div    ng-repeat="tema in temas" class="">
+                    <div ng-repeat="tema in temas" class="">
                         <!-- TAREAS -->
                         <div ng-repeat="cues in tema.cuestionarios" class="contenido-preview" ng-show="cues.id==id_buscarcuestionario">
                             <div class="media">
@@ -96,13 +96,10 @@
                                         <p><strong>Publicado:</strong> {{ cues.fecha_creacion | date:'mediumDate' }}</p>
                                         <div ng-bind-html="cues.descripcion"></div>
                                         <!-- Mostrar calificación obtenida -->
-                                        <div ng-if="cues.calificacion && cues.calificacion !== 'No disponible'">
-                                            <strong>Tu calificación:</strong> {{ cues.calificacion }}
+                                        <div>
+                                            <strong>Tu calificación:</strong>
+                                            {{ calificacionRecibida != null ? calificacionRecibida : 'No disponible' }}
                                         </div>
-                                        <div ng-if="!cues.calificacion || cues.calificacion === 'No disponible'">
-                                            <strong>Tu calificación:</strong> No disponible
-                                        </div>
-
                                     </div>
                                     <div class="card-footer">
                                         <a href="./claseCuestionarioContenido.php?id_clase={{clase.id}}&id_cuestionario={{cues.id}}" target="_blank" class="btn-abrir">

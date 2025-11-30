@@ -798,22 +798,23 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       });
   };
 
-$scope.consultarCuestionarioHistorial = function() {
-    $scope.clase.id = getParameterByName("id_clase");
-    $scope.usuario.id_usuario = document.getElementById("idUsuario").value;
-    $scope.id_buscarcuestionario = getParameterByName("id_cuestionario"); // Cuestionario actual
+  $scope.consultarCuestionarioHistorial = function() {
+      $scope.clase.id = getParameterByName("id_clase");
+      $scope.usuario.id_usuario = document.getElementById("idUsuario").value;
+      $scope.id_buscarcuestionario = getParameterByName("id_cuestionario"); // Cuestionario actual
 
-    $http.post("../api/consultarHistorialCuestionarioUsuario.php", {
-        id_usuario: $scope.usuario.id_usuario,
-        id_cuestionario: $scope.id_buscarcuestionario
-    })
-    .success(function(data){
-        $scope.temas = [{ cuestionarios: [data] }]; // Solo un cuestionario
-    })
-    .error(function(err){
-        console.error(err);
-    });
-};
+      $http.post("../api/consultarHistorialCuestionarioUsuario.php", {
+          id_usuario: $scope.usuario.id_usuario,
+          id_cuestionario: $scope.id_buscarcuestionario
+      })
+      .success(function(data){
+           // SOLO AGREGA ESTA LÍNEA:
+        $scope.calificacionRecibida = data.calificacion;
+      })
+      .error(function(err){
+          console.error(err);
+      });
+  };
 
 $scope.consultarCuestionarioHistorial();
 
