@@ -38,17 +38,6 @@ App.controller("claseCtrl", function ($scope, $http, $sce) {
       },
     });
 
-    setTimeout(function () {
-      quillM = new Quill("#editorM", {
-        theme: "snow",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            [{ list: "ordered" }, { list: "bullet" }],
-          ],
-        },
-      });
-    }, 500);
     $scope.guardarAnuncio = function () {
       var contenido = quill.root.innerHTML;
       $scope.anuncio.id_clase = getParameterByName("id_clase");
@@ -842,33 +831,49 @@ $scope.consultarCuestionarioHistorial();
   // CALIFICACIONES
   // -----------------------------------
 
-  // Consultar alumnos con sus tareas asignadas
-  $scope.consultarTareasCalificacion = function () {
+ // Consultar alumno logueado con sus tareas asignadas
+$scope.consultarTareasCalificacion = function () {
     $scope.clase.id = getParameterByName("id_clase");
     $scope.id_buscartarea = getParameterByName("id_tarea");
-    // Hacer la petición HTTP
+    
+    $scope.usuario.id_usuario = document.getElementById("idUsuario").value;
+
+    // Mandamos ambos valores al PHP
+    let datos = {
+        id: $scope.clase.id,              // id_clase
+        id_usuario: $scope.usuario.id_usuario
+    };
+
     $http
-      .post("../api/consultarHistorial_tareas.php", $scope.clase)
+      .post("../api/consultarHistorial_tareasAlumnos.php", datos)
       .success(function (data) {
         $scope.tareasAlumnos = data;
       })
       .error(function (data) {
         alert("Error BD: " + data);
       });
-  };
-     // Consultar alumnos con sus tareas asignadas
-  $scope.consultarCuestionariosCalificacion = function () {
+};
+// Consultar cuestionarios del usuario logueado
+$scope.consultarCuestionariosCalificacion = function () {
     $scope.clase.id = getParameterByName("id_clase");
-    // Hacer la petición HTTP
+    $scope.usuario.id_usuario = document.getElementById("idUsuario").value;
+
+    // Lo que enviamos al PHP
+    let datos = {
+        id: $scope.clase.id,               // id_clase
+        id_usuario: $scope.usuario.id_usuario
+    };
+
     $http
-      .post("../api/consultarHistorial_Cuestionarios.php", $scope.clase)
+      .post("../api/consultarHistorial_CuestionariosAlumnos.php", datos)
       .success(function (data) {
         $scope.cuestionariosAlumnos = data;
       })
       .error(function (data) {
         alert("Error BD: " + data);
       });
-  };
+};
+
   
  
   // -----------------------------------
@@ -879,6 +884,7 @@ $scope.consultarCuestionarioHistorial();
   // Alumnos
   // -----------------------------------
   $scope.alumnos = {};
+  
 
   $scope.buscarMaestroPorIdClase = function (id) {
     var resultado = $scope.clasesInscritas.filter(function (item) {
