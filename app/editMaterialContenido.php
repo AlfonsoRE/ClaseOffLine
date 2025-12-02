@@ -71,10 +71,9 @@
         <div class="content-column">
             <div ng-repeat="tema in temas" class="">
                 <!-- TAREAS -->
-                <div ng-repeat="mat in tema.material" class="contenido-preview" ng-click="mat.id==id_buscarmaterial">
+                <div ng-repeat="mat in tema.material | filter:{id:id_buscarmaterial}" class="contenido-preview">
                     <div class="media">
-
-                        <div class="material-card" ng-repeat="mat in tema.material">
+                        <div class="material-card">
                             <div class="card-header">
                                 <i class="glyphicon glyphicon-book icono-grande text-success"></i>
                                 <h3>{{ mat.titulo }} <span>

@@ -20,7 +20,7 @@
           </div>
           <div class="media-body" ng-if="datosMaestro">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong>{{ buscarMaestroPorIdClase(clase.id) }} publicó una nueva tarea: {{ tarea.titulo }}</strong>
+              <strong> {{ tarea.titulo }}</strong>
               <p><strong>Fecha Límite:</strong> {{ tarea.fecha_entrega | date:'mediumDate' }}</p>
 
             </div>
@@ -66,7 +66,7 @@
           </div>
           <div class="media-body">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong>{{ buscarMaestroPorIdClase(clase.id) }} publicó un nuevo material: {{ mat.titulo }}</strong>
+              <strong> {{ mat.titulo }}</strong>
 
             </div>
             <div ng-show="mat.abierto" class="contenido-detalle">
@@ -109,7 +109,7 @@
           </div>
           <div class="media-body">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong>{{ buscarMaestroPorIdClase(clase.id) }} publicó una nueva tarea: {{ cues.titulo }}</strong>
+              <strong> {{ cues.titulo }}</strong>
             </div>
             <div ng-show="cues.abierto" class="contenido-detalle">
               <p><strong>Fecha creación:</strong> {{ cues.fecha_creacion | date:'mediumDate' }}</p>
