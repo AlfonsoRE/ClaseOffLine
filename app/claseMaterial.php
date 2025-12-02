@@ -69,13 +69,11 @@
     <div class="main-layout">
         <!-- Columna principal (contenido) -->
         <div class="content-column">
-            <div ng-repeat="tema in temas" class="">
-                <!-- TAREAS -->
-                <div ng-repeat="mat in tema.material" class="contenido-preview" ng-click="mat.id==id_buscarmaterial">
-                    <div class="media">
+            <div ng-repeat="tema in temas">
 
-                        <div class="material-card" ng-repeat="mat in tema.material">
-                            <div class="card-header">
+    <div ng-repeat="mat in tema.material" class="material-card">
+
+        <div class="card-header">
                                 <i class="glyphicon glyphicon-book icono-grande text-success"></i>
                                 <h3>{{ mat.titulo }}</h3>
                             </div>

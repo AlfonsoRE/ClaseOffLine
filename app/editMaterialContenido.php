@@ -68,15 +68,16 @@
     <br>
     <div class="main-layout">
         <!-- Columna principal (contenido) -->
-        <div class="content-column">
-            <div ng-repeat="tema in temas" class="">
-                <!-- TAREAS -->
-                <div ng-repeat="mat in tema.material" class="contenido-preview" ng-click="mat.id==id_buscarmaterial">
-                    <div class="media">
+     <div class="content-column">
 
-                        <div class="material-card" ng-repeat="mat in tema.material">
-                            <div class="card-header">
-                                <i class="glyphicon glyphicon-book icono-grande text-success"></i>
+    <div ng-repeat="tema in temas">
+
+        <div ng-repeat="mat in tema.material" 
+             class="material-card contenido-preview"
+             ng-click="mat.id == id_buscarmaterial">
+
+            <div class="card-header">
+                <i class="glyphicon glyphicon-book icono-grande text-success"></i>
                                 <h3>{{ mat.titulo }} <span>
                                         <button class="btn btn-xs btn-warning" ng-click="$event.stopPropagation(); abrirModalEditarMaterial(mat)">
                                             <i class="glyphicon glyphicon-pencil"></i>
