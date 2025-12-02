@@ -1506,110 +1506,110 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `anuncios`
 --
 ALTER TABLE `anuncios`
-  ADD CONSTRAINT `anuncios_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`),
-  ADD CONSTRAINT `anuncios_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `anuncios_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `anuncios_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `archivos_anuncios`
 --
 ALTER TABLE `archivos_anuncios`
-  ADD CONSTRAINT `archivos_anuncios_ibfk_1` FOREIGN KEY (`id_anuncios`) REFERENCES `anuncios` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `archivos_anuncios_ibfk_1` FOREIGN KEY (`id_anuncios`) REFERENCES `anuncios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `archivos_material`
 --
 ALTER TABLE `archivos_material`
-  ADD CONSTRAINT `archivos_material_ibfk_1` FOREIGN KEY (`id_material`) REFERENCES `material` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `archivos_material_ibfk_1` FOREIGN KEY (`id_material`) REFERENCES `material` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `archivos_tarea`
 --
 ALTER TABLE `archivos_tarea`
-  ADD CONSTRAINT `archivos_tarea_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `archivos_tarea_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `clases`
 --
 ALTER TABLE `clases`
-  ADD CONSTRAINT `clases_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `clases_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `clase_estudiantes`
 --
 ALTER TABLE `clase_estudiantes`
-  ADD CONSTRAINT `clase_estudiantes_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`),
-  ADD CONSTRAINT `clase_estudiantes_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `clase_estudiantes_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `clase_estudiantes_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`),
-  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`)ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `cuestionarios`
 --
 ALTER TABLE `cuestionarios`
-  ADD CONSTRAINT `cuestionarios_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`),
-  ADD CONSTRAINT `cuestionarios_ibfk_2` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`);
+  ADD CONSTRAINT `cuestionarios_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cuestionarios_ibfk_2` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `cuestionarios_contenido`
 --
 ALTER TABLE `cuestionarios_contenido`
-  ADD CONSTRAINT `cuestionarios_contenido_ibfk_1` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionarios` (`id`);
+  ADD CONSTRAINT `cuestionarios_contenido_ibfk_1` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `enlaces_anuncios`
 --
 ALTER TABLE `enlaces_anuncios`
-  ADD CONSTRAINT `enlaces_anuncios_ibfk_1` FOREIGN KEY (`id_anuncios`) REFERENCES `anuncios` (`id`);
+  ADD CONSTRAINT `enlaces_anuncios_ibfk_1` FOREIGN KEY (`id_anuncios`) REFERENCES `anuncios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `enlace_material`
 --
 ALTER TABLE `enlace_material`
-  ADD CONSTRAINT `enlace_material_ibfk_1` FOREIGN KEY (`id_material`) REFERENCES `material` (`id`);
+  ADD CONSTRAINT `enlace_material_ibfk_1` FOREIGN KEY (`id_material`) REFERENCES `material` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `enlace_tarea`
 --
 ALTER TABLE `enlace_tarea`
-  ADD CONSTRAINT `enlace_tarea_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`);
+  ADD CONSTRAINT `enlace_tarea_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `historial_cuestionario`
 --
 ALTER TABLE `historial_cuestionario`
-  ADD CONSTRAINT `historial_cuestionario_ibfk_1` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionarios` (`id`),
-  ADD CONSTRAINT `historial_cuestionario_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `historial_cuestionario_ibfk_1` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `historial_cuestionario_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `historial_tareas`
 --
 ALTER TABLE `historial_tareas`
-  ADD CONSTRAINT `historial_tareas_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`),
-  ADD CONSTRAINT `historial_tareas_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `historial_tareas_ibfk_1` FOREIGN KEY (`id_tareas`) REFERENCES `tareas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `historial_tareas_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `material`
 --
 ALTER TABLE `material`
-  ADD CONSTRAINT `material_ibfk_1` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`);
+  ADD CONSTRAINT `material_ibfk_1` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tareas`
 --
 ALTER TABLE `tareas`
-  ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`),
-  ADD CONSTRAINT `tareas_ibfk_2` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`);
+  ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tareas_ibfk_2` FOREIGN KEY (`id_tema`) REFERENCES `temas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `temas`
 --
 ALTER TABLE `temas`
-  ADD CONSTRAINT `temas_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`);
+  ADD CONSTRAINT `temas_ibfk_1` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
