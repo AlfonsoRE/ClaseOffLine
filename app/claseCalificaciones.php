@@ -226,6 +226,30 @@
         font-size: 1.8rem;
     }
 }
+/* Evitar que el sidebar tape el contenido */
+.classroom-student-container {
+    margin-left: 260px; /* Ajusta al ancho REAL de tu sidebar */
+    padding-top: 20px;
+}
+
+/* Evitar que la tabla se salga hacia los lados */
+.student-card {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Centrar tablas */
+.table-classroom-student {
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Evitar que el header verde/azul se estire mal */
+.table-classroom-student thead th {
+    white-space: nowrap;
+}
+
 </style>
 
 <div class="classroom-student-container">
