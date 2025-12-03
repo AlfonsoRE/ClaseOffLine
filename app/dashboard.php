@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
-
+<?php session_start();?>
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,8 +36,7 @@
           <li><a href="./joinClase.php">Unirse a una clase</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href=""><?php session_start();
-                          echo  $_SESSION['usuario']; ?></a></li>
+          <li><a href=""><?php echo  $_SESSION['usuario']; ?></a></li>
           <li><a href="../api/salir.php">Salir</a></li>
         </ul>
 
