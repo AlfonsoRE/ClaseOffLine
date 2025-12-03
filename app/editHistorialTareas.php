@@ -117,13 +117,13 @@
                         <tbody>
                             <tr ng-repeat="h in historialTareas">
                                 <td class="alumno-nombre">
-                            
+
                                     {{h.nombre_usuario}}
                                 </td>
 
                                 <td>
                                     <a ng-href="{{h.url}}" target="_blank" class="archivo-link">
-                                    
+
                                         {{h.nombre_archivo}}
                                     </a>
                                 </td>
@@ -144,6 +144,116 @@
             </div>
         </div>
     </div>
-</div>
 
-<?php require_once 'pie.php'; ?>
+    <!-- Modal Agregar Tarea -->
+    <div id="modalAgregarTarea" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title"> <span class="glyphicon glyphicon-edit"></span> Modulo Tarea</h4>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group"> <label class="col-sm-2 control-label"> Tema: </label>
+                                    <div class="col-sm-10"> <select ng-model="nuevaTarea.id_tema" ng-options="tema.id as tema.titulo for tema in temas" class="form-control">
+                                            <option value="">Seleccione un tema</option>
+                                        </select> </div>
+                                </div>
+                                <div class="form-group"> <label class="col-sm-2 control-label"> Título: </label>
+                                    <div class="col-sm-10"> <input type="text" class="form-control" ng-model="nuevaTarea.titulo" placeholder="Título" required> </div>
+                                </div>
+                                <div class="form-group"> <label class="col-sm-2 control-label"> Valor: </label>
+                                    <div class="col-sm-10"> <input type="text" class="form-control" ng-model="nuevaTarea.valor" placeholder="Valor"> </div>
+                                </div>
+                                <div class="form-group"> <label class="col-sm-2 control-label"> Fecha de Entrega: </label>
+                                    <div class="col-sm-10"> <input type="datetime-local" class="form-control" ng-model="nuevaTarea.fecha_entrega"> </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12 "><b> Descripción de la tarea:</b> </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div id="editor"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn-group col-sm-12"> <button type="button" class="btn btn-primary" ng-click="subirArchivoT()"><span class="glyphicon glyphicon-cloud"></span> Subir archivo</button> <button type="button" class="btn btn-primary" ng-click="agregarEnlaceT()"><span class="glyphicon glyphicon-link"></span> Agregar enlace</button> </div>
+                                </div>
+                    </form>
+                    <div class="container-fluid"> <!-- Sección de Archivos -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading bg-primary text-white"> <span class="glyphicon glyphicon-file"></span> Archivos </div>
+                                    <div class="panel-body" ng-show='archivos.length>0'>
+                                        <ul class="list-group">
+                                            <div ng-repeat='a in archivos'>
+                                                <li class="list-group-item"> <span class="glyphicon glyphicon-file"></span> <a href="{{a.url}}" target="_blank"> {{a.nombre}}</a> <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarArchivoT(a.id)"> <span class="glyphicon glyphicon-trash"></span> Eliminar </button> </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- Sección de URLs -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading bg-success text-white"> <span class="glyphicon glyphicon-link"></span> Enlaces Externos </div>
+                                    <div class="panel-body" ng-show='enlaces.length>0'>
+                                        <ul class="list-group">
+                                            <div ng-repeat='e in enlaces'>
+                                                <li class="list-group-item"> <span class="glyphicon glyphicon-link"></span> <a href="{{e.enlace}}" target="_blank"> Enlace {{$index+1}}</a> <button class="btn btn-danger btn-xs pull-right" ng-click="eliminarEnlaceT(e.id)"> <span class="glyphicon glyphicon-trash"></span> Eliminar </button> </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"> <button class="btn btn-success" ng-click="guardarTarea()"> <span class="glyphicon glyphicon-bullhorn"></span> Publicar Tarea</button> <button class="btn btn-secondary" data-dismiss="modal" id="ModalTareaClose">Cerrar</button> </div>
+    </div>
+</div>
+</div>
+</div> <!-- Modal archivo-->
+<div id="ModalArchivo" class="modal fade" role="dialog">
+    <div class="modal-dialog"> <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-primary"> <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Subir Archivo</h4>
+            </div>
+            <div class="modal-body">
+                <form ng-submit="guardarArchivoT()" enctype="multipart/form-data"> <label>Seleccionar Archivo:</label> <input type="file" uploader-model="documento" required> <br><br> <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-cloud"></span> Subir archivo</button> </form>
+            </div>
+            <div class="modal-footer"> <button type="button" id="ModalArchivoClose" class="btn btn-default" data-dismiss="modal">Close</button> </div>
+        </div>
+    </div>
+</div> <!-- Termina Modal --> <!-- Modal enlace -->
+<div id="ModalEnlace" class="modal fade" role="dialog">
+    <div class="modal-dialog"> <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-primary"> <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Agregar enlace</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" name="formenlace">
+                    <div class="form-group"> <label class="col-sm-4 control-label"> Enlace: </label>
+                        <div class="col-sm-7"> <input type="text" class="form-control" name="enlace" ng-model="enlace.enlace" required> </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-7"> <button type="submit" value="enviar" ng-click="formenlace.$valid && guardarEnlaceT()" class="btn btn-primary"> <span class="glyphicon glyphicon-link"></span> Agregar enlace</button> </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"> <button type="button" id="ModalEnlaceClose" class="btn btn-default" data-dismiss="modal">Close</button> </div>
+        </div>
+    </div>
+</div> <!-- Termina Modal --> </div>
+</body>
+</div> <?php require_once 'pie.php'; ?>
