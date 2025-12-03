@@ -45,7 +45,7 @@
                         <li><a href="./claseCalificaciones.php?id_clase={{clase.id}}">Calificaciones</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href=""><?php echo  $_SESSION['usuario']; ?></a></li>
+                        <li><a href=""><?php echo $_SESSION['usuario'];?></a></li>
                         <li><a href="../api/salir.php">Salir</a></li>
                     </ul>
 
@@ -81,7 +81,7 @@
 
             </div>
         </div>
-         
+        
     </body>
 
-   <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">
+<input type="hidden" id="idUsuario" value="<?php echo $_SESSION['id']; ?>">

@@ -1,4 +1,4 @@
-    <?php require_once 'encabezadoClase.php'; ?>
+    <?php require_once 'encabezadoClase.php';?>
     <link rel="stylesheet" href="./css/quill.snow.css">
     <script src="./controlador/quill.min.js"></script>
     <script src="./controlador/angular-sanitize.min.js"></script>
@@ -304,7 +304,7 @@
                 ng-class="{
         'correcta': respuestas[pregunta.id] === pregunta.respuesta && cuestionarioEnviado,
         'incorrecta': respuestas[pregunta.id] !== pregunta.respuesta && cuestionarioEnviado
-     }">
+    }">
 
                 <h5>
                     <span class="question-number">{{$index + 1}}</span>
