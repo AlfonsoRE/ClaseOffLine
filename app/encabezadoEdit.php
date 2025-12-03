@@ -1,3 +1,4 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 
@@ -43,8 +44,7 @@
                         <li><a href="./editCalificaciones.php?id_clase={{clase.id}}">Calificaciones</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href=""><?php session_start();
-                                        echo  $_SESSION['usuario']; ?></a></li>
+                        <li><a href=""><?php echo  $_SESSION['usuario']; ?></a></li>
                         <li><a href="../api/salir.php">Salir</a></li>
                     </ul>
 
