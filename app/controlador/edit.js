@@ -317,7 +317,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
 
       return (
         "Publicado el " + fechaLocal + " " + horaLocal + " — " + textoTiempo
-      );      
+      );
     };
 
     $scope.eliminarAnuncio = function (id) {
@@ -522,21 +522,44 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
     $scope.consultarEnlacesT();
     $("#modalAgregarTarea").modal("show");
   };
+  // ===============================
+  // CARGAR HISTORIAL DE TAREA (ENTREGAS)
+  // ===============================
+  $scope.cargarHistorialTareas = function () {
+
+    if (!$scope.id_buscartarea) {
+      console.warn("No hay id_buscartarea aún.");
+      return;
+    }
+
+    $http.post("../api/consultarHisorialTareasPorTarea.php", {
+      id_tareas: $scope.id_buscartarea
+    })
+      .success(function (data) {
+        $scope.historialTareas = data;
+        console.log("Historial de tareas cargado:", data);
+      })
+      .error(function (err) {
+        console.error("Error al cargar historial:", err);
+      });
+  };
 
   $scope.consultarTarea = function () {
     $scope.id_buscartarea = getParameterByName("id_tarea");
-    $http
-      .post("../api/consultarTarea.php", { id: $scope.id_buscartarea })
+
+    $http.post("../api/consultarTarea.php", { id: $scope.id_buscartarea })
       .success(function (data) {
         $scope.tarea = data;
-        // Verificamos si hay archivos
         $scope.tarea.tieneArchivo =
           $scope.tarea.archivos && $scope.tarea.archivos.length > 0;
+        // Cargar entregas de los alumnos
+        $scope.cargarHistorialTareas();
       })
       .error(function (err) {
         alert("Error al consultar tareas: " + err);
       });
   };
+
   $scope.consultarTareas = function () {
     $http
       .post("../api/consultarTareas.php", { id_clase: $scope.id_clase })
@@ -1462,7 +1485,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
         alert("Error BD: " + data);
       });
   };
-   // Consultar alumnos con sus tareas asignadas
+  // Consultar alumnos con sus tareas asignadas
   $scope.consultarCuestionariosAlumnos = function () {
     $scope.clase.id = getParameterByName("id_clase");
     // Hacer la petición HTTP
@@ -1494,6 +1517,7 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
   //$scope.consultarTareas();
 
   $scope.consultarTarea();
+  $scope.cargarHistorialTareas();
   $scope.consultarClases();
   $scope.consultarDatosMaestro();
   $scope.consultarCuestionario();

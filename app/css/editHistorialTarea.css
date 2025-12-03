@@ -1,0 +1,136 @@
+/* ==========================
+   TARJETAS DE TAREA
+========================== */
+.tarea-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.tarea-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+.card-header i {
+    font-size: 28px;
+    color: #fbbc05;
+}
+.card-header h3 {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 600;
+}
+.card-body {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #202124;
+}
+.card-body a {
+    text-decoration: none;
+    color: #1a73e8;
+    transition: color 0.2s;
+}
+.card-body a:hover {
+    color: #0c5dc0;
+}
+
+/* BOTONES */
+.btn-abrir {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 500;
+    color: white;
+    background: linear-gradient(135deg, #fbbc05, #f28b00);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.btn-abrir:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: linear-gradient(135deg, #f2a500, #d97c00);
+}
+
+/* ==========================
+   SIDEBAR DERECHA — ENTREGAS
+========================== */
+.classroom-sidebar {
+    width: 40% !important;
+    min-width: 420px;
+    margin-left: 20px;
+}
+.entregas-panel {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.entregas-heading {
+    background: #1a73e8;
+    color: white;
+    font-size: 18px;
+    padding: 12px 15px;
+    font-weight: 500;
+}
+.entregas-body {
+    padding: 15px;
+    background: #ffffff;
+}
+.entregas-tabla {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 16px;
+}
+.entregas-tabla thead th {
+    font-weight: 600;
+    font-size: 15px;
+    color: #202124;
+    padding: 10px 8px;
+    background: transparent;
+    text-align: left;
+}
+.entregas-tabla tbody tr {
+    background: #f1f3f4;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+.entregas-tabla tbody tr:hover {
+    background: #e8f0fe;
+    transform: scale(1.01);
+}
+.alumno-nombre {
+    font-weight: 500;
+    color: #1a73e8;
+}
+.icon-user { color: #1a73e8; margin-right:5px; }
+.icon-file { color: #1967d2; margin-right:5px; }
+.icon-time { color: #5f6368; margin-right:4px; }
+.archivo-link {
+    text-decoration: none;
+    font-weight: 500;
+    color: #1967d2;
+}
+.archivo-link:hover {
+    text-decoration: underline;
+    color: #0b57d0;
+}
+.fecha-entrega {
+    font-size: 14px;
+    color: #5f6368;
+    white-space: nowrap;
+}
+.sin-entregas {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+    padding: 20px 0;
+}
