@@ -71,7 +71,8 @@
         <div class="content-column">
             <div ng-repeat="tema in temas" class="">
                 <!-- TAREAS -->
-                <div ng-repeat="mat in tema.material | filter:{id:id_buscarmaterial}" class="contenido-preview">
+                <div ng-repeat="mat in tema.material | filter:{id:id_buscarmaterial}" 
+                class="contenido-preview">
                     <div class="media">
 
                         <div class="material-card" >
