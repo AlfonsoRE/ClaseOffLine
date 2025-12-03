@@ -42,6 +42,4 @@ if ($db->connect_errno > 0) {
 
 // 7. Configuración de acentos (UTF-8)
 $acentos = $db->query("SET NAMES 'utf8'");
-
-// ¡La variable de conexión $db ya está lista para usarse!
 ?>
