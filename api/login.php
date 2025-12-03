@@ -16,8 +16,8 @@ if($stmt->fetch()){
     header("Location: ../app/dashboard.php");
     }
     if($rol=="administador"){
-     $_SESSION['rol']=$rol;    
-     header("Location: ../app/dashboardAdmin.php");
+    $_SESSION['rol']=$rol;    
+    header("Location: ../app/dashboardAdmin.php");
     }     
 }
 else{
