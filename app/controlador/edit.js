@@ -528,7 +528,6 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
   $scope.cargarHistorialTareas = function () {
 
     if (!$scope.id_buscartarea) {
-      console.warn("No hay id_buscartarea aún.");
       return;
     }
 
@@ -537,7 +536,6 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
     })
       .success(function (data) {
         $scope.historialTareas = data;
-        console.log("Historial de tareas cargado:", data);
       })
       .error(function (err) {
         console.error("Error al cargar historial:", err);
@@ -1499,17 +1497,20 @@ App.controller("editCtrl", function ($scope, $http, $sce) {
       });
   };
 
-  // Modificar calificación
-  $scope.actualizarCalificacion = function (tarea) {
+// Modificar calificación
+$scope.actualizarCalificacion = function (tarea) {
     $http
-      .post("../api/modificarHistorialTareas.php", tarea)
-      .success(function (data) {
-        $scope.consultarTareasAlumnos();
-      })
-      .error(function (data) {
-        alert("Error BD: " + data);
-      });
-  };
+        .post("../api/modificarHistorialTareas.php", tarea)
+        .success(function (data) {
+            $scope.consultarTareasAlumnos();
+            // Mostrar alerta de éxito
+            alert("✅ Calificación de " + tarea.nombre + " actualizada a " + tarea.calificacion);
+        })
+        .error(function (data) {
+            alert("❌ Error al actualizar la calificación: " + data);
+        });
+};
+
 
   $scope.consultarTareasAlumnos();
   $scope.consultarCuestionariosAlumnos();
