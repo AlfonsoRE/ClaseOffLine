@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 require_once 'conexion.php';
 $pass = md5($_POST['pass']);
@@ -7,8 +8,7 @@ $stmt->bind_param('ss', $_POST['email'], $pass);
 $stmt->bind_result($id,$rol, $nombre,$email);
 $stmt->execute();
 
-if($stmt->fetch()){
-    session_start();
+if($stmt->fetch()){    
     $_SESSION['usuario'] = $nombre;
     $_SESSION['id'] = $id;
     if($rol=="usuario"){
