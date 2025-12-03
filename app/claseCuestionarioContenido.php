@@ -4,7 +4,7 @@
     <script src="./controlador/angular-sanitize.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 
-    <header>
+
         <style>
             body {
                 background-color: #f5f5f5;
@@ -282,7 +282,7 @@
                 margin-top: 8px;
             }
         </style>
-    </header>
+
 
     <div id="content" class="container">
 
@@ -349,5 +349,7 @@
 
 
     </div>
-    <br>
+</body>
+
+</div>
     <?php require_once 'pie.php'; ?>
