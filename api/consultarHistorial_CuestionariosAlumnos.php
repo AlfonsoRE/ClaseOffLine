@@ -35,11 +35,11 @@ $stmt = $db->prepare("
     LEFT JOIN historial_cuestionario hc 
            ON hc.id_cuestionario = c.id
            AND hc.id_usuario = u.id
-    WHERE u.id = ?
+    WHERE u.id = ? AND cl.id = ?
     ORDER BY c.id ASC
 ");
 
-$stmt->bind_param("i", $id_usuario);
+$stmt->bind_param("ii", $id_usuario, $obj->id);
 $stmt->execute();
 
 $stmt->bind_result(

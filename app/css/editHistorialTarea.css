@@ -134,3 +134,42 @@
     color: #888;
     padding: 20px 0;
 }
+
+
+.entregas-body {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+}
+
+.entregas-tabla {
+    width: auto !important;
+    min-width: 750px !important;
+}
+
+.entregas-tabla td,
+.entregas-tabla th {
+    white-space: nowrap !important;
+}
+
+.archivo-link {
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+    display: inline-block;
+}
+
+.entregas-body::-webkit-scrollbar {
+    height: 6px;
+}
+.entregas-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.entregas-body::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.25);
+    border-radius: 4px;
+}
+.entregas-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.35);
+}
