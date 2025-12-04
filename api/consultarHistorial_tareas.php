@@ -7,7 +7,7 @@ $stmt = $db->prepare("
     join clase_estudiantes ce on ce.id_clase = t.id_clase 
     join usuarios u on u.id = ce.id_estudiante 
     left join historial_tareas ht on ht.id_tareas = ta.id and ht.id_usuario = u.id 
-    where t.id_clase = ? order by u.nombre, t.id 
+    where t.id_clase = ? order by u.nombre, ta.id asc 
 ");
 $obj = json_decode(file_get_contents("php://input"));
 $stmt->bind_param('i', $obj->id);
